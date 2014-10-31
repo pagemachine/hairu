@@ -3,10 +3,12 @@
 
 <form
   method="post"
+  onsubmit="{submitJavaScript}"
   class="login form-inline">
 
   <input type="hidden" name="logintype" value="login"/>
   <input type="hidden" name="pid" value="{settings.userStoragePage}"/>
+  <f:format.raw>{additionalHiddenFields}</f:format.raw>
 
   <f:render partial="Form/TextField" arguments="{
     fieldName: 'user',
