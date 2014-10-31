@@ -25,9 +25,11 @@ namespace PAGEmachine\Hairu\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use PAGEmachine\Hairu\LoginType;
 
 class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
@@ -74,12 +76,17 @@ class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
       $this->forward('showLogoutForm');
     }
 
+    $formData = $this->request->getArgument('formData');
+    $loginFailed = isset($formData['logintype'])
+      && $formData['logintype'] === 'login';
+
     list($submitJavaScript, $additionalHiddenFields) = $this->getAdditionalLoginFormCode();
 
     $this->view->assignMultiple(array(
       'logintype' => LoginType::LOGIN,
       'submitJavaScript' => $submitJavaScript,
       'additionalHiddenFields' => $additionalHiddenFields,
+      'loginFailed' => $loginFailed,
     ));
   }
 

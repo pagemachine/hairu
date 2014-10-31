@@ -1,12 +1,19 @@
 <f:layout name="Default"/>
 <f:section name="main">
 
+<f:if condition="{loginFailed}">
+<f:render partial="Message" arguments="{
+  type: 'danger',
+  translationKey: 'login.failed'
+}"/>
+</f:if>
+
 <form
   method="post"
   onsubmit="{submitJavaScript}"
   class="login form-inline">
 
-  <input type="hidden" name="logintype" value="{logintype}"/>
+  <input type="hidden" name="logintype" value="login"/>
   <input type="hidden" name="pid" value="{settings.userStoragePage}"/>
   <f:format.raw>{additionalHiddenFields}</f:format.raw>
 
