@@ -16,6 +16,10 @@
         <source>Log in</source>
       </trans-unit>
 
+      <trans-unit id="action.logout">
+        <source>Log out</source>
+      </trans-unit>
+
     </body>
   </file>
 </xliff>

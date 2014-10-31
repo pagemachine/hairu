@@ -32,6 +32,12 @@ use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 
   /**
+   * @var \PAGEmachine\Hairu\Authentication\AuthenticationService
+   * @inject
+   */
+  protected $authenticationService;
+
+  /**
    * Initialize all actions
    *
    * @return void
@@ -62,6 +68,11 @@ class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
    */
   public function showLoginFormAction() {
 
+    if ($this->authenticationService->isUserAuthenticated()) {
+
+      $this->forward('showLogoutForm');
+    }
+
     list($submitJavaScript, $additionalHiddenFields) = $this->getAdditionalLoginFormCode();
 
     $this->view->assignMultiple(array(
@@ -69,6 +80,13 @@ class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
       'additionalHiddenFields' => $additionalHiddenFields,
     ));
   }
+
+  /**
+   * Logout form view
+   *
+   * @return void
+   */
+  public function showLogoutFormAction() {}
 
   /**
    * Gets additional code for login forms based on the

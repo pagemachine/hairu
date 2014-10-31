@@ -1,0 +1,17 @@
+<f:layout name="Default"/>
+<f:section name="main">
+
+<form
+  method="post"
+  class="logout form-inline">
+
+  <input type="hidden" name="logintype" value="logout"/>
+
+  <f:render partial="Form/SubmitButton" arguments="{
+    translationKey: 'action.logout',
+    defaultLabel: 'Log out'
+  }"/>
+
+</form>
+
+</f:section>
