@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" product-name="hairu">
+    <header/>
+    <body>
+
+      <trans-unit id="plugin.login">
+        <source>Login form</source>
+      </trans-unit>
+
+      <trans-unit id="plugin.login.description">
+        <source>Login/logout form for website users</source>
+      </trans-unit>
+
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,7 @@
+plugin.tx_hairu {
+  view {
+    templateRootPaths.0 = {$plugin.tx_hairu.view.templateRootPath}
+    partialRootPaths.0 = {$plugin.tx_hairu.view.partialRootPath}
+    layoutRootPaths.0 = {$plugin.tx_hairu.view.layoutRootPath}
+  }
+}
