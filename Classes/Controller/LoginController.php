@@ -28,6 +28,7 @@ namespace PAGEmachine\Hairu\Controller;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use PAGEmachine\Hairu\LoginType;
 
 class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 
@@ -76,6 +77,7 @@ class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     list($submitJavaScript, $additionalHiddenFields) = $this->getAdditionalLoginFormCode();
 
     $this->view->assignMultiple(array(
+      'logintype' => LoginType::LOGIN,
       'submitJavaScript' => $submitJavaScript,
       'additionalHiddenFields' => $additionalHiddenFields,
     ));
@@ -86,7 +88,12 @@ class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
    *
    * @return void
    */
-  public function showLogoutFormAction() {}
+  public function showLogoutFormAction() {
+
+    $this->view->assignMultiple(array(
+      'logintype' => LoginType::LOGOUT,
+    ));
+  }
 
   /**
    * Gets additional code for login forms based on the
