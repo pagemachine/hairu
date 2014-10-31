@@ -4,4 +4,8 @@ plugin.tx_hairu {
     partialRootPaths.0 = {$plugin.tx_hairu.view.partialRootPath}
     layoutRootPaths.0 = {$plugin.tx_hairu.view.layoutRootPath}
   }
+
+  settings {
+    userStoragePage = {$plugin.tx_hairu.settings.userStoragePage}
+  }
 }

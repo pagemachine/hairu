@@ -7,4 +7,9 @@ plugin.tx_hairu {
     // cat=plugin.tx_hairu/file; type=string; label=Path to template layouts (FE)
     layoutRootPath = EXT:hairu/Resources/Private/Layouts/
   }
+
+  settings {
+    // cat=plugin.tx_hairu//userStoragePage; type=int+; label=User storage page ID: Page where frontend user records are stored
+    userStoragePage =
+  }
 }
