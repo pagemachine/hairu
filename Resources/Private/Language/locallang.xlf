@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" product-name="hairu">
+    <header/>
+    <body>
+
+      <trans-unit id="username">
+        <source>Username</source>
+      </trans-unit>
+
+      <trans-unit id="password">
+        <source>Password</source>
+      </trans-unit>
+
+      <trans-unit id="action.login">
+        <source>Log in</source>
+      </trans-unit>
+
+    </body>
+  </file>
+</xliff>

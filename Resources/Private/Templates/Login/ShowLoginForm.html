@@ -1,3 +1,32 @@
 <f:layout name="Default"/>
 <f:section name="main">
+
+<form
+  method="post"
+  class="login form-inline">
+
+  <input type="hidden" name="logintype" value="login"/>
+  <input type="hidden" name="pid" value="{settings.userStoragePage}"/>
+
+  <f:render partial="Form/TextField" arguments="{
+    fieldName: 'user',
+    fieldType: 'text',
+    translationKey: 'username',
+    defaultLabel: 'Username'
+  }"/>
+
+  <f:render partial="Form/TextField" arguments="{
+    fieldName: 'pass',
+    fieldType: 'password',
+    translationKey: 'password',
+    defaultLabel: 'Password'
+  }"/>
+
+  <f:render partial="Form/SubmitButton" arguments="{
+    translationKey: 'action.login',
+    defaultLabel: 'Log in'
+  }"/>
+
+</form>
+
 </f:section>
