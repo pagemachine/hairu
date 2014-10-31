@@ -25,9 +25,35 @@ namespace PAGEmachine\Hairu\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 
 class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
+
+  /**
+   * Initialize all actions
+   *
+   * @return void
+   */
+  protected function initializeAction() {
+
+    $formData = GeneralUtility::_GET();
+    ArrayUtility::mergeRecursiveWithOverrule($formData, GeneralUtility::_POST());
+
+    $this->request->setArgument('formData', $formData);
+  }
+
+  /**
+   * Initialize all views
+   *
+   * @param ViewInterface $view
+   * @return void
+   */
+  protected function initializeView(ViewInterface $view) {
+
+    $view->assign('formData', $this->request->getArgument('formData'));
+  }
 
   /**
    * Login form view
