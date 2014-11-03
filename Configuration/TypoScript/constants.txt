@@ -1,3 +1,5 @@
+# customsubcategory=reset=Password reset
+
 plugin.tx_hairu {
   view {
     // cat=plugin.tx_hairu/file; type=string; label=Path to template root (FE)
@@ -11,5 +13,10 @@ plugin.tx_hairu {
   settings {
     // cat=plugin.tx_hairu//userStoragePage; type=int+; label=User storage page ID: Page where frontend user records are stored
     userStoragePage =
+
+    passwordReset {
+      // cat=plugin.tx_hairu/reset/page; type=int+; label=Password reset page ID: Page where a password reset can be performed, current page if empty
+      page =
+    }
   }
 }
