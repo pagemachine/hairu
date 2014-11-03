@@ -140,6 +140,7 @@ class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
    * @return void
    * 
    * @validate $username NotEmpty
+   * @validate $username PAGEmachine\Hairu\Validation\Validator\ValidFrontendUserValidator(property = username)
    */
   public function startPasswordResetAction($username) {}
 
