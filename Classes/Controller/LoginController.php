@@ -127,6 +127,35 @@ class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
   }
 
   /**
+   * Password reset form view
+   *
+   * @return void
+   */
+  public function showPasswordResetFormAction() {}
+
+  /**
+   * Start password reset
+   *
+   * @param string $username
+   * @return void
+   * 
+   * @validate $username NotEmpty
+   */
+  public function startPasswordResetAction($username) {}
+
+  /**
+   * A template method for displaying custom error flash messages, or to
+   * display no flash message at all on errors. Override this to customize
+   * the flash message in your action controller.
+   *
+   * @return string The flash message or FALSE if no flash message should be set
+   * @api
+   */
+  protected function getErrorFlashMessage() {
+    return FALSE;
+  }
+
+  /**
    * Gets additional code for login forms based on the
    * TYPO3_CONF_VARS/EXTCONF/felogin/loginFormOnSubmitFuncs hook
    *

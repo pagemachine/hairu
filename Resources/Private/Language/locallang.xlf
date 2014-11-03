@@ -20,6 +20,10 @@
         <source>Log out</source>
       </trans-unit>
 
+      <trans-unit id="action.resetPassword">
+        <source>Reset password</source>
+      </trans-unit>
+
       <trans-unit id="login.failed">
         <source><![CDATA[<b>Login failure</b><br>
 Most likely you didn't enter the username or password correctly. Be certain that you enter them precisely as they are, including upper/lower case. Another possibility is that cookies might be disabled in your web browser.]]></source>
