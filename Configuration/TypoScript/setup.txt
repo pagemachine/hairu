@@ -1,3 +1,15 @@
+config.tx_extbase {
+  persistence {
+    classes {
+      PAGEmachine\Hairu\Domain\Model\FrontendUser {
+        mapping {
+          tableName = fe_users
+        }
+      }
+    }
+  }
+}
+
 plugin.tx_hairu {
   view {
     templateRootPaths.0 = {$plugin.tx_hairu.view.templateRootPath}
