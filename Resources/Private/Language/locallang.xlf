@@ -29,6 +29,10 @@ Most likely you didn't enter the username or password correctly. Be certain that
         <source><![CDATA[You are now logged in as <b>%s</b>.]]></source>
       </trans-unit>
 
+      <trans-unit id="logout.successful">
+        <source>You just logged out from your session on this website.</source>
+      </trans-unit>
+
     </body>
   </file>
 </xliff>

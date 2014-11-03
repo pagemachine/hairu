@@ -77,8 +77,24 @@ class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     }
 
     $formData = $this->request->getArgument('formData');
-    $loginFailed = isset($formData['logintype'])
-      && $formData['logintype'] === 'login';
+    $loginFailed = FALSE;
+    $logoutSuccessful = FALSE;
+
+    if (isset($formData['logintype'])) {
+
+      switch ($formData['logintype']) {
+
+        case LoginType::LOGIN:
+
+          $loginFailed = TRUE;
+          break;
+
+        case LoginType::LOGOUT:
+
+          $logoutSuccessful = TRUE;
+          break;
+      }
+    }
 
     list($submitJavaScript, $additionalHiddenFields) = $this->getAdditionalLoginFormCode();
 
@@ -87,6 +103,7 @@ class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
       'submitJavaScript' => $submitJavaScript,
       'additionalHiddenFields' => $additionalHiddenFields,
       'loginFailed' => $loginFailed,
+      'logoutSuccessful' => $logoutSuccessful,
     ));
   }
 
