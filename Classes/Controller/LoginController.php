@@ -28,6 +28,7 @@ namespace PAGEmachine\Hairu\Controller;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MailUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -40,6 +41,12 @@ class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
    * @inject
    */
   protected $authenticationService;
+
+  /**
+   * @var \TYPO3\CMS\Extbase\Security\Cryptography\HashService
+   * @inject
+   */
+  protected $hashService;
 
   /**
    * @var \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
@@ -157,7 +164,65 @@ class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
    * @validate $username NotEmpty
    * @validate $username PAGEmachine\Hairu\Validation\Validator\ValidFrontendUserValidator(property = username)
    */
-  public function startPasswordResetAction($username) {}
+  public function startPasswordResetAction($username) {
+
+    $user = $this->frontendUserRepository->findOneByUsername($username);
+    $hash = md5(GeneralUtility::generateRandomBytes(64));
+    $token = array(
+      'uid' => $user->getUid(),
+      'hmac' => $this->hashService->generateHmac($user->getPassword()),
+    );
+
+    // Remove other possibly existing tokens
+    $this->tokenCache->flushByTag($user->getUid());
+    // Store new reset token
+    $tokenLifetime = $this->getSettingValue('passwordReset.token.lifetime', 86400); // 1 day
+    $this->tokenCache->set($hash, $token, array($user->getUid()), $tokenLifetime);
+
+    $passwordResetPageUid = $this->getSettingValue('passwordReset.page', $this->getFrontendController()->id);
+    $hashUri = $this->uriBuilder
+      ->setTargetPageUid($passwordResetPageUid)
+      ->setUseCacheHash(FALSE)
+      ->setCreateAbsoluteUri(TRUE)
+      ->uriFor('showPasswordResetForm', array(
+        'hash' => $hash,
+      ));
+    $this->view->assignMultiple(array(
+      'user' => $user,
+      'hash' => $hash, // Allow for custom URI in Fluid
+      'hashUri' => $hashUri,
+    ));
+
+    $message = $this->objectManager->get('TYPO3\\CMS\\Core\\Mail\\MailMessage');
+    $message
+      ->setFrom($this->getSettingValue('passwordReset.mail.from', MailUtility::getSystemFrom()))
+      ->setTo($user->getEmail())
+      ->setSubject($this->getSettingValue('passwordReset.mail.subject', 'Password reset request'));
+
+    $this->request->setFormat('txt');
+    $message->setBody($this->view->render('passwordResetMail'), 'text/plain');
+    $this->request->setFormat('html');
+    $message->addPart($this->view->render('passwordResetMail'), 'text/html');
+    $mailSent = FALSE;
+
+    try {
+      
+      $mailSent = $message->send();
+    } catch (\Swift_SwiftException $e) {
+      
+      /* Nothing to do ATM */
+    }
+
+    if ($mailSent) {
+
+      $this->addLocalizedFlashMessage('resetPassword.started', array($user->getEmail()), FlashMessage::INFO);
+    } else {
+
+      $this->addLocalizedFlashMessage('resetPassword.failed.sending', array($user->getEmail()), FlashMessage::ERROR);
+    }
+
+    $this->redirect('showPasswordResetForm');
+  }
 
   /**
    * Shorthand helper for getting setting values with optional default values
@@ -249,5 +314,13 @@ class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     $additionalHiddenFields = implode('LF', $additionalHiddenFields);
 
     return array($submitJavaScript, $additionalHiddenFields);
+  }
+
+  /**
+   * @return \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
+   */
+  protected function getFrontendController() {
+
+    return $GLOBALS['TSFE'];
   }
 }
