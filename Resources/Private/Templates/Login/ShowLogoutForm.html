@@ -15,6 +15,12 @@
 
   <input type="hidden" name="logintype" value="{logintype}"/>
 
+  <f:render partial="Form/Static" arguments="{
+    translationKey: 'login.status',
+    defaultLabel: 'Currently logged in as:',
+    text: user.username
+  }"/>
+
   <f:render partial="Form/SubmitButton" arguments="{
     translationKey: 'action.logout',
     defaultLabel: 'Log out'
