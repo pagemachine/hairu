@@ -27,4 +27,17 @@ namespace PAGEmachine\Hairu\Domain\Repository;
 
 class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository {
 
+  /**
+   * Returns a query for objects of this repository
+   *
+   * @return \TYPO3\CMS\Extbase\Persistence\QueryInterface
+   * @api
+   */
+  public function createQuery() {
+
+    $query = parent::createQuery();
+    $query->getQuerySettings()->setRespectStoragePage(FALSE);
+
+    return $query;
+  }
 }
