@@ -1,12 +1,18 @@
-<p class="form-group">
-  <label class="sr-only" for="login-{fieldName}">
-    <f:translate key="{translationKey}">{defaultLabel}</f:translate>
-  </label>
-  <input
-    type="{fieldType}"
-    name="{fieldName}"
-    value="{fieldValue}"
-    id="login-{fieldName}"
-    placeholder="{f:translate(key: '{translationKey}', default: '{defaultLabel}')}"
-    class="form-control"/>
-</p>
+<f:form.validationResults for="{fieldName}">
+  <p class="form-group {f:if(condition: validationResults.errors, then: 'has-error has-feedback')}">
+    <label class="sr-only" for="login-{fieldName}">
+      <f:translate key="{translationKey}">{defaultLabel}</f:translate>
+    </label>
+    <f:form.textfield
+      type="{fieldType}"
+      name="{fieldName}"
+      value="{fieldValue}"
+      id="login-{fieldName}"
+      placeholder="{f:translate(key: '{translationKey}', default: '{defaultLabel}')}"
+      title="{validationResults.errors.0}"
+      class="form-control"/>
+    <f:if condition="{validationResults.errors}">
+      <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+    </f:if>
+  </p>
+</f:form.validationResults>
