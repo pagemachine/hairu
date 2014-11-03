@@ -28,6 +28,12 @@ namespace PAGEmachine\Hairu\Authentication;
 class AuthenticationService implements \TYPO3\CMS\Core\SingletonInterface {
 
   /**
+   * @var \PAGEmachine\Hairu\Domain\Repository\FrontendUserRepository
+   * @inject
+   */
+  protected $frontendUserRepository;
+
+  /**
    * Returns whether any user is currently authenticated
    *
    * @return boolean
@@ -35,6 +41,16 @@ class AuthenticationService implements \TYPO3\CMS\Core\SingletonInterface {
   public function isUserAuthenticated() {
 
     return $this->getFrontendController()->loginUser;
+  }
+
+  /**
+   * Returns the currently authenticated zser
+   *
+   * @return \PAGEmachine\Hairu\Domain\Model\FrontendUser
+   */
+  public function getAuthenticatedUser() {
+
+    return $this->frontendUserRepository->findByIdentifier($this->getFrontendController()->fe_user->user['uid']);
   }
 
   /**
