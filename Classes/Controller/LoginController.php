@@ -97,8 +97,15 @@ class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
    */
   public function showLogoutFormAction() {
 
+    $formData = $this->request->getArgument('formData');
+    $loginSuccessful = $this->authenticationService->isUserAuthenticated()
+      && isset($formData['logintype'])
+      && $formData['logintype'] === LoginType::LOGIN;
+
     $this->view->assignMultiple(array(
       'logintype' => LoginType::LOGOUT,
+      'loginSuccessful' => $loginSuccessful,
+      'user' => $this->authenticationService->getAuthenticatedUser(),
     ));
   }
 
