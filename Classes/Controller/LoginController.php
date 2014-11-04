@@ -41,6 +41,20 @@ class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
   protected $authenticationService;
 
   /**
+   * @var \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
+   */
+  protected $tokenCache;
+
+  /**
+   * @param \TYPO3\CMS\Core\Cache\CacheManager $cacheManager
+   * @return void
+   */
+  public function injectCacheManager(\TYPO3\CMS\Core\Cache\CacheManager $cacheManager) {
+
+    $this->tokenCache = $cacheManager->getCache('hairu_token');
+  }
+
+  /**
    * Initialize all actions
    *
    * @return void
