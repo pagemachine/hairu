@@ -38,6 +38,12 @@ use PAGEmachine\Hairu\Mvc\Controller\ActionController;
 class LoginController extends ActionController {
 
   /**
+   * @var \PAGEmachine\Hairu\Domain\Repository\FrontendUserRepository
+   * @inject
+   */
+  protected $frontendUserRepository;
+
+  /**
    * @var \PAGEmachine\Hairu\Authentication\AuthenticationService
    * @inject
    */
@@ -48,6 +54,12 @@ class LoginController extends ActionController {
    * @inject
    */
   protected $hashService;
+
+  /**
+   * @var \PAGEmachine\Hairu\Domain\Service\PasswordService
+   * @inject
+   */
+  protected $passwordService;
 
   /**
    * @var \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
@@ -152,9 +164,22 @@ class LoginController extends ActionController {
   /**
    * Password reset form view
    *
+   * @param string $hash
    * @return void
    */
-  public function showPasswordResetFormAction() {}
+  public function showPasswordResetFormAction($hash = NULL) {
+
+    if ($hash !== NULL) {
+
+      if ($this->tokenCache->get($hash) !== FALSE) {
+
+        $this->view->assign('hash', $hash);
+      } else {
+
+        $this->addLocalizedFlashMessage('resetPassword.failed.invalid', NULL, FlashMessage::ERROR);
+      }
+    }
+  }
 
   /**
    * Start password reset
@@ -222,6 +247,51 @@ class LoginController extends ActionController {
     }
 
     $this->redirect('showPasswordResetForm');
+  }
+
+  /**
+   * Complete password reset
+   *
+   * @param string $hash
+   * @param string $password
+   * @param string $passwordRepeat
+   * @return void
+   *
+   * @validate $password NotEmpty
+   * @validate $passwordRepeat NotEmpty
+   */
+  public function completePasswordResetAction($hash, $password, $passwordRepeat) {
+
+    $token = $this->tokenCache->get($hash);
+
+    if ($token !== FALSE) {
+
+      $user = $this->frontendUserRepository->findByIdentifier($token['uid']);
+
+      if ($user !== NULL) {
+
+        if ($this->hashService->validateHmac($user->getPassword(), $token['hmac'])) {
+
+          $user->setPassword($this->passwordService->applyTransformations($password));
+          $this->frontendUserRepository->update($user);
+          $this->tokenCache->remove($hash);
+
+          $this->addLocalizedFlashMessage('resetPassword.completed', NULL, FlashMessage::OK);
+        } else {
+
+          $this->addLocalizedFlashMessage('resetPassword.failed.expired', NULL, FlashMessage::ERROR);
+        }
+      } else {
+
+        $this->addLocalizedFlashMessage('resetPassword.failed.invalid', NULL, FlashMessage::ERROR);
+      }
+    } else {
+
+      $this->addLocalizedFlashMessage('resetPassword.failed.expired', NULL, FlashMessage::ERROR);
+    }
+
+    $loginPageUid = $this->getSettingValue('login.page', $this->getFrontendController()->id);
+    $this->redirect('showLoginForm', NULL, NULL, NULL, $loginPageUid);
   }
 
   /**

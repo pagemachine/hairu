@@ -12,6 +12,10 @@
         <source>Password</source>
       </trans-unit>
 
+      <trans-unit id="passwordRepeat">
+        <source>Repeat password</source>
+      </trans-unit>
+
       <trans-unit id="action.login">
         <source>Log in</source>
       </trans-unit>
@@ -22,6 +26,10 @@
 
       <trans-unit id="action.resetPassword">
         <source>Reset password</source>
+      </trans-unit>
+
+      <trans-unit id="action.setPassword">
+        <source>Set new password</source>
       </trans-unit>
 
       <trans-unit id="login.failed">
@@ -45,8 +53,20 @@ Most likely you didn't enter the username or password correctly. Be certain that
         <source><![CDATA[The password reset mail could not be sent to <b>%s</b>, please try again later.]]></source>
       </trans-unit>
 
+      <trans-unit id="resetPassword.failed.invalid">
+        <source>Invalid password reset request, please try again. Make sure you follow the steps from the password reset mail or start the reset process again.</source>
+      </trans-unit>
+
+      <trans-unit id="resetPassword.failed.expired">
+        <source>Your password reset request has expired, please start the reset process again.</source>
+      </trans-unit>
+
       <trans-unit id="resetPassword.started">
         <source><![CDATA[A mail has been sent to <b>%s</b>, please check the inbox of your mail account to complete the password reset process.]]></source>
+      </trans-unit>
+
+      <trans-unit id="resetPassword.completed">
+        <source>You have successfully changed your password and may login now with your new password.</source>
       </trans-unit>
 
       <trans-unit id="validator.validFrontendUser.invalid">

@@ -5,10 +5,10 @@ defined('TYPO3_MODE') or die();
   'PAGEmachine.Hairu',
   'Login',
   array(
-    'Login' => 'showLoginForm, showLogoutForm, showPasswordResetForm, startPasswordReset',
+    'Login' => 'showLoginForm, showLogoutForm, showPasswordResetForm, startPasswordReset, completePasswordReset',
   ),
   array(
-    'Login' => 'showLoginForm, showLogoutForm, showPasswordResetForm, startPasswordReset',
+    'Login' => 'showLoginForm, showLogoutForm, showPasswordResetForm, startPasswordReset, completePasswordReset',
   )
 );
 
