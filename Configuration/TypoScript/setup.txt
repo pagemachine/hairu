@@ -59,6 +59,16 @@ plugin.tx_hairu {
           }
         }
       }
+      completePasswordReset {
+        password {
+          1 {
+            type = StringLength
+            options {
+              minimum = 5
+            }
+          }
+        }
+      }
     }
   }
 }
