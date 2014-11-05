@@ -40,4 +40,20 @@ plugin.tx_hairu {
       }
     }
   }
+
+  mvc.validation {
+    // Validation of Login controller action arguments
+    Login {
+      startPasswordReset {
+        username {
+          1 {
+            type = PAGEmachine.Hairu:ValidFrontendUserValidator
+            options {
+              property = username
+            }
+          }
+        }
+      }
+    }
+  }
 }

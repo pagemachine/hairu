@@ -33,8 +33,9 @@ use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use PAGEmachine\Hairu\LoginType;
+use PAGEmachine\Hairu\Mvc\Controller\ActionController;
 
-class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
+class LoginController extends ActionController {
 
   /**
    * @var \PAGEmachine\Hairu\Authentication\AuthenticationService
@@ -69,9 +70,9 @@ class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
    */
   protected function initializeAction() {
 
+    // Make global form data (as expected by the CMS core) available
     $formData = GeneralUtility::_GET();
     ArrayUtility::mergeRecursiveWithOverrule($formData, GeneralUtility::_POST());
-
     $this->request->setArgument('formData', $formData);
   }
 
@@ -162,7 +163,6 @@ class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
    * @return void
    * 
    * @validate $username NotEmpty
-   * @validate $username PAGEmachine\Hairu\Validation\Validator\ValidFrontendUserValidator(property = username)
    */
   public function startPasswordResetAction($username) {
 
