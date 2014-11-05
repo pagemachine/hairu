@@ -17,6 +17,13 @@ plugin.tx_hairu {
     passwordReset {
       // cat=plugin.tx_hairu/reset/page; type=int+; label=Password reset page ID: Page where a password reset can be performed, current page if empty
       page =
+
+      mail {
+        // cat=plugin.tx_hairu/reset/mail.subject; type=string; label=Mail subject: Subject for the password reset mail
+        subject = Password reset request
+        // cat=plugin.tx_hairu/reset/mail.subject; type=string; label=Mail from: Sender for the password reset mail, system from address if empty
+        from = 
+      }
     }
   }
 }
