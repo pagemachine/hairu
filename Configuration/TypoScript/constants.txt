@@ -1,3 +1,4 @@
+# customsubcategory=login=Login
 # customsubcategory=reset=Password reset
 
 plugin.tx_hairu {
@@ -13,6 +14,11 @@ plugin.tx_hairu {
   settings {
     // cat=plugin.tx_hairu//userStoragePage; type=int+; label=User storage page ID: Page where frontend user records are stored
     userStoragePage =
+
+    login {
+      // cat=plugin.tx_hairu/login/page; type=int+; label=Login page ID: Page where visitors can log in, current page if empty
+      page = 
+    }
 
     passwordReset {
       // cat=plugin.tx_hairu/reset/page; type=int+; label=Password reset page ID: Page where a password reset can be performed, current page if empty

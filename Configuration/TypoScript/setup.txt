@@ -27,6 +27,11 @@ plugin.tx_hairu {
 
   settings {
     userStoragePage = {$plugin.tx_hairu.settings.userStoragePage}
+
+    login {
+      page = {$plugin.tx_hairu.settings.login.page}
+    }
+
     passwordReset {
       page = {$plugin.tx_hairu.settings.passwordReset.page}
 
