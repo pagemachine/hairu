@@ -15,6 +15,10 @@ plugin.tx_hairu {
     skipDefaultArguments = 1
   }
 
+  legacy {
+    enableLegacyFlashMessageHandling = 0
+  }
+
   view {
     templateRootPaths.0 = {$plugin.tx_hairu.view.templateRootPath}
     partialRootPaths.0 = {$plugin.tx_hairu.view.partialRootPath}
