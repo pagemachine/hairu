@@ -11,6 +11,10 @@ config.tx_extbase {
 }
 
 plugin.tx_hairu {
+  features {
+    skipDefaultArguments = 1
+  }
+
   view {
     templateRootPaths.0 = {$plugin.tx_hairu.view.templateRootPath}
     partialRootPaths.0 = {$plugin.tx_hairu.view.partialRootPath}
