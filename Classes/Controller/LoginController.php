@@ -250,6 +250,21 @@ class LoginController extends ActionController {
   }
 
   /**
+   * Initialize complete password reset
+   *
+   * @return void
+   */
+  protected function initializeCompletePasswordResetAction() {
+
+    // Password repeat validation needs to be added manually here to access the password value
+    $passwordRepeatArgumentValidator = $this->arguments->getArgument('passwordRepeat')->getValidator();
+    $passwordsEqualValidator = $this->validatorResolver->createValidator('PAGEmachine.Hairu:EqualValidator', array(
+      'equalTo' => $this->request->getArgument('password'),
+    ));
+    $passwordRepeatArgumentValidator->addValidator($passwordsEqualValidator);
+  }
+
+  /**
    * Complete password reset
    *
    * @param string $hash
