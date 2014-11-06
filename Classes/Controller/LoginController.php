@@ -203,13 +203,13 @@ class LoginController extends ActionController {
       'uid' => $user->getUid(),
       'hmac' => $this->hashService->generateHmac($user->getPassword()),
     );
-
-    // Remove other possibly existing tokens
-    $this->tokenCache->flushByTag($user->getUid());
-    // Store new reset token
     $tokenLifetime = $this->getSettingValue('passwordReset.token.lifetime', 86400); // 1 day
+
+    // Remove possibly existing reset tokens and store new one
+    $this->tokenCache->flushByTag($user->getUid());
     $this->tokenCache->set($hash, $token, array($user->getUid()), $tokenLifetime);
 
+    $expiryDate = new \DateTime(sprintf('now + %d seconds', $tokenLifetime));
     $passwordResetPageUid = $this->getSettingValue('passwordReset.page', $this->getFrontendController()->id);
     $hashUri = $this->uriBuilder
       ->setTargetPageUid($passwordResetPageUid)
@@ -221,6 +221,7 @@ class LoginController extends ActionController {
     $this->view->assignMultiple(array(
       'user' => $user,
       'hash' => $hash, // Allow for custom URI in Fluid
+      'expiryDate' => $expiryDate,
       'hashUri' => $hashUri,
     ));
 
