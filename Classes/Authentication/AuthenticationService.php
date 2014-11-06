@@ -25,6 +25,8 @@ namespace PAGEmachine\Hairu\Authentication;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use PAGEmachine\Hairu\Domain\Model\FrontendUser;
+
 class AuthenticationService implements \TYPO3\CMS\Core\SingletonInterface {
 
   /**
@@ -44,13 +46,28 @@ class AuthenticationService implements \TYPO3\CMS\Core\SingletonInterface {
   }
 
   /**
-   * Returns the currently authenticated zser
+   * Returns the currently authenticated user
    *
-   * @return \PAGEmachine\Hairu\Domain\Model\FrontendUser
+   * @return FrontendUser
    */
   public function getAuthenticatedUser() {
 
     return $this->frontendUserRepository->findByIdentifier($this->getFrontendController()->fe_user->user['uid']);
+  }
+
+  /**
+   * Authenticates a frontend user
+   *
+   * @param FrontendUser $user
+   * @return void
+   */
+  public function authenticateUser(FrontendUser $user) {
+
+    $frontendController = $this->getFrontendController();
+    $frontendController->fe_user->createUserSession($user->_getCleanProperties());
+    $frontendController->fe_user->loginSessionStarted = TRUE;
+    $frontendController->fe_user->user = $frontendController->fe_user->fetchUserSession();
+    $frontendController->loginUser = TRUE;
   }
 
   /**
