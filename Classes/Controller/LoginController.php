@@ -29,6 +29,7 @@ use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use PAGEmachine\Hairu\LoginType;
 
@@ -157,6 +158,28 @@ class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
    * @validate $username PAGEmachine\Hairu\Validation\Validator\ValidFrontendUserValidator(property = username)
    */
   public function startPasswordResetAction($username) {}
+
+  /**
+   * Shorthand helper for getting setting values with optional default values
+   *
+   * @param string $settingPath Path to the setting, e.g. "foo.bar.qux"
+   * @param mixed $defaultValue Default value if no value is set
+   * @return mixed
+   */
+  protected function getSettingValue($settingPath, $defaultValue = NULL) {
+
+    $value = ObjectAccess::getPropertyPath($this->settings, $settingPath);
+
+    // Change type of value to type of default value if possible
+    if (!empty($value) && $defaultValue !== NULL) {
+
+      settype($value, gettype($defaultValue));
+    }
+
+    $value = !empty($value) ? $value : $defaultValue;
+
+    return $value;
+  }
 
   /**
    * A template method for displaying custom error flash messages, or to
