@@ -201,6 +201,8 @@ class AuthenticationController extends ActionController {
 
       if ($this->tokenCache->get($hash) !== FALSE) {
 
+        $this->addLocalizedFlashMessage('resetPassword.hints', NULL, FlashMessage::INFO);
+
         $this->view->assign('hash', $hash);
       } else {
 

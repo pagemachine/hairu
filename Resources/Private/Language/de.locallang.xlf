@@ -71,6 +71,11 @@ Höchstwahrscheinlich wurden Nutzername oder Passwort falsch eingegeben. Bitte v
         <target>Bitte gibt den Nutzernamen deines Kontos ein, eine E-Mail zum Zurücksetzen deines Passworts wird dann unverzüglich an deine E-Mail-Adresse geschickt.</target>
       </trans-unit>
 
+      <trans-unit id="resetPassword.hints">
+        <source>Please enter your new password twice.</source>
+        <target>Bitte gibt dein neues Passwort zweimal ein.</target>
+      </trans-unit>
+
       <trans-unit id="resetPassword.errors">
         <source>There where some errors with your input:</source>
         <target>Bei der Verarbeitung der Eingaben sind Fehler aufgetreten:</target>
