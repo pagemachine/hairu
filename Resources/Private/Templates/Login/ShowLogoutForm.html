@@ -1,14 +1,6 @@
 <f:layout name="Default"/>
 <f:section name="main">
 
-<f:if condition="{loginSuccessful}">
-<f:render partial="Message" arguments="{
-  type: 'success',
-  translationKey: 'login.successful',
-  arguments: '{0: user.username}'
-}"/>
-</f:if>
-
 <f:flashMessages renderMode="div"/>
 
 <form

@@ -146,14 +146,18 @@ class LoginController extends ActionController {
   public function showLogoutFormAction() {
 
     $formData = $this->request->getArgument('formData');
-    $loginSuccessful = $this->authenticationService->isUserAuthenticated()
-      && isset($formData['logintype'])
-      && $formData['logintype'] === LoginType::LOGIN;
+    $user = $this->authenticationService->getAuthenticatedUser();
+
+    if ($this->authenticationService->isUserAuthenticated()
+        && isset($formData['logintype'])
+        && $formData['logintype'] === LoginType::LOGIN) {
+
+      $this->addLocalizedFlashMessage('login.successful', array($user->getUsername()), FlashMessage::OK);
+    }
 
     $this->view->assignMultiple(array(
       'logintype' => LoginType::LOGOUT,
-      'loginSuccessful' => $loginSuccessful,
-      'user' => $this->authenticationService->getAuthenticatedUser(),
+      'user' => $user,
     ));
   }
 
