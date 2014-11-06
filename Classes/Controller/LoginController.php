@@ -165,9 +165,15 @@ class LoginController extends ActionController {
    * Password reset form view
    *
    * @param string $hash
+   * @param boolean $start
    * @return void
    */
-  public function showPasswordResetFormAction($hash = NULL) {
+  public function showPasswordResetFormAction($hash = NULL, $start = FALSE) {
+
+    if ($start) {
+
+      $this->addLocalizedFlashMessage('resetPassword.start', NULL, FlashMessage::INFO);
+    }
 
     if ($hash !== NULL) {
 
