@@ -44,7 +44,7 @@ class LoginController extends ActionController {
   protected $frontendUserRepository;
 
   /**
-   * @var \PAGEmachine\Hairu\Authentication\AuthenticationService
+   * @var \PAGEmachine\Hairu\Domain\Service\AuthenticationService
    * @inject
    */
   protected $authenticationService;

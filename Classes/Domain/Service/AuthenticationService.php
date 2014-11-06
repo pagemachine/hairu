@@ -1,5 +1,5 @@
 <?php
-namespace PAGEmachine\Hairu\Authentication;
+namespace PAGEmachine\Hairu\Domain\Service;
 
 /***************************************************************
  *  Copyright notice
