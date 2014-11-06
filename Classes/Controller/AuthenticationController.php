@@ -76,6 +76,28 @@ class AuthenticationController extends ActionController {
   }
 
   /**
+   * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
+   * @return void
+   */
+  public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager) {
+
+    parent::injectConfigurationManager($configurationManager);
+
+    $defaultSettings = array(
+      'login' => array(
+        'page' => $this->getFrontendController()->id,
+      ),
+      'passwordReset' => array(
+        'page' => $this->getFrontendController()->id,
+      ),
+    );
+
+    $settings = $defaultSettings;
+    ArrayUtility::mergeRecursiveWithOverrule($settings, $this->settings, TRUE, FALSE);
+    $this->settings = $settings;
+  }
+
+  /**
    * Initialize all actions
    *
    * @return void
@@ -210,7 +232,7 @@ class AuthenticationController extends ActionController {
     $this->tokenCache->set($hash, $token, array($user->getUid()), $tokenLifetime);
 
     $expiryDate = new \DateTime(sprintf('now + %d seconds', $tokenLifetime));
-    $passwordResetPageUid = $this->getSettingValue('passwordReset.page', $this->getFrontendController()->id);
+    $passwordResetPageUid = $this->getSettingValue('passwordReset.page');
     $hashUri = $this->uriBuilder
       ->setTargetPageUid($passwordResetPageUid)
       ->setUseCacheHash(FALSE)
@@ -319,7 +341,7 @@ class AuthenticationController extends ActionController {
       $this->addLocalizedFlashMessage('resetPassword.failed.expired', NULL, FlashMessage::ERROR);
     }
 
-    $loginPageUid = $this->getSettingValue('login.page', $this->getFrontendController()->id);
+    $loginPageUid = $this->getSettingValue('login.page');
     $this->redirect('showLoginForm', NULL, NULL, NULL, $loginPageUid);
   }
 
