@@ -43,6 +43,8 @@ plugin.tx_hairu {
         subject = {$plugin.tx_hairu.settings.passwordReset.mail.subject}
         from = {$plugin.tx_hairu.settings.passwordReset.mail.from}
       }
+
+      loginOnSuccess = {$plugin.tx_hairu.settings.passwordReset.loginOnSuccess}
     }
   }
 

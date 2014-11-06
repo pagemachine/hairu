@@ -69,6 +69,10 @@ Most likely you didn't enter the username or password correctly. Be certain that
         <source>You have successfully changed your password and may login now with your new password.</source>
       </trans-unit>
 
+      <trans-unit id="resetPassword.completed.login">
+        <source>You have successfully changed your password and have been logged in automatically.</source>
+      </trans-unit>
+
       <trans-unit id="validator.validFrontendUser.invalid">
         <source>There is no user "%s".</source>
       </trans-unit>

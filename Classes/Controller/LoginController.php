@@ -291,7 +291,14 @@ class LoginController extends ActionController {
           $this->frontendUserRepository->update($user);
           $this->tokenCache->remove($hash);
 
-          $this->addLocalizedFlashMessage('resetPassword.completed', NULL, FlashMessage::OK);
+          if ($this->getSettingValue('passwordReset.loginOnSuccess', FALSE)) {
+
+            $this->authenticationService->authenticateUser($user);
+            $this->addLocalizedFlashMessage('resetPassword.completed.login', NULL, FlashMessage::OK);
+          } else {
+
+            $this->addLocalizedFlashMessage('resetPassword.completed', NULL, FlashMessage::OK);
+          }
         } else {
 
           $this->addLocalizedFlashMessage('resetPassword.failed.expired', NULL, FlashMessage::ERROR);
