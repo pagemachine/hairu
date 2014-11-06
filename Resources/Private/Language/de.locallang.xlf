@@ -48,7 +48,7 @@
         <source><![CDATA[<b>Login failure</b><br>
 Most likely you didn't enter the username or password correctly. Be certain that you enter them precisely as they are, including upper/lower case. Another possibility is that cookies might be disabled in your web browser.]]></source>
         <target><![CDATA[<b>Anmeldung fehlgeschlagen</b><br>
-Höchstwahrscheinlich wurden Nutzername oder Passwort falsch eingegeben. Bitte vergewissere dich, dass diese Angaben korrekt sind, inklusive Groß- und Kleinshreibung. Außerdem könnten Cookies in deinem Browser deaktiviert sein.]]></target>
+Höchstwahrscheinlich wurden Nutzername oder Passwort falsch eingegeben. Bitte vergewissere dich, dass diese Angaben korrekt sind, inklusive Groß- und Kleinschreibung. Außerdem könnten Cookies in deinem Browser deaktiviert sein.]]></target>
       </trans-unit>
 
       <trans-unit id="login.successful">
