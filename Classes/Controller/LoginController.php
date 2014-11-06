@@ -112,7 +112,6 @@ class LoginController extends ActionController {
     }
 
     $formData = $this->request->getArgument('formData');
-    $logoutSuccessful = FALSE;
 
     if (isset($formData['logintype'])) {
 
@@ -125,7 +124,7 @@ class LoginController extends ActionController {
 
         case LoginType::LOGOUT:
 
-          $logoutSuccessful = TRUE;
+          $this->addLocalizedFlashMessage('logout.successful', NULL, FlashMessage::INFO);
           break;
       }
     }
@@ -136,7 +135,6 @@ class LoginController extends ActionController {
       'logintype' => LoginType::LOGIN,
       'submitJavaScript' => $submitJavaScript,
       'additionalHiddenFields' => $additionalHiddenFields,
-      'logoutSuccessful' => $logoutSuccessful,
     ));
   }
 

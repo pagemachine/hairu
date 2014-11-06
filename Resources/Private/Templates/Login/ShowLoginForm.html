@@ -1,13 +1,6 @@
 <f:layout name="Default"/>
 <f:section name="main">
 
-<f:if condition="{logoutSuccessful}">
-<f:render partial="Message" arguments="{
-  type: 'info',
-  translationKey: 'logout.successful'
-}"/>
-</f:if>
-
 <f:flashMessages renderMode="div"/>
 
 <form
