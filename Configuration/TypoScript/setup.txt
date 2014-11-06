@@ -49,8 +49,8 @@ plugin.tx_hairu {
   }
 
   mvc.validation {
-    // Validation of Login controller action arguments
-    Login {
+    // Validation of Authentication controller action arguments
+    Authentication {
       startPasswordReset {
         username {
           1 {

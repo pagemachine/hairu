@@ -35,7 +35,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use PAGEmachine\Hairu\LoginType;
 use PAGEmachine\Hairu\Mvc\Controller\ActionController;
 
-class LoginController extends ActionController {
+class AuthenticationController extends ActionController {
 
   /**
    * @var \PAGEmachine\Hairu\Domain\Repository\FrontendUserRepository

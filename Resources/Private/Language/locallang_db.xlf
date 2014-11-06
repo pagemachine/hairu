@@ -4,11 +4,11 @@
     <header/>
     <body>
 
-      <trans-unit id="plugin.login">
-        <source>Login form</source>
+      <trans-unit id="plugin.auth">
+        <source>Authentication form</source>
       </trans-unit>
 
-      <trans-unit id="plugin.login.description">
+      <trans-unit id="plugin.auth.description">
         <source>Login/logout form for website users</source>
       </trans-unit>
 
