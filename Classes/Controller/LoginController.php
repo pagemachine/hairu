@@ -171,6 +171,26 @@ class LoginController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
   }
 
   /**
+   * Shorthand helper for adding localized flash messages
+   *
+   * @param string $translationKey
+   * @param array $translationArguments
+   * @param integer $severity
+   */
+  protected function addLocalizedFlashMessage($translationKey, array $translationArguments = NULL, $severity) {
+
+    $this->addFlashMessage(
+      LocalizationUtility::translate(
+        $translationKey,
+        $this->request->getControllerExtensionName(),
+        $translationArguments
+      ),
+      '',
+      $severity
+    );
+  }
+
+  /**
    * Gets additional code for login forms based on the
    * TYPO3_CONF_VARS/EXTCONF/felogin/loginFormOnSubmitFuncs hook
    *
