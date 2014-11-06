@@ -18,6 +18,11 @@ plugin.tx_hairu {
       // cat=plugin.tx_hairu/reset/page; type=int+; label=Password reset page ID: Page where a password reset can be performed, current page if empty
       page =
 
+      token {
+        // cat=plugin.tx_hairu/reset/token.lifetime; type=int+; label=Reset token lifetime: Number of seconds a password reset token is valid
+        lifetime = 86400
+      }
+
       mail {
         // cat=plugin.tx_hairu/reset/mail.subject; type=string; label=Mail subject: Subject for the password reset mail
         subject = Password reset request
