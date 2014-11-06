@@ -40,4 +40,15 @@ class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Fronte
 
     return $query;
   }
+
+  /**
+   * Replaces an existing object with the same identifier by the given object
+   *
+   * @param object $modifiedObject The modified object
+   * @return void
+   */
+  public function update($modifiedObject) {
+
+    $this->persistenceManager->update($modifiedObject);
+  }
 }
