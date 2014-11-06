@@ -25,7 +25,7 @@ namespace PAGEmachine\Hairu\Domain\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use PAGEmachine\Hairu\Domain\Model\FrontendUser;
+use TYPO3\CMS\Extbase\DomainObject\DomainObjectInterface;
 
 class AuthenticationService implements \TYPO3\CMS\Core\SingletonInterface {
 
@@ -58,10 +58,10 @@ class AuthenticationService implements \TYPO3\CMS\Core\SingletonInterface {
   /**
    * Authenticates a frontend user
    *
-   * @param FrontendUser $user
+   * @param DomainObjectInterface $user
    * @return void
    */
-  public function authenticateUser(FrontendUser $user) {
+  public function authenticateUser(DomainObjectInterface $user) {
 
     $frontendController = $this->getFrontendController();
     $frontendController->fe_user->createUserSession($user->_getCleanProperties());
