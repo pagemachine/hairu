@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+  <file source-language="en" target-language="en" datatype="plaintext" original="messages" product-name="hairu">
+    <header/>
+    <body>
+
+      <trans-unit id="plugin.auth">
+        <source>Authentication form</source>
+        <target>Authentifizierungs-Formular</target>
+      </trans-unit>
+
+      <trans-unit id="plugin.auth.description">
+        <source>Login/logout form for website users</source>
+        <target>Anmelde-/Abmeldeformular für Website-Nutzer</target>
+      </trans-unit>
+
+    </body>
+  </file>
+</xliff>
