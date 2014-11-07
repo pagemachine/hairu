@@ -63,6 +63,12 @@ class AuthenticationController extends ActionController {
   protected $passwordService;
 
   /**
+   * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
+   * @inject
+   */
+  protected $signalSlotDispatcher;
+
+  /**
    * @var \TYPO3\CMS\Core\Log\Logger
    */
   protected $logger;
@@ -194,6 +200,8 @@ class AuthenticationController extends ActionController {
     if ($this->authenticationService->isUserAuthenticated()
         && isset($formData['logintype'])
         && $formData['logintype'] === LoginType::LOGIN) {
+
+      $this->emitAfterLoginSignal();
 
       $this->addLocalizedFlashMessage('login.successful', array($user->getUsername()), FlashMessage::OK);
     }
@@ -466,5 +474,22 @@ class AuthenticationController extends ActionController {
   protected function getFrontendController() {
 
     return $GLOBALS['TSFE'];
+  }
+
+  /**
+   * Emits a signal after a view was initialized
+   *
+   * @return void
+   */
+  protected function emitAfterLoginSignal() {
+
+    $this->signalSlotDispatcher->dispatch(
+      __CLASS__,
+      'afterLogin',
+      array(
+        $this->request,
+        $this->settings
+      )
+    );
   }
 }
