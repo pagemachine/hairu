@@ -63,9 +63,23 @@ class AuthenticationController extends ActionController {
   protected $passwordService;
 
   /**
+   * @var \TYPO3\CMS\Core\Log\Logger
+   */
+  protected $logger;
+
+  /**
    * @var \TYPO3\CMS\Core\Cache\Frontend\FrontendInterface
    */
   protected $tokenCache;
+
+  /**
+   * @param \TYPO3\CMS\Core\Log\LogManager $logManager
+   * @return void
+   */
+  public function injectLogManager(\TYPO3\CMS\Core\Log\LogManager $logManager) {
+
+    $this->logger = $logManager->getLogger(__CLASS__);
+  }
 
   /**
    * @param \TYPO3\CMS\Core\Cache\CacheManager $cacheManager
@@ -273,7 +287,7 @@ class AuthenticationController extends ActionController {
       $mailSent = $message->send();
     } catch (\Swift_SwiftException $e) {
       
-      /* Nothing to do ATM */
+      $this->logger->error($e->getMessage);
     }
 
     if ($mailSent) {
