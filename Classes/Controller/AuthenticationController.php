@@ -173,6 +173,8 @@ class AuthenticationController extends ActionController {
 
         case LoginType::LOGOUT:
 
+          $this->emitAfterLogoutSignal();
+
           $this->addLocalizedFlashMessage('logout.successful', NULL, FlashMessage::INFO);
           break;
       }
@@ -477,7 +479,7 @@ class AuthenticationController extends ActionController {
   }
 
   /**
-   * Emits a signal after a view was initialized
+   * Emits a signal after a user has logged in
    *
    * @return void
    */
@@ -486,6 +488,23 @@ class AuthenticationController extends ActionController {
     $this->signalSlotDispatcher->dispatch(
       __CLASS__,
       'afterLogin',
+      array(
+        $this->request,
+        $this->settings
+      )
+    );
+  }
+
+  /**
+   * Emits a signal after a user has logged out
+   *
+   * @return void
+   */
+  protected function emitAfterLogoutSignal() {
+
+    $this->signalSlotDispatcher->dispatch(
+      __CLASS__,
+      'afterLogout',
       array(
         $this->request,
         $this->settings
