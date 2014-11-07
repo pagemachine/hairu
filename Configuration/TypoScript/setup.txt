@@ -30,6 +30,8 @@ plugin.tx_hairu {
   }
 
   settings {
+    dateFormat = {$plugin.tx_hairu.settings.dateFormat}
+
     login {
       page = {$plugin.tx_hairu.settings.login.page}
     }

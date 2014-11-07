@@ -17,6 +17,9 @@ plugin.tx_hairu {
   }
 
   settings {
+    // cat=plugin.tx_hairu//dateFormat; type=string; label=Date format: Format for date output (PHP date/strftime), value of TYPO3_CONF_VARS/SYS/ddmmyy if empty
+    dateFormat = 
+
     login {
       // cat=plugin.tx_hairu/login/page; type=int+; label=Login page ID: Page where visitors can log in, current page if empty
       page = 

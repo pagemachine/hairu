@@ -85,6 +85,7 @@ class AuthenticationController extends ActionController {
     parent::injectConfigurationManager($configurationManager);
 
     $defaultSettings = array(
+      'dateFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'],
       'login' => array(
         'page' => $this->getFrontendController()->id,
       ),
