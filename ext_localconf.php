@@ -22,3 +22,13 @@ if (!is_array($TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['hairu_t
     ),
   );
 }
+
+/** @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher */
+$signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\SignalSlot\\Dispatcher');
+$signalSlotDispatcher->connect(
+  'PAGEmachine\\Hairu\\Controller\\AuthenticationController',
+  'afterLogin',
+  'PAGEmachine\\Hairu\\Slots\\AfterLogin\\RedirectUrlSlot',
+  'processRedirect'
+);
+unset($signalSlotDispatcher);
