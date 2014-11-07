@@ -193,8 +193,8 @@ class AuthenticationController extends ActionController {
   /**
    * Password reset form view
    *
-   * @param string $hash
-   * @param boolean $start
+   * @param string $hash Identification hash of a password reset token
+   * @param boolean $start TRUE when starting the reset process, FALSE otherwise
    * @return void
    */
   public function showPasswordResetFormAction($hash = NULL, $start = FALSE) {
@@ -221,7 +221,7 @@ class AuthenticationController extends ActionController {
   /**
    * Start password reset
    *
-   * @param string $username
+   * @param string $username Username of a user
    * @return void
    * 
    * @validate $username NotEmpty
@@ -305,9 +305,9 @@ class AuthenticationController extends ActionController {
   /**
    * Complete password reset
    *
-   * @param string $hash
-   * @param string $password
-   * @param string $passwordRepeat
+   * @param string $hash Identification hash of a password reset token
+   * @param string $password New password of the user
+   * @param string $passwordRepeat Confirmation of the new password
    * @return void
    *
    * @validate $password NotEmpty
