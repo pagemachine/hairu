@@ -39,9 +39,9 @@
         <target>Passwort zurücksetzen</target>
       </trans-unit>
 
-      <trans-unit id="action.setPassword">
-        <source>Set new password</source>
-        <target>Neues Passwort speichern</target>
+      <trans-unit id="action.changePassword">
+        <source>Change password</source>
+        <target>Passwort ändern</target>
       </trans-unit>
 
       <trans-unit id="login.failed">

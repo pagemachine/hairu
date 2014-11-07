@@ -32,8 +32,8 @@
         <source>Reset password</source>
       </trans-unit>
 
-      <trans-unit id="action.setPassword">
-        <source>Set new password</source>
+      <trans-unit id="action.changePassword">
+        <source>Change password</source>
       </trans-unit>
 
       <trans-unit id="login.failed">
