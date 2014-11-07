@@ -25,9 +25,11 @@ plugin.tx_hairu {
     layoutRootPaths.0 = {$plugin.tx_hairu.view.layoutRootPath}
   }
 
-  settings {
-    userStoragePage = {$plugin.tx_hairu.settings.userStoragePage}
+  persistence {
+    storagePid = {$plugin.tx_hairu.persistence.storagePid}
+  }
 
+  settings {
     login {
       page = {$plugin.tx_hairu.settings.login.page}
     }

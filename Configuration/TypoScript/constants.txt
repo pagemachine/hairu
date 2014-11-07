@@ -11,10 +11,12 @@ plugin.tx_hairu {
     layoutRootPath = EXT:hairu/Resources/Private/Layouts/
   }
 
-  settings {
-    // cat=plugin.tx_hairu//userStoragePage; type=int+; label=User storage page ID: Page where frontend user records are stored
-    userStoragePage =
+  persistence {
+    // cat=plugin.tx_hairu//storagePid; type=int+; label=Default storage PID
+    storagePid =
+  }
 
+  settings {
     login {
       // cat=plugin.tx_hairu/login/page; type=int+; label=Login page ID: Page where visitors can log in, current page if empty
       page = 

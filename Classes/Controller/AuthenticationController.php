@@ -29,6 +29,7 @@ use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MailUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -118,7 +119,12 @@ class AuthenticationController extends ActionController {
    */
   protected function initializeView(ViewInterface $view) {
 
-    $view->assign('formData', $this->request->getArgument('formData'));
+    $frameworkConfiguration = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+
+    $view->assignMultiple(array(
+      'formData' => $this->request->getArgument('formData'),
+      'storagePid' => $frameworkConfiguration['persistence']['storagePid'],
+    ));
   }
 
   /**
