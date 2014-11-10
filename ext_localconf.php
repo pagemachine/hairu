@@ -31,4 +31,10 @@ $signalSlotDispatcher->connect(
   'PAGEmachine\\Hairu\\Slots\\RedirectUrlSlot',
   'processRedirect'
 );
+$signalSlotDispatcher->connect(
+  'PAGEmachine\\Hairu\\Controller\\AuthenticationController',
+  'afterLogout',
+  'PAGEmachine\\Hairu\\Slots\\RedirectUrlSlot',
+  'processRedirect'
+);
 unset($signalSlotDispatcher);
