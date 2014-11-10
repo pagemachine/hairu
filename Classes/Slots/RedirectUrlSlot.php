@@ -1,5 +1,5 @@
 <?php
-namespace PAGEmachine\Hairu\Slots\AfterLogin;
+namespace PAGEmachine\Hairu\Slots;
 
 /***************************************************************
  *  Copyright notice

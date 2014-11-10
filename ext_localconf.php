@@ -28,7 +28,7 @@ $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TY
 $signalSlotDispatcher->connect(
   'PAGEmachine\\Hairu\\Controller\\AuthenticationController',
   'afterLogin',
-  'PAGEmachine\\Hairu\\Slots\\AfterLogin\\RedirectUrlSlot',
+  'PAGEmachine\\Hairu\\Slots\\RedirectUrlSlot',
   'processRedirect'
 );
 unset($signalSlotDispatcher);
