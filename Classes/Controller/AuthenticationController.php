@@ -465,7 +465,7 @@ class AuthenticationController extends ActionController {
     }
 
     $submitJavaScript = implode(';', $submitJavaScript);
-    $additionalHiddenFields = implode('LF', $additionalHiddenFields);
+    $additionalHiddenFields = implode(LF, $additionalHiddenFields);
 
     return array($submitJavaScript, $additionalHiddenFields);
   }
