@@ -209,7 +209,6 @@ class AuthenticationController extends ActionController {
     }
 
     $this->view->assignMultiple(array(
-      'logintype' => LoginType::LOGOUT,
       'user' => $user,
     ));
   }

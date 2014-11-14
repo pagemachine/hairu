@@ -1,14 +1,14 @@
+{namespace h=PAGEmachine\Hairu\ViewHelpers}
+
 <f:layout name="Default"/>
 <f:section name="main">
 
 <f:flashMessages renderMode="div"/>
 
-<form
-  action="{f:uri.page(pageUid: settings.login.page)}"
+<h:logoutForm
+  pageUid="{settings.login.page}"
   method="post"
   class="logout form-inline">
-
-  <input type="hidden" name="logintype" value="{logintype}"/>
 
   <f:render partial="Form/Static" arguments="{
     translationKey: 'login.status',
@@ -21,6 +21,6 @@
     defaultLabel: 'Log out'
   }"/>
 
-</form>
+</h:logoutForm>
 
 </f:section>
