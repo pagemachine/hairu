@@ -265,9 +265,8 @@ class AuthenticationController extends ActionController {
     $this->tokenCache->set($hash, $token, array($user->getUid()), $tokenLifetime);
 
     $expiryDate = new \DateTime(sprintf('now + %d seconds', $tokenLifetime));
-    $passwordResetPageUid = $this->getSettingValue('passwordReset.page');
     $hashUri = $this->uriBuilder
-      ->setTargetPageUid($passwordResetPageUid)
+      ->setTargetPageUid($this->getSettingValue('passwordReset.page'))
       ->setUseCacheHash(FALSE)
       ->setCreateAbsoluteUri(TRUE)
       ->uriFor('showPasswordResetForm', array(
@@ -276,8 +275,8 @@ class AuthenticationController extends ActionController {
     $this->view->assignMultiple(array(
       'user' => $user,
       'hash' => $hash, // Allow for custom URI in Fluid
-      'expiryDate' => $expiryDate,
       'hashUri' => $hashUri,
+      'expiryDate' => $expiryDate,
     ));
 
     $message = $this->objectManager->get('TYPO3\\CMS\\Core\\Mail\\MailMessage');
