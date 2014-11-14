@@ -110,7 +110,15 @@ class AuthenticationController extends ActionController {
         'page' => $this->getFrontendController()->id,
       ),
       'passwordReset' => array(
+        'loginOnSuccess' => FALSE,
+        'mail' => array(
+          'from' => MailUtility::getSystemFrom(),
+          'subject' => 'Password reset request',
+        ),
         'page' => $this->getFrontendController()->id,
+        'token' => array(
+          'lifetime' => 86400, // 1 day
+        ),
       ),
     );
 
@@ -258,7 +266,7 @@ class AuthenticationController extends ActionController {
       'uid' => $user->getUid(),
       'hmac' => $this->hashService->generateHmac($user->getPassword()),
     );
-    $tokenLifetime = $this->getSettingValue('passwordReset.token.lifetime', 86400); // 1 day
+    $tokenLifetime = $this->getSettingValue('passwordReset.token.lifetime');
 
     // Remove possibly existing reset tokens and store new one
     $this->tokenCache->flushByTag($user->getUid());
@@ -281,9 +289,9 @@ class AuthenticationController extends ActionController {
 
     $message = $this->objectManager->get('TYPO3\\CMS\\Core\\Mail\\MailMessage');
     $message
-      ->setFrom($this->getSettingValue('passwordReset.mail.from', MailUtility::getSystemFrom()))
+      ->setFrom($this->getSettingValue('passwordReset.mail.from'))
       ->setTo($user->getEmail())
-      ->setSubject($this->getSettingValue('passwordReset.mail.subject', 'Password reset request'));
+      ->setSubject($this->getSettingValue('passwordReset.mail.subject'));
 
     $this->request->setFormat('txt');
     $message->setBody($this->view->render('passwordResetMail'), 'text/plain');
@@ -352,7 +360,7 @@ class AuthenticationController extends ActionController {
           $this->frontendUserRepository->update($user);
           $this->tokenCache->remove($hash);
 
-          if ($this->getSettingValue('passwordReset.loginOnSuccess', FALSE)) {
+          if ($this->getSettingValue('passwordReset.loginOnSuccess')) {
 
             $this->authenticationService->authenticateUser($user);
             $this->addLocalizedFlashMessage('resetPassword.completed.login', NULL, FlashMessage::OK);
