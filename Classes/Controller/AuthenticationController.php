@@ -413,7 +413,6 @@ class AuthenticationController extends ActionController {
    * the flash message in your action controller.
    *
    * @return string The flash message or FALSE if no flash message should be set
-   * @api
    */
   protected function getErrorFlashMessage() {
     return FALSE;
