@@ -1,17 +1,16 @@
+{namespace h=PAGEmachine\Hairu\ViewHelpers}
+
 <f:layout name="Default"/>
 <f:section name="main">
 
 <f:flashMessages renderMode="div"/>
 
-<form
+<h:loginForm
+  userStoragePageUid="{storagePid}"
   method="post"
-  onsubmit="{submitJavaScript}"
   class="login form-inline">
 
-  <input type="hidden" name="logintype" value="login"/>
-  <input type="hidden" name="pid" value="{storagePid}"/>
   <input type="hidden" name="redirect_url" value="{formData.redirect_url}"/>
-  <f:format.raw>{additionalHiddenFields}</f:format.raw>
 
   <f:render partial="Form/TextField" arguments="{
     fieldName: 'user',
@@ -42,6 +41,6 @@
     </f:link.action>
   </p>
 
-</form>
+</h:loginForm>
 
 </f:section>

@@ -187,14 +187,6 @@ class AuthenticationController extends ActionController {
           break;
       }
     }
-
-    list($submitJavaScript, $additionalHiddenFields) = $this->getAdditionalLoginFormCode();
-
-    $this->view->assignMultiple(array(
-      'logintype' => LoginType::LOGIN,
-      'submitJavaScript' => $submitJavaScript,
-      'additionalHiddenFields' => $additionalHiddenFields,
-    ));
   }
 
   /**
@@ -436,44 +428,6 @@ class AuthenticationController extends ActionController {
       '',
       $severity
     );
-  }
-
-  /**
-   * Gets additional code for login forms based on the
-   * TYPO3_CONF_VARS/EXTCONF/felogin/loginFormOnSubmitFuncs hook
-   *
-   * @return array Array containing code for submit JavaScript
-   *                     and additional hidden fields
-   */
-  protected function getAdditionalLoginFormCode() {
-
-    $submitJavaScript = array();
-    $additionalHiddenFields = array();
-
-    if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['felogin']['loginFormOnSubmitFuncs'])) {
-
-      $parameters = array();
-
-      foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['felogin']['loginFormOnSubmitFuncs'] as $callback) {
-
-        $result = GeneralUtility::callUserFunction($callback, $parameters, $this);
-
-        if (isset($result[0])) {
-
-          $submitJavaScript[] = $result[0];
-        }
-
-        if (isset($result[1])) {
-
-          $additionalHiddenFields[] = $result[1];
-        }
-      }
-    }
-
-    $submitJavaScript = implode(';', $submitJavaScript);
-    $additionalHiddenFields = implode(LF, $additionalHiddenFields);
-
-    return array($submitJavaScript, $additionalHiddenFields);
   }
 
   /**
