@@ -14,7 +14,6 @@
     "php": ">=5.3"
   },
   "autoload": {
-    "__comment": "XXX: Change this to properly indicate psr-4 as soon as the package manager of TYPO3 supports it. See: https://forge.typo3.org/issues/57604",
     "psr-0": {
       "PAGEmachine\\Hairu\\": "Classes/"
     }
