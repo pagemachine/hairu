@@ -112,7 +112,7 @@ class AuthenticationController extends ActionController {
       'passwordReset' => array(
         'loginOnSuccess' => FALSE,
         'mail' => array(
-          'from' => MailUtility::getSystemFrom(),
+          'from' => MailUtility::getSystemFromAddress(),
           'subject' => 'Password reset request',
         ),
         'page' => $this->getFrontendController()->id,
