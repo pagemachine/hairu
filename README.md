@@ -22,6 +22,18 @@ After including the static template a few options will be available in the Templ
 
 Make sure you set at least the *Default storage PID* to the page where your frontend user records are stored.
 
+You can also use the `stdWrap` property on any `settings` value for custom processing. Example for easy translation of the password reset mail subject:
+
+    plugin.tx_hairu {
+      settings {
+        passwordReset {
+          mail {
+            subject.stdWrap.data = LLL:.../locallang.xlf:passwordReset.mail.subject
+          }
+        }
+      }
+    }
+
 ## Password reset validation
 
 The validation rules applied within the password reset process can be customized freely through TypoScript. Example from the default configuration:

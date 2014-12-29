@@ -379,6 +379,8 @@ class AuthenticationController extends ActionController {
   /**
    * Shorthand helper for getting setting values with optional default values
    *
+   * Any setting value is automatically processed via stdWrap if configured.
+   *
    * @param string $settingPath Path to the setting, e.g. "foo.bar.qux"
    * @param mixed $defaultValue Default value if no value is set
    * @return mixed
@@ -386,6 +388,12 @@ class AuthenticationController extends ActionController {
   protected function getSettingValue($settingPath, $defaultValue = NULL) {
 
     $value = ObjectAccess::getPropertyPath($this->settings, $settingPath);
+    $stdWrapConfiguration = ObjectAccess::getPropertyPath($this->settings, $settingPath . '.stdWrap');
+
+    if ($stdWrapConfiguration !== NULL) {
+
+      $value = $this->getFrontendController()->cObj->stdWrap($value, $stdWrapConfiguration);
+    }
 
     // Change type of value to type of default value if possible
     if (!empty($value) && $defaultValue !== NULL) {
