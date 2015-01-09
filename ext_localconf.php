@@ -12,6 +12,7 @@ defined('TYPO3_MODE') or die();
   )
 );
 
+// Cache configuration
 if (!is_array($TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['hairu_token'])) {
 
   $TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['hairu_token'] = array(
@@ -22,6 +23,16 @@ if (!is_array($TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['hairu_t
     ),
   );
 }
+
+// Logging configuration
+$GLOBALS['TYPO3_CONF_VARS']['LOG']['PAGEmachine']['Hairu']['writerConfiguration'] = array(
+  // DEBUG and higher severity
+  \TYPO3\CMS\Core\Log\LogLevel::DEBUG => array(
+    'TYPO3\\CMS\\Core\\Log\\Writer\\FileWriter' => array(
+      'logFile' => 'typo3temp/logs/hairu.log',
+    ),
+  ),
+);
 
 /** @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher */
 $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\SignalSlot\\Dispatcher');
