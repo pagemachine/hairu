@@ -252,10 +252,22 @@ class AuthenticationController extends ActionController {
   public function startPasswordResetAction($username) {
 
     $user = $this->frontendUserRepository->findOneByUsername($username);
+    // Forbid password reset if there is no password or password property,
+    // e.g. if the user has not completed a special registration process
+    // or is supposed to authenticate in some other way
+    $password = ObjectAccess::getPropertyPath($user, 'password');
+
+    if ($password === NULL) {
+
+      $this->logger->error('Failed to initiate password reset for user "' . $username . '": no password present');
+      $this->addLocalizedFlashMessage('resetPassword.failed.nopassword', NULL, FlashMessage::ERROR);
+      $this->redirect('showPasswordResetForm');
+    }
+
     $hash = md5(GeneralUtility::generateRandomBytes(64));
     $token = array(
       'uid' => $user->getUid(),
-      'hmac' => $this->hashService->generateHmac($user->getPassword()),
+      'hmac' => $this->hashService->generateHmac($password),
     );
     $tokenLifetime = $this->getSettingValue('passwordReset.token.lifetime');
 
