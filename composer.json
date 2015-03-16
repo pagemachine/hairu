@@ -13,6 +13,13 @@
   "require": {
     "php": ">=5.3"
   },
+  "require-dev": {
+    "namelesscoder/typo3-repository-client": "~1.0.2"
+  },
+  "config": {
+    "vendor-dir": ".build/vendor",
+    "bin-dir": ".build/bin"
+  },
   "autoload": {
     "psr-0": {
       "PAGEmachine\\Hairu\\": "Classes/"
