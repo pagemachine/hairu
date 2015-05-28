@@ -25,6 +25,9 @@ namespace PAGEmachine\Hairu\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use PAGEmachine\Hairu\LoginType;
+use PAGEmachine\Hairu\Mvc\Controller\ActionController;
+use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -33,8 +36,6 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use PAGEmachine\Hairu\LoginType;
-use PAGEmachine\Hairu\Mvc\Controller\ActionController;
 
 class AuthenticationController extends ActionController {
 
@@ -302,6 +303,8 @@ class AuthenticationController extends ActionController {
     $message->addPart($this->view->render('passwordResetMail'), 'text/html');
     $mailSent = FALSE;
 
+    $this->emitBeforePasswordResetMailSendSignal($message);
+
     try {
       
       $mailSent = $message->send();
@@ -487,6 +490,23 @@ class AuthenticationController extends ActionController {
       array(
         $this->request,
         $this->settings
+      )
+    );
+  }
+
+  /**
+   * Emits a signal before a password reset mail is sent
+   *
+   * @param MailMessage $message
+   * @return void
+   */
+  protected function emitBeforePasswordResetMailSendSignal(MailMessage $message) {
+
+    $this->signalSlotDispatcher->dispatch(
+      __CLASS__,
+      'beforePasswordResetMailSend',
+      array(
+        $message,
       )
     );
   }
