@@ -70,7 +70,7 @@ Most likely you didn't enter the username or password correctly. Be certain that
       </trans-unit>
 
       <trans-unit id="resetPassword.failed.sending">
-        <source><![CDATA[The password reset mail could not be sent to <b>%s</b>, please try again later.]]></source>
+        <source><![CDATA[The password reset mail could not be sent, please try again later.]]></source>
       </trans-unit>
 
       <trans-unit id="resetPassword.failed.invalid">
@@ -82,7 +82,7 @@ Most likely you didn't enter the username or password correctly. Be certain that
       </trans-unit>
 
       <trans-unit id="resetPassword.started">
-        <source><![CDATA[A mail has been sent to <b>%s</b>, please check the inbox of your mail account to complete the password reset process.]]></source>
+        <source><![CDATA[A mail has been sent, please check the inbox of your mail account to complete the password reset process.]]></source>
       </trans-unit>
 
       <trans-unit id="resetPassword.completed">

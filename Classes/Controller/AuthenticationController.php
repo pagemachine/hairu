@@ -5,7 +5,7 @@ namespace PAGEmachine\Hairu\Controller;
  *  Copyright notice
  *
  *  (c) 2014 Mathias Brodala <mbrodala@pagemachine.de>, PAGEmachine AG
- *  
+ *
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -247,7 +247,7 @@ class AuthenticationController extends ActionController {
    *
    * @param string $username Username of a user
    * @return void
-   * 
+   *
    * @validate $username NotEmpty
    */
   public function startPasswordResetAction($username) {
@@ -306,19 +306,19 @@ class AuthenticationController extends ActionController {
     $this->emitBeforePasswordResetMailSendSignal($message);
 
     try {
-      
+
       $mailSent = $message->send();
     } catch (\Swift_SwiftException $e) {
-      
+
       $this->logger->error($e->getMessage);
     }
 
     if ($mailSent) {
 
-      $this->addLocalizedFlashMessage('resetPassword.started', array($user->getEmail()), FlashMessage::INFO);
+      $this->addLocalizedFlashMessage('resetPassword.started', NULL, FlashMessage::INFO);
     } else {
 
-      $this->addLocalizedFlashMessage('resetPassword.failed.sending', array($user->getEmail()), FlashMessage::ERROR);
+      $this->addLocalizedFlashMessage('resetPassword.failed.sending', NULL, FlashMessage::ERROR);
     }
 
     $this->redirect('showPasswordResetForm');
