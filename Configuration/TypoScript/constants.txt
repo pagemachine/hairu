@@ -18,11 +18,11 @@ plugin.tx_hairu {
 
   settings {
     // cat=plugin.tx_hairu//dateFormat; type=string; label=Date format: Format for date output (PHP date/strftime), value of TYPO3_CONF_VARS/SYS/ddmmyy if empty
-    dateFormat = 
+    dateFormat =
 
     login {
       // cat=plugin.tx_hairu/login/page; type=int+; label=Login page ID: Page where visitors can log in, current page if empty
-      page = 
+      page =
     }
 
     passwordReset {
@@ -37,8 +37,10 @@ plugin.tx_hairu {
       mail {
         // cat=plugin.tx_hairu/reset/mail.subject; type=string; label=Mail subject: Subject for the password reset mail
         subject = Password reset request
-        // cat=plugin.tx_hairu/reset/mail.subject; type=string; label=Mail from: Sender for the password reset mail, system from address if empty
-        from = 
+        // cat=plugin.tx_hairu/reset/mail.from; type=string; label=Mail from: Sender for the password reset mail, system from address if empty
+        from =
+        // cat=plugin.tx_hairu/reset/mail.html; type=boolean; label=Send the reset mail including HTML content?
+        html = 0
       }
 
       // cat=plugin.tx_hairu/reset/loginOnSuccess; type=boolean; label=Login on success: Whether to automatically log in users after successful password reset

@@ -25,17 +25,14 @@ namespace PAGEmachine\Hairu\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use PAGEmachine\Hairu\LoginType;
-use PAGEmachine\Hairu\Mvc\Controller\ActionController;
-use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\MailUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
-use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use PAGEmachine\Hairu\LoginType;
+use PAGEmachine\Hairu\Mvc\Controller\ActionController;
 
 class AuthenticationController extends ActionController {
 
@@ -80,6 +77,18 @@ class AuthenticationController extends ActionController {
   protected $tokenCache;
 
   /**
+   * @var \PAGEmachine\Hairu\Service\SettingService
+   * @inject
+   */
+  protected $settingService;
+
+  /**
+   * @var \PAGEmachine\Hairu\Service\PasswordResetService
+   * @inject
+   */
+  protected $passwordResetService;
+
+  /**
    * @param \TYPO3\CMS\Core\Log\LogManager $logManager
    * @return void
    */
@@ -98,37 +107,6 @@ class AuthenticationController extends ActionController {
   }
 
   /**
-   * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
-   * @return void
-   */
-  public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager) {
-
-    parent::injectConfigurationManager($configurationManager);
-
-    $defaultSettings = array(
-      'dateFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'],
-      'login' => array(
-        'page' => $this->getFrontendController()->id,
-      ),
-      'passwordReset' => array(
-        'loginOnSuccess' => FALSE,
-        'mail' => array(
-          'from' => MailUtility::getSystemFromAddress(),
-          'subject' => 'Password reset request',
-        ),
-        'page' => $this->getFrontendController()->id,
-        'token' => array(
-          'lifetime' => 86400, // 1 day
-        ),
-      ),
-    );
-
-    $settings = $defaultSettings;
-    ArrayUtility::mergeRecursiveWithOverrule($settings, $this->settings, TRUE, FALSE);
-    $this->settings = $settings;
-  }
-
-  /**
    * Initialize all actions
    *
    * @return void
@@ -139,6 +117,9 @@ class AuthenticationController extends ActionController {
     $formData = GeneralUtility::_GET();
     ArrayUtility::mergeRecursiveWithOverrule($formData, GeneralUtility::_POST());
     $this->request->setArgument('formData', $formData);
+
+    // Get merged settings
+    $this->settings = $this->settingService->getSettings();
   }
 
   /**
@@ -251,74 +232,33 @@ class AuthenticationController extends ActionController {
    * @validate $username NotEmpty
    */
   public function startPasswordResetAction($username) {
-
+    /* @var $user \PAGEmachine\Hairu\Domain\Model\FrontendUser */
     $user = $this->frontendUserRepository->findOneByUsername($username);
     // Forbid password reset if there is no password or password property,
     // e.g. if the user has not completed a special registration process
     // or is supposed to authenticate in some other way
-    $password = ObjectAccess::getPropertyPath($user, 'password');
+    $password = $user->getPassword();
 
-    if ($password === NULL) {
-
+    if (TRUE === empty($password)) {
       $this->logger->error('Failed to initiate password reset for user "' . $username . '": no password present');
       $this->addLocalizedFlashMessage('resetPassword.failed.nopassword', NULL, FlashMessage::ERROR);
       $this->redirect('showPasswordResetForm');
     }
 
-    $hash = md5(GeneralUtility::generateRandomBytes(64));
-    $token = array(
-      'uid' => $user->getUid(),
-      'hmac' => $this->hashService->generateHmac($password),
-    );
-    $tokenLifetime = $this->getSettingValue('passwordReset.token.lifetime');
+    $hash = $this->passwordResetService->generatePasswordResetHash($user);
 
-    // Remove possibly existing reset tokens and store new one
-    $this->tokenCache->flushByTag($user->getUid());
-    $this->tokenCache->set($hash, $token, array($user->getUid()), $tokenLifetime);
-
-    $expiryDate = new \DateTime(sprintf('now + %d seconds', $tokenLifetime));
-    $hashUri = $this->uriBuilder
-      ->setTargetPageUid($this->getSettingValue('passwordReset.page'))
-      ->setUseCacheHash(FALSE)
-      ->setCreateAbsoluteUri(TRUE)
-      ->uriFor('showPasswordResetForm', array(
-        'hash' => $hash,
-      ));
-    $this->view->assignMultiple(array(
-      'user' => $user,
-      'hash' => $hash, // Allow for custom URI in Fluid
-      'hashUri' => $hashUri,
-      'expiryDate' => $expiryDate,
-    ));
-
-    $message = $this->objectManager->get('TYPO3\\CMS\\Core\\Mail\\MailMessage');
-    $message
-      ->setFrom($this->getSettingValue('passwordReset.mail.from'))
-      ->setTo($user->getEmail())
-      ->setSubject($this->getSettingValue('passwordReset.mail.subject'));
-
-    $this->request->setFormat('txt');
-    $message->setBody($this->view->render('passwordResetMail'), 'text/plain');
-    $this->request->setFormat('html');
-    $message->addPart($this->view->render('passwordResetMail'), 'text/html');
     $mailSent = FALSE;
 
-    $this->emitBeforePasswordResetMailSendSignal($message);
-
     try {
-
-      $mailSent = $message->send();
+      $mailSent = $this->passwordResetService->sendMail($user, $hash);
     } catch (\Swift_SwiftException $e) {
-
       $this->logger->error($e->getMessage);
     }
 
     if ($mailSent) {
-
-      $this->addLocalizedFlashMessage('resetPassword.started', NULL, FlashMessage::INFO);
+      $this->addLocalizedFlashMessage('resetPassword.started', array($user->getEmail()), FlashMessage::INFO);
     } else {
-
-      $this->addLocalizedFlashMessage('resetPassword.failed.sending', NULL, FlashMessage::ERROR);
+      $this->addLocalizedFlashMessage('resetPassword.failed.sending', array($user->getEmail()), FlashMessage::ERROR);
     }
 
     $this->redirect('showPasswordResetForm');
@@ -330,7 +270,6 @@ class AuthenticationController extends ActionController {
    * @return void
    */
   protected function initializeCompletePasswordResetAction() {
-
     // Password repeat validation needs to be added manually here to access the password value
     $passwordRepeatArgumentValidator = $this->arguments->getArgument('passwordRepeat')->getValidator();
     $passwordsEqualValidator = $this->validatorResolver->createValidator('PAGEmachine.Hairu:EqualValidator', array(
@@ -351,74 +290,35 @@ class AuthenticationController extends ActionController {
    * @validate $passwordRepeat NotEmpty
    */
   public function completePasswordResetAction($hash, $password, $passwordRepeat) {
-
     $token = $this->tokenCache->get($hash);
 
     if ($token !== FALSE) {
-
       $user = $this->frontendUserRepository->findByIdentifier($token['uid']);
 
       if ($user !== NULL) {
-
         if ($this->hashService->validateHmac($user->getPassword(), $token['hmac'])) {
-
           $user->setPassword($this->passwordService->applyTransformations($password));
           $this->frontendUserRepository->update($user);
           $this->tokenCache->remove($hash);
 
-          if ($this->getSettingValue('passwordReset.loginOnSuccess')) {
-
+          if ($this->settingService->getSettingValue('passwordReset.loginOnSuccess')) {
             $this->authenticationService->authenticateUser($user);
             $this->addLocalizedFlashMessage('resetPassword.completed.login', NULL, FlashMessage::OK);
           } else {
-
             $this->addLocalizedFlashMessage('resetPassword.completed', NULL, FlashMessage::OK);
           }
         } else {
-
           $this->addLocalizedFlashMessage('resetPassword.failed.expired', NULL, FlashMessage::ERROR);
         }
       } else {
-
         $this->addLocalizedFlashMessage('resetPassword.failed.invalid', NULL, FlashMessage::ERROR);
       }
     } else {
-
       $this->addLocalizedFlashMessage('resetPassword.failed.expired', NULL, FlashMessage::ERROR);
     }
 
-    $loginPageUid = $this->getSettingValue('login.page');
+    $loginPageUid = $this->settingService->getSettingValue('login.page');
     $this->redirect('showLoginForm', NULL, NULL, NULL, $loginPageUid);
-  }
-
-  /**
-   * Shorthand helper for getting setting values with optional default values
-   *
-   * Any setting value is automatically processed via stdWrap if configured.
-   *
-   * @param string $settingPath Path to the setting, e.g. "foo.bar.qux"
-   * @param mixed $defaultValue Default value if no value is set
-   * @return mixed
-   */
-  protected function getSettingValue($settingPath, $defaultValue = NULL) {
-
-    $value = ObjectAccess::getPropertyPath($this->settings, $settingPath);
-    $stdWrapConfiguration = ObjectAccess::getPropertyPath($this->settings, $settingPath . '.stdWrap');
-
-    if ($stdWrapConfiguration !== NULL) {
-
-      $value = $this->getFrontendController()->cObj->stdWrap($value, $stdWrapConfiguration);
-    }
-
-    // Change type of value to type of default value if possible
-    if (!empty($value) && $defaultValue !== NULL) {
-
-      settype($value, gettype($defaultValue));
-    }
-
-    $value = !empty($value) ? $value : $defaultValue;
-
-    return $value;
   }
 
   /**
@@ -490,23 +390,6 @@ class AuthenticationController extends ActionController {
       array(
         $this->request,
         $this->settings
-      )
-    );
-  }
-
-  /**
-   * Emits a signal before a password reset mail is sent
-   *
-   * @param MailMessage $message
-   * @return void
-   */
-  protected function emitBeforePasswordResetMailSendSignal(MailMessage $message) {
-
-    $this->signalSlotDispatcher->dispatch(
-      __CLASS__,
-      'beforePasswordResetMailSend',
-      array(
-        $message,
       )
     );
   }
