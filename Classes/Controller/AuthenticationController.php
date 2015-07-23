@@ -284,12 +284,15 @@ class AuthenticationController extends ActionController {
       ->uriFor('showPasswordResetForm', array(
         'hash' => $hash,
       ));
-    $this->view->assignMultiple(array(
-      'user' => $user,
-      'hash' => $hash, // Allow for custom URI in Fluid
-      'hashUri' => $hashUri,
-      'expiryDate' => $expiryDate,
-    ));
+
+    $actionVariables = array(
+        'user' => $user,
+        'hash' => $hash, // Allow for custom URI in Fluid
+        'hashUri' => $hashUri,
+        'expiryDate' => $expiryDate,
+    );
+
+    $this->view->assignMultiple($actionVariables);
 
     $message = $this->objectManager->get('TYPO3\\CMS\\Core\\Mail\\MailMessage');
     $message
@@ -303,14 +306,14 @@ class AuthenticationController extends ActionController {
     $message->addPart($this->view->render('passwordResetMail'), 'text/html');
     $mailSent = FALSE;
 
-    $this->emitBeforePasswordResetMailSendSignal($message);
+    $this->emitBeforePasswordResetMailSendSignal($message, $actionVariables);
 
     try {
 
       $mailSent = $message->send();
     } catch (\Swift_SwiftException $e) {
 
-      $this->logger->error($e->getMessage);
+      $this->logger->error($e->getMessage());
     }
 
     if ($mailSent) {
@@ -498,9 +501,10 @@ class AuthenticationController extends ActionController {
    * Emits a signal before a password reset mail is sent
    *
    * @param MailMessage $message
+   * @param array $actionVariables
    * @return void
    */
-  protected function emitBeforePasswordResetMailSendSignal(MailMessage $message) {
+  protected function emitBeforePasswordResetMailSendSignal(MailMessage $message, $actionVariables) {
 
     $this->signalSlotDispatcher->dispatch(
       __CLASS__,
