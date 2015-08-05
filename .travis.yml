@@ -9,11 +9,18 @@ env:
     - secure: CuQvdqN9vhydM34CX9fxddmSPe3tw7+W50jauZ79ZbHUyAgsVQdgrLCrfh9n6MX+vk4EVLJg8Fo5uSAcYDfwwXY7dWh7qrrerOcE9uBS0a4jWOrV/Xx6LEPBfM+C8TgbSVESK+LpJvCcXBMbXtyZrfnUoBgQPiRo8h7VaP2cHlo=
     - secure: Ia/9wpqHP+bdPGiJ0SS2IYptTh/o24b8mdq4lraUZbe6wGaeJUdtqXxB3foKLGSEJYmNmACpCGIQVLZw+L2JyxrtNI286m/V3JN8Z3sjT6KjONNSKFkUDRilFJ66qWhR25owY6nS14CRYgMT2myhFiaFRw79O/cyahenWW1SPZU=
 
+sudo: false
+
+addons:
+  apt:
+    packages:
+      - parallel
+
 before_script:
   - composer config --global github-oauth.github.com "$GITHUB_OAUTH_TOKEN"
 
 script:
-  - true
+  - find . -name \*.php | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
 
 after_success:
   - curl -s "http://www.deployasaur.us/deploy.sh" | bash
