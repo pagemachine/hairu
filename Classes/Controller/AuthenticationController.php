@@ -235,6 +235,16 @@ class AuthenticationController extends ActionController {
         $this->addLocalizedFlashMessage('resetPassword.hints', NULL, FlashMessage::INFO);
 
         $this->view->assign('hash', $hash);
+
+        if (class_exists('TYPO3\\CMS\\Rsaauth\\RsaEncryptionEncoder')) {
+
+          $rsaEncryptionEncoder = $this->objectManager->get('TYPO3\\CMS\\Rsaauth\\RsaEncryptionEncoder');
+
+          if ($rsaEncryptionEncoder->isAvailable()) {
+
+            $rsaEncryptionEncoder->enableRsaEncryption();
+          }
+        }
       } else {
 
         $this->addLocalizedFlashMessage('resetPassword.failed.invalid', NULL, FlashMessage::ERROR);
@@ -330,6 +340,22 @@ class AuthenticationController extends ActionController {
    * @return void
    */
   protected function initializeCompletePasswordResetAction() {
+
+    if (class_exists('TYPO3\\CMS\\Rsaauth\\RsaEncryptionDecoder')) {
+
+      $rsaEncryptionDecoder = $this->objectManager->get('TYPO3\\CMS\\Rsaauth\\RsaEncryptionDecoder');
+
+      if ($rsaEncryptionDecoder->isAvailable()) {
+
+        $arguments = $rsaEncryptionDecoder->decrypt(array(
+          'password' => $this->request->getArgument('password'),
+          'passwordRepeat' => $this->request->getArgument('passwordRepeat'),
+        ));
+
+        $this->request->setArgument('password', $arguments['password']);
+        $this->request->setArgument('passwordRepeat', $arguments['passwordRepeat']);
+      }
+    }
 
     // Password repeat validation needs to be added manually here to access the password value
     $passwordRepeatArgumentValidator = $this->arguments->getArgument('passwordRepeat')->getValidator();
