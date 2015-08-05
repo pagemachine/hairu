@@ -25,6 +25,7 @@ namespace PAGEmachine\Hairu\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use PAGEmachine\Hairu\Domain\DTO\PasswordResetRequestTransferObject;
 use PAGEmachine\Hairu\LoginType;
 use PAGEmachine\Hairu\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Mail\MailMessage;
@@ -285,6 +286,13 @@ class AuthenticationController extends ActionController {
         'hash' => $hash,
       ));
 
+	/** @var \PAGEmachine\Hairu\Domain\DTO\PasswordResetRequestTransferObject $passwordResetRequestTransferObject */
+	$passwordResetRequestTransferObject = GeneralUtility::makeInstance('PAGEmachine\\Hairu\\Domain\\DTO\\PasswordResetRequestTransferObject');
+	$passwordResetRequestTransferObject->setUser($user);
+	$passwordResetRequestTransferObject->setHash($hash);
+	$passwordResetRequestTransferObject->setHashUri($hashUri);
+	$passwordResetRequestTransferObject->setExpiryDate($expiryDate);
+
     $actionVariables = array(
         'user' => $user,
         'hash' => $hash, // Allow for custom URI in Fluid
@@ -294,6 +302,7 @@ class AuthenticationController extends ActionController {
 
     $this->view->assignMultiple($actionVariables);
 
+	/** @var \TYPO3\CMS\Core\Mail\MailMessage $message */
     $message = $this->objectManager->get('TYPO3\\CMS\\Core\\Mail\\MailMessage');
     $message
       ->setFrom($this->getSettingValue('passwordReset.mail.from'))
@@ -306,7 +315,9 @@ class AuthenticationController extends ActionController {
     $message->addPart($this->view->render('passwordResetMail'), 'text/html');
     $mailSent = FALSE;
 
-    $this->emitBeforePasswordResetMailSendSignal($message, $actionVariables);
+	$passwordResetRequestTransferObject->setMessage($message);
+
+    $this->emitBeforePasswordResetMailSendSignal($passwordResetRequestTransferObject);
 
     try {
 
@@ -500,17 +511,16 @@ class AuthenticationController extends ActionController {
   /**
    * Emits a signal before a password reset mail is sent
    *
-   * @param MailMessage $message
-   * @param array $actionVariables
+   * @param	PasswordResetRequestTransferObject	$passwordResetRequestTransferObject
    * @return void
    */
-  protected function emitBeforePasswordResetMailSendSignal(MailMessage $message, $actionVariables) {
+  protected function emitBeforePasswordResetMailSendSignal(PasswordResetRequestTransferObject $passwordResetRequestTransferObject) {
 
     $this->signalSlotDispatcher->dispatch(
       __CLASS__,
       'beforePasswordResetMailSend',
       array(
-        $message,
+        $passwordResetRequestTransferObject
       )
     );
   }
