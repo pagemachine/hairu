@@ -16,8 +16,12 @@ addons:
     packages:
       - parallel
 
-before_script:
+before_install:
+  - composer self-update
   - composer config --global github-oauth.github.com "$GITHUB_OAUTH_TOKEN"
+
+before_script:
+  - composer install
 
 script:
   - find . -name \*.php | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
