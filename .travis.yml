@@ -28,7 +28,7 @@ before_script:
   - composer install
 
 script:
-  - find . -name \*.php | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
+  - find . -name \*.php ! -path "./bin/*" ! -path "./vendor*/" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
 
 after_script:
   - >
