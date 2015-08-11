@@ -253,19 +253,28 @@ class AuthenticationController extends ActionController {
     // Forbid password reset if there is no password or password property,
     // e.g. if the user has not completed a special registration process
     // or is supposed to authenticate in some other way
-    $password = ObjectAccess::getPropertyPath($user, 'password');
+    $userPassword = ObjectAccess::getPropertyPath($user, 'password');
 
-    if ($password === NULL) {
+    if ($userPassword === NULL) {
 
       $this->logger->error('Failed to initiate password reset for user "' . $username . '": no password present');
       $this->addLocalizedFlashMessage('resetPassword.failed.nopassword', NULL, FlashMessage::ERROR);
       $this->redirect('showPasswordResetForm');
     }
 
+    $userEmail = ObjectAccess::getPropertyPath($user, 'email');
+
+    if (empty($userEmail)) {
+
+      $this->logger->error('Failed to initiate password reset for user "' . $username . '": no email address present');
+      $this->addLocalizedFlashMessage('resetPassword.failed.noemail', NULL, FlashMessage::ERROR);
+      $this->redirect('showPasswordResetForm');
+    }
+
     $hash = md5(GeneralUtility::generateRandomBytes(64));
     $token = array(
       'uid' => $user->getUid(),
-      'hmac' => $this->hashService->generateHmac($password),
+      'hmac' => $this->hashService->generateHmac($userPassword),
     );
     $tokenLifetime = $this->getSettingValue('passwordReset.token.lifetime');
 
@@ -291,7 +300,7 @@ class AuthenticationController extends ActionController {
     $message = $this->objectManager->get('TYPO3\\CMS\\Core\\Mail\\MailMessage');
     $message
       ->setFrom($this->getSettingValue('passwordReset.mail.from'))
-      ->setTo($user->getEmail())
+      ->setTo($userEmail)
       ->setSubject($this->getSettingValue('passwordReset.mail.subject'));
 
     $this->request->setFormat('txt');

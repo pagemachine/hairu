@@ -69,6 +69,10 @@ Most likely you didn't enter the username or password correctly. Be certain that
         <source>This account currently has no password, you have most likely not completed registration yet or are supposed to authenticate in some other way.</source>
       </trans-unit>
 
+      <trans-unit id="resetPassword.failed.noemail">
+        <source>This account currently has no email address, please make sure to set it in your account.</source>
+      </trans-unit>
+
       <trans-unit id="resetPassword.failed.sending">
         <source><![CDATA[The password reset mail could not be sent, please try again later.]]></source>
       </trans-unit>
