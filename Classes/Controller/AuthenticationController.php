@@ -461,7 +461,7 @@ class AuthenticationController extends ActionController {
    * @param array $translationArguments
    * @param integer $severity
    */
-  protected function addLocalizedFlashMessage($translationKey, array $translationArguments = NULL, $severity) {
+  protected function addLocalizedFlashMessage($translationKey, array $translationArguments = NULL, $severity = FlashMessage::OK) {
 
     $this->addFlashMessage(
       LocalizationUtility::translate(
