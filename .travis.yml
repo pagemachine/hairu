@@ -35,14 +35,12 @@ after_script:
     if [ -n "$TRAVIS_TAG" ]; then
       echo "Preparing upload of release ${TRAVIS_TAG} to TER"
       echo;
-      curl -sSL https://raw.githubusercontent.com/alrra/travis-after-all/1.1.0/lib/travis-after-all.js | node;
+      curl -sSL https://raw.githubusercontent.com/alrra/travis-after-all/1.3.0/lib/travis-after-all.js | node;
       if [ $? -eq 0 ]; then
         TAG_ANNOTATION="$(git tag -n -l $TRAVIS_TAG)"
         TAG_MESSAGE="${TAG_ANNOTATION#* }"
         echo "Uploading release ${TRAVIS_TAG} to TER"
         bin/upload . $TYPO3_ORG_USERNAME $TYPO3_ORG_PASSWORD "$TAG_MESSAGE"
-      else
-        echo "Not all builds succeeded, skipping TER upload"
       fi;
     fi;
   - >
