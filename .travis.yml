@@ -26,6 +26,8 @@ before_install:
 
 before_script:
   - composer install
+  - npm install
+  - export PATH="$(npm bin):$PATH"
 
 script:
   - find . -name \*.php ! -path "./bin/*" ! -path "./vendor*/" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
@@ -35,7 +37,7 @@ after_script:
     if [ -n "$TRAVIS_TAG" ]; then
       echo "Preparing upload of release ${TRAVIS_TAG} to TER"
       echo;
-      curl -sSL https://raw.githubusercontent.com/alrra/travis-after-all/1.3.0/lib/travis-after-all.js | node;
+      travis-after-all;
       if [ $? -eq 0 ]; then
         TAG_ANNOTATION="$(git tag -n -l $TRAVIS_TAG)"
         TAG_MESSAGE="${TAG_ANNOTATION#* }"
