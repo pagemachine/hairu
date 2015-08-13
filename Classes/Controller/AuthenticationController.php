@@ -343,13 +343,7 @@ class AuthenticationController extends ActionController {
 
       if ($rsaEncryptionDecoder->isAvailable()) {
 
-        $arguments = $rsaEncryptionDecoder->decrypt(array(
-          'password' => $this->request->getArgument('password'),
-          'passwordRepeat' => $this->request->getArgument('passwordRepeat'),
-        ));
-
-        $this->request->setArgument('password', $arguments['password']);
-        $this->request->setArgument('passwordRepeat', $arguments['passwordRepeat']);
+        $this->request->setArguments($rsaEncryptionDecoder->decrypt($this->request->getArguments()));
       }
     }
 
