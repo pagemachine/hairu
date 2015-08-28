@@ -41,8 +41,7 @@ after_script:
         TAG_ANNOTATION="$(git tag -n -l $TRAVIS_TAG)"
         TAG_MESSAGE="${TAG_ANNOTATION#* }"
         echo "Uploading release ${TRAVIS_TAG} to TER"
-        git clean -xdf
-        git reset --hard HEAD
+        rm -rf node_modules
         .vendor/bin/upload . $TYPO3_ORG_USERNAME $TYPO3_ORG_PASSWORD "$TAG_MESSAGE"
       fi;
     fi;
