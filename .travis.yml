@@ -48,4 +48,4 @@ after_script:
 
 notifications:
   slack:
-    secure: FHPbVXHOrXsk80e0+WLID8v5m9S59/qoQyM5XK2hytFUaT+oSh0iY+Ajdnajpl+6qd6iQNbREfd04A2TTBxh7+LzHgOqxhHoZSYTgTHgsOPQPgUCxPJpWInwQGxgp+23pE0l+oX8u0lWkYk9NIf+WtrF6niLvT0KLOJiuB8ojms=
+    secure: TPgLYBAyIa6V6RT3YqndCnpkiifnY01ehmPrhVHU3G3yC4e4PtnqftgCrg8D4IBbmlVTxncNbsDqNbFfBEaJ1dMv6tv0yMpYlllfN5Syl3nBcjh43rHN4DWEffgJ59dAhJJtWjHvPfYR1/80EdKzsmepQl1i1+CXH1ryxtS6jEU=
