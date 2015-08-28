@@ -30,7 +30,7 @@ before_script:
   - export PATH="$(npm bin):$PATH"
 
 script:
-  - find . -name \*.php ! -path "./bin/*" ! -path "./vendor*/" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
+  - find . -name \*.php ! -path "./.vendor/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
 
 after_script:
   - >
@@ -43,7 +43,6 @@ after_script:
         echo "Uploading release ${TRAVIS_TAG} to TER"
         git clean -xdf
         git reset --hard HEAD
-        bin/upload . $TYPO3_ORG_USERNAME $TYPO3_ORG_PASSWORD "$TAG_MESSAGE"
+        .vendor/bin/upload . $TYPO3_ORG_USERNAME $TYPO3_ORG_PASSWORD "$TAG_MESSAGE"
       fi;
     fi;
-  - >
