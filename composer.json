@@ -9,6 +9,10 @@
       "email": "mbrodala@pagemachine.de"
     }
   ],
+  "support": {
+    "issues": "https://github.com/pagemachine/hairu/issues",
+    "source": "https://github.com/pagemachine/hairu"
+  },
   "type": "typo3-cms-extension",
   "require": {
     "php": ">=5.3"
