@@ -45,3 +45,7 @@ after_script:
         .vendor/bin/upload . $TYPO3_ORG_USERNAME $TYPO3_ORG_PASSWORD "$TAG_MESSAGE"
       fi;
     fi;
+
+notifications:
+  slack:
+    secure: FHPbVXHOrXsk80e0+WLID8v5m9S59/qoQyM5XK2hytFUaT+oSh0iY+Ajdnajpl+6qd6iQNbREfd04A2TTBxh7+LzHgOqxhHoZSYTgTHgsOPQPgUCxPJpWInwQGxgp+23pE0l+oX8u0lWkYk9NIf+WtrF6niLvT0KLOJiuB8ojms=
