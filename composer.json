@@ -20,6 +20,10 @@
   "require-dev": {
     "namelesscoder/typo3-repository-client": "~1.0.2"
   },
+  "replace": {
+    "hairu": "self.version",
+    "typo3-ter/hairu": "self.version"
+  },
   "config": {
     "vendor-dir": ".vendor"
   },
