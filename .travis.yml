@@ -32,19 +32,19 @@ before_script:
 script:
   - find . -name \*.php ! -path "./.vendor/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
 
-after_script:
-  - >
-    if [ -n "$TRAVIS_TAG" ]; then
-      echo -e "Preparing upload of release ${TRAVIS_TAG} to TER\n"
-      travis-after-all;
-      if [ $? -eq 0 ]; then
-        TAG_ANNOTATION="$(git tag -n -l $TRAVIS_TAG)"
-        TAG_MESSAGE="${TAG_ANNOTATION#* }"
-        echo "Uploading release ${TRAVIS_TAG} to TER"
-        rm -rf node_modules
-        .vendor/bin/upload . $TYPO3_ORG_USERNAME $TYPO3_ORG_PASSWORD "$TAG_MESSAGE"
-      fi;
-    fi;
+# after_script:
+#   - >
+#     if [ -n "$TRAVIS_TAG" ]; then
+#       echo -e "Preparing upload of release ${TRAVIS_TAG} to TER\n"
+#       travis-after-all;
+#       if [ $? -eq 0 ]; then
+#         TAG_ANNOTATION="$(git tag -n -l $TRAVIS_TAG)"
+#         TAG_MESSAGE="${TAG_ANNOTATION#* }"
+#         echo "Uploading release ${TRAVIS_TAG} to TER"
+#         rm -rf node_modules
+#         .vendor/bin/upload . $TYPO3_ORG_USERNAME $TYPO3_ORG_PASSWORD "$TAG_MESSAGE"
+#       fi;
+#     fi;
 
 notifications:
   slack:
