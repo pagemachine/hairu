@@ -13,6 +13,7 @@ namespace PAGEmachine\Hairu\Mvc\Controller;
  */
 
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 
 class ActionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 
@@ -42,7 +43,7 @@ class ActionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
       try {
 
         $argumentValidator = $this->arguments->getArgument($argumentName)->getValidator();
-      } catch (\TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException $e) {
+      } catch (NoSuchArgumentException $e) {
 
         continue;
       }
