@@ -32,16 +32,16 @@ class RedirectUrlSlot {
     $formData = $request->getArgument('formData');
     $redirectUrl = NULL;
 
-    // May be set via config.typolinkLinkAccessRestrictedPages_addParams
-    if (!empty($formData['return_url'])) {
-
-      $redirectUrl = $formData['return_url'];
-    }
-
     // May be set by anything
     if (!empty($formData['redirect_url'])) {
 
       $redirectUrl = $formData['redirect_url'];
+    }
+
+    // May be set via config.typolinkLinkAccessRestrictedPages_addParams
+    if (!empty($formData['return_url'])) {
+
+      $redirectUrl = $formData['return_url'];
     }
 
     if ($redirectUrl !== NULL) {
