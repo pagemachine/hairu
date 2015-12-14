@@ -442,7 +442,7 @@ class AuthenticationController extends ActionController {
    * display no flash message at all on errors. Override this to customize
    * the flash message in your action controller.
    *
-   * @return string The flash message or FALSE if no flash message should be set
+   * @return string|bool The flash message or FALSE if no flash message should be set
    */
   protected function getErrorFlashMessage() {
     return FALSE;

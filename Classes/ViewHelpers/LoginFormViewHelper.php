@@ -129,7 +129,7 @@ class LoginFormViewHelper extends AbstractAuthenticationFormViewHelper {
    */
   protected function renderHiddenUserStoragePageUidField($userStoragePageUid) {
 
-    return LF . '<input type="hidden" name="pid" value="' . $userStoragePageUid .'" />' . LF;
+    return LF . '<input type="hidden" name="pid" value="' . $userStoragePageUid . '" />' . LF;
   }
 
   /**

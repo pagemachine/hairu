@@ -89,6 +89,6 @@ abstract class AbstractAuthenticationFormViewHelper extends AbstractTagBasedView
 
     $loginType = LoginType::cast($loginType); // Ensure valid value
 
-    return LF . '<input type="hidden" name="logintype" value="' . $loginType .'" />' . LF;
+    return LF . '<input type="hidden" name="logintype" value="' . $loginType . '" />' . LF;
   }
 }
