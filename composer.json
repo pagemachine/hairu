@@ -24,7 +24,6 @@
     "typo3-ter/hairu": "self.version"
   },
   "config": {
-    "vendor-dir": ".vendor"
   },
   "autoload": {
     "psr-4": {
