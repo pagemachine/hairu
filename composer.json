@@ -24,6 +24,7 @@
     "typo3-ter/hairu": "self.version"
   },
   "config": {
+    "bin-dir": "bin"
   },
   "autoload": {
     "psr-4": {
