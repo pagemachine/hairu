@@ -11,11 +11,6 @@ env:
 
 sudo: false
 
-addons:
-  apt:
-    packages:
-      - parallel
-
 cache:
   directories:
     - $HOME/.composer/cache
@@ -30,7 +25,7 @@ before_script:
   - export PATH=$HOME/.composer/vendor/bin:$(npm bin):$PATH
 
 script:
-  - find . -name \*.php ! -path "./vendor/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
+  - bin/parallel-lint --exclude bin --exclude vendor .
 
 after_script:
   - >
