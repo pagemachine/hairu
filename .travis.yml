@@ -24,8 +24,6 @@ before_install:
 
 before_script:
   - composer install
-  - npm install
-  - export PATH=$HOME/.composer/vendor/bin:$(npm bin):$PATH
 
 script:
   - bin/parallel-lint --exclude bin --exclude vendor .
@@ -34,13 +32,20 @@ after_script:
   - >
     if [ -n "$TRAVIS_TAG" ]; then
       echo -e "Preparing upload of release ${TRAVIS_TAG} to TER\n"
+
+      export PATH=$HOME/.composer/vendor/bin:$(npm bin):$PATH
+      npm install
       travis-after-all;
+
       if [ $? -eq 0 ]; then
         TAG_ANNOTATION="$(git tag -n -l $TRAVIS_TAG)"
         TAG_MESSAGE="${TAG_ANNOTATION#* }"
+
         git reset --hard
         git clean -xfd
+
         composer global require namelesscoder/typo3-repository-client:^1.1.1
+
         echo "Uploading release ${TRAVIS_TAG} to TER"
         upload . $TYPO3_ORG_USERNAME $TYPO3_ORG_PASSWORD "$TAG_MESSAGE"
       fi;
