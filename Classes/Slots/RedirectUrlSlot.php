@@ -24,10 +24,9 @@ class RedirectUrlSlot {
    * Performs a redirect if possible
    *
    * @param RequestInterface $request
-   * @param array $settings
    * @return void
    */
-  public function processRedirect(RequestInterface $request, array $settings) {
+  public function processRedirect(RequestInterface $request) {
 
     $formData = $request->getArgument('formData');
     $redirectUrl = NULL;
