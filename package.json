@@ -1,5 +1,8 @@
 {
   "devDependencies": {
     "travis-after-all": "^1.4.4"
+  },
+  "scripts": {
+    "wait": "travis-after-all"
   }
 }
