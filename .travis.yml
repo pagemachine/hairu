@@ -46,7 +46,7 @@ after_script:
         composer global require namelesscoder/typo3-repository-client:^1.1.1
 
         echo "Uploading release ${TRAVIS_TAG} to TER"
-        upload . $TYPO3_ORG_USERNAME $TYPO3_ORG_PASSWORD "$TAG_MESSAGE"
+        $HOME/.composer/vendor/bin/upload . $TYPO3_ORG_USERNAME $TYPO3_ORG_PASSWORD "$TAG_MESSAGE"
       fi;
     fi;
 
