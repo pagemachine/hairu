@@ -85,13 +85,13 @@ class AuthenticationController extends ActionController {
   }
 
   /**
-   * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager
+   * Initialize all actions
+   *
    * @return void
    */
-  public function injectConfigurationManager(\TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface $configurationManager) {
+  protected function initializeAction() {
 
-    parent::injectConfigurationManager($configurationManager);
-
+    // Apply default settings
     $defaultSettings = array(
       'dateFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'],
       'login' => array(
@@ -113,14 +113,6 @@ class AuthenticationController extends ActionController {
     $settings = $defaultSettings;
     ArrayUtility::mergeRecursiveWithOverrule($settings, $this->settings, TRUE, FALSE);
     $this->settings = $settings;
-  }
-
-  /**
-   * Initialize all actions
-   *
-   * @return void
-   */
-  protected function initializeAction() {
 
     // Make global form data (as expected by the CMS core) available
     $formData = GeneralUtility::_GET();
