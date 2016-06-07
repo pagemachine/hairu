@@ -34,7 +34,7 @@ after_script:
       echo -e "Preparing upload of release ${TRAVIS_TAG} to TER\n"
 
       npm install
-      npm wait
+      npm run travis-after-all
 
       if [ $? -eq 0 ]; then
         TAG_ANNOTATION="$(git tag -n -l $TRAVIS_TAG)"
