@@ -6,11 +6,6 @@ php:
   - 5.6
   - 7.0
 
-env:
-  global:
-    - TYPO3_ORG_USERNAME=pagemachine
-    - secure: Ia/9wpqHP+bdPGiJ0SS2IYptTh/o24b8mdq4lraUZbe6wGaeJUdtqXxB3foKLGSEJYmNmACpCGIQVLZw+L2JyxrtNI286m/V3JN8Z3sjT6KjONNSKFkUDRilFJ66qWhR25owY6nS14CRYgMT2myhFiaFRw79O/cyahenWW1SPZU=
-
 sudo: false
 
 cache:
