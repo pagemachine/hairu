@@ -1,6 +1,6 @@
 <?php
 
-$EM_CONF['hairu'] = array(
+$EM_CONF[$_EXTKEY] = array(
   'title' => 'Hairu',
   'description' => 'Flexible login/logout form based on Extbase/Fluid',
   'category' => 'fe',
