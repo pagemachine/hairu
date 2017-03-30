@@ -3,7 +3,7 @@
 <f:layout name="Default"/>
 <f:section name="main">
 
-<f:flashMessages renderMode="div"/>
+<f:flashMessages />
 
 <h:logoutForm
   pageUid="{settings.login.page}"
@@ -21,6 +21,14 @@
     defaultLabel: 'Log out'
   }"/>
 
+  <p>
+    <f:link.action
+            action="showPasswordEditForm"
+            arguments="{start: 1}"
+            pageUid="{settings.passwordReset.page}">
+      <f:translate key="action.resetPassword">Edit password</f:translate>
+    </f:link.action>
+  </p>
 </h:logoutForm>
 
 </f:section>

@@ -12,6 +12,7 @@ namespace PAGEmachine\Hairu\Domain\Service;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use PAGEmachine\Hairu\Domain\Model\FrontendUser;
 use TYPO3\CMS\Extbase\DomainObject\DomainObjectInterface;
 
 class AuthenticationService implements \TYPO3\CMS\Core\SingletonInterface {
