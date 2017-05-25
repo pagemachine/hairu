@@ -99,7 +99,7 @@ class AuthenticationController extends ActionController {
         'page' => $this->getFrontendController()->id,
       ),
       'passwordReset' => array(
-        'loginOnSuccess' => false,
+        'loginOnSuccess' => FALSE,
         'mail' => array(
           'from' => MailUtility::getSystemFromAddress(),
           'subject' => 'Password reset request',
@@ -112,7 +112,7 @@ class AuthenticationController extends ActionController {
     );
 
     $settings = $defaultSettings;
-    ArrayUtility::mergeRecursiveWithOverrule($settings, $this->settings, true, false);
+    ArrayUtility::mergeRecursiveWithOverrule($settings, $this->settings, TRUE, FALSE);
     $this->settings = $settings;
 
     // Make global form data (as expected by the CMS core) available
@@ -157,14 +157,14 @@ class AuthenticationController extends ActionController {
 
         case LoginType::LOGIN:
 
-          $this->addLocalizedFlashMessage('login.failed', null, FlashMessage::ERROR);
+          $this->addLocalizedFlashMessage('login.failed', NULL, FlashMessage::ERROR);
           break;
 
         case LoginType::LOGOUT:
 
           $this->emitAfterLogoutSignal();
 
-          $this->addLocalizedFlashMessage('logout.successful', null, FlashMessage::INFO);
+          $this->addLocalizedFlashMessage('logout.successful', NULL, FlashMessage::INFO);
           break;
       }
     }
@@ -253,18 +253,18 @@ class AuthenticationController extends ActionController {
    * @param boolean $start TRUE when starting the reset process, FALSE otherwise
    * @return void
    */
-  public function showPasswordResetFormAction($hash = null, $start = false) {
+  public function showPasswordResetFormAction($hash = NULL, $start = FALSE) {
 
     if ($start) {
 
-      $this->addLocalizedFlashMessage('resetPassword.start', null, FlashMessage::INFO);
+      $this->addLocalizedFlashMessage('resetPassword.start', NULL, FlashMessage::INFO);
     }
 
-    if ($hash !== null) {
+    if ($hash !== NULL) {
 
-      if ($this->tokenCache->get($hash) !== false) {
+      if ($this->tokenCache->get($hash) !== FALSE) {
 
-        $this->addLocalizedFlashMessage('resetPassword.hints', null, FlashMessage::INFO);
+        $this->addLocalizedFlashMessage('resetPassword.hints', NULL, FlashMessage::INFO);
 
         $this->view->assign('hash', $hash);
 
@@ -279,7 +279,7 @@ class AuthenticationController extends ActionController {
         }
       } else {
 
-        $this->addLocalizedFlashMessage('resetPassword.failed.invalid', null, FlashMessage::ERROR);
+        $this->addLocalizedFlashMessage('resetPassword.failed.invalid', NULL, FlashMessage::ERROR);
       }
     }
   }
@@ -299,10 +299,10 @@ class AuthenticationController extends ActionController {
     // or is supposed to authenticate in some other way
     $userPassword = ObjectAccess::getPropertyPath($user, 'password');
 
-    if ($userPassword === null) {
+    if ($userPassword === NULL) {
 
       $this->logger->error('Failed to initiate password reset for user "' . $username . '": no password present');
-      $this->addLocalizedFlashMessage('resetPassword.failed.nopassword', null, FlashMessage::ERROR);
+      $this->addLocalizedFlashMessage('resetPassword.failed.nopassword', NULL, FlashMessage::ERROR);
       $this->redirect('showPasswordResetForm');
     }
 
@@ -311,7 +311,7 @@ class AuthenticationController extends ActionController {
     if (empty($userEmail)) {
 
       $this->logger->error('Failed to initiate password reset for user "' . $username . '": no email address present');
-      $this->addLocalizedFlashMessage('resetPassword.failed.noemail', null, FlashMessage::ERROR);
+      $this->addLocalizedFlashMessage('resetPassword.failed.noemail', NULL, FlashMessage::ERROR);
       $this->redirect('showPasswordResetForm');
     }
 
@@ -329,8 +329,8 @@ class AuthenticationController extends ActionController {
     $expiryDate = new \DateTime(sprintf('now + %d seconds', $tokenLifetime));
     $hashUri = $this->uriBuilder
       ->setTargetPageUid($this->getSettingValue('passwordReset.page'))
-      ->setUseCacheHash(false)
-      ->setCreateAbsoluteUri(true)
+      ->setUseCacheHash(FALSE)
+      ->setCreateAbsoluteUri(TRUE)
       ->uriFor('showPasswordResetForm', array(
         'hash' => $hash,
       ));
@@ -351,7 +351,7 @@ class AuthenticationController extends ActionController {
     $message->setBody($this->view->render('passwordResetMail'), 'text/plain');
     $this->request->setFormat('html');
     $message->addPart($this->view->render('passwordResetMail'), 'text/html');
-    $mailSent = false;
+    $mailSent = FALSE;
 
     $this->emitBeforePasswordResetMailSendSignal($message);
 
@@ -365,10 +365,10 @@ class AuthenticationController extends ActionController {
 
     if ($mailSent) {
 
-      $this->addLocalizedFlashMessage('resetPassword.started', null, FlashMessage::INFO);
+      $this->addLocalizedFlashMessage('resetPassword.started', NULL, FlashMessage::INFO);
     } else {
 
-      $this->addLocalizedFlashMessage('resetPassword.failed.sending', null, FlashMessage::ERROR);
+      $this->addLocalizedFlashMessage('resetPassword.failed.sending', NULL, FlashMessage::ERROR);
     }
 
     $this->redirect('showPasswordResetForm');
@@ -413,11 +413,11 @@ class AuthenticationController extends ActionController {
 
     $token = $this->tokenCache->get($hash);
 
-    if ($token !== false) {
+    if ($token !== FALSE) {
 
       $user = $this->frontendUserRepository->findByIdentifier($token['uid']);
 
-      if ($user !== null) {
+      if ($user !== NULL) {
 
         if ($this->hashService->validateHmac($user->getPassword(), $token['hmac'])) {
 
@@ -428,26 +428,26 @@ class AuthenticationController extends ActionController {
           if ($this->getSettingValue('passwordReset.loginOnSuccess')) {
 
             $this->authenticationService->authenticateUser($user);
-            $this->addLocalizedFlashMessage('resetPassword.completed.login', null, FlashMessage::OK);
+            $this->addLocalizedFlashMessage('resetPassword.completed.login', NULL, FlashMessage::OK);
           } else {
 
-            $this->addLocalizedFlashMessage('resetPassword.completed', null, FlashMessage::OK);
+            $this->addLocalizedFlashMessage('resetPassword.completed', NULL, FlashMessage::OK);
           }
         } else {
 
-          $this->addLocalizedFlashMessage('resetPassword.failed.expired', null, FlashMessage::ERROR);
+          $this->addLocalizedFlashMessage('resetPassword.failed.expired', NULL, FlashMessage::ERROR);
         }
       } else {
 
-        $this->addLocalizedFlashMessage('resetPassword.failed.invalid', null, FlashMessage::ERROR);
+        $this->addLocalizedFlashMessage('resetPassword.failed.invalid', NULL, FlashMessage::ERROR);
       }
     } else {
 
-      $this->addLocalizedFlashMessage('resetPassword.failed.expired', null, FlashMessage::ERROR);
+      $this->addLocalizedFlashMessage('resetPassword.failed.expired', NULL, FlashMessage::ERROR);
     }
 
     $loginPageUid = $this->getSettingValue('login.page');
-    $this->redirect('showLoginForm', null, null, null, $loginPageUid);
+    $this->redirect('showLoginForm', NULL, NULL, NULL, $loginPageUid);
   }
 
   /**
@@ -458,18 +458,18 @@ class AuthenticationController extends ActionController {
    * @param mixed $defaultValue Default value if no value is set
    * @return mixed
    */
-  protected function getSettingValue($settingPath, $defaultValue = null) {
+  protected function getSettingValue($settingPath, $defaultValue = NULL) {
 
     $value = ObjectAccess::getPropertyPath($this->settings, $settingPath);
     $stdWrapConfiguration = ObjectAccess::getPropertyPath($this->settings, $settingPath . '.stdWrap');
 
-    if ($stdWrapConfiguration !== null) {
+    if ($stdWrapConfiguration !== NULL) {
 
       $value = $this->getFrontendController()->cObj->stdWrap($value, $stdWrapConfiguration);
     }
 
     // Change type of value to type of default value if possible
-    if (!empty($value) && $defaultValue !== null) {
+    if (!empty($value) && $defaultValue !== NULL) {
 
       settype($value, gettype($defaultValue));
     }
@@ -487,7 +487,7 @@ class AuthenticationController extends ActionController {
    * @return string|bool The flash message or FALSE if no flash message should be set
    */
   protected function getErrorFlashMessage() {
-    return false;
+    return FALSE;
   }
 
   /**
@@ -499,7 +499,7 @@ class AuthenticationController extends ActionController {
    */
   protected function addLocalizedFlashMessage(
     $translationKey,
-    array $translationArguments = null,
+    array $translationArguments = NULL,
     $severity = FlashMessage::OK
   ) {
 
