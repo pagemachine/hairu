@@ -13,6 +13,8 @@ namespace PAGEmachine\Hairu\Domain\Service;
  */
 
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Saltedpasswords\Salt\SaltFactory;
+use TYPO3\CMS\Saltedpasswords\Utility\SaltedPasswordsUtility;
 
 /**
  * Service for password-related tasks
@@ -27,13 +29,10 @@ class PasswordService implements \TYPO3\CMS\Core\SingletonInterface {
    */
   public function applyTransformations($password) {
 
-    if (ExtensionManagementUtility::isLoaded('saltedpasswords')) {
+    if (SaltedPasswordsUtility::isUsageEnabled('FE')) {
 
-      if (\TYPO3\CMS\Saltedpasswords\Utility\SaltedPasswordsUtility::isUsageEnabled('FE')) {
-
-        $saltingInstance = \TYPO3\CMS\Saltedpasswords\Salt\SaltFactory::getSaltingInstance();
-        $password = $saltingInstance->getHashedPassword($password);
-      }
+      $saltingInstance = SaltFactory::getSaltingInstance();
+      $password = $saltingInstance->getHashedPassword($password);
     }
 
     return $password;
