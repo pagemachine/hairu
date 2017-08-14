@@ -10,13 +10,14 @@ cache:
   directories:
     - $HOME/.composer/cache
 
+before_install:
+  - composer self-update
+before_script:
+  - composer install
+
 jobs:
   include:
-    - before_install:
-        - composer self-update
-      before_script:
-        - composer install
-      script:
+    - script:
         - bin/typoscript-lint
         - bin/xmllint --pattern "*.xlf*,svg" Resources
         - bin/parallel-lint --exclude bin --exclude vendor .
