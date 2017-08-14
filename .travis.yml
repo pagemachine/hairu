@@ -17,9 +17,10 @@ before_script:
   - composer install
 
 script:
-  - bin/parallel-lint --exclude bin --exclude vendor .
   - bin/typoscript-lint
   - bin/xmllint --pattern "*.xlf*,svg" Resources
+  - bin/parallel-lint --exclude bin --exclude vendor .
+  - bin/phpcs
 
 after_script:
   - >
