@@ -2,44 +2,42 @@
 defined('TYPO3_MODE') or die();
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-  'PAGEmachine.Hairu',
-  'Auth',
-  array(
-    'Authentication' => 'showLoginForm, showLogoutForm, showPasswordResetForm, startPasswordReset, completePasswordReset',
-  ),
-  array(
-    'Authentication' => 'showLoginForm, showLogoutForm, showPasswordResetForm, startPasswordReset, completePasswordReset',
-  )
+    'PAGEmachine.Hairu',
+    'Auth',
+    [
+        'Authentication' => 'showLoginForm, showLogoutForm, showPasswordResetForm, startPasswordReset, completePasswordReset',
+    ],
+    [
+        'Authentication' => 'showLoginForm, showLogoutForm, showPasswordResetForm, startPasswordReset, completePasswordReset',
+    ]
 );
 
 // Cache configuration
 if (!is_array($TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['hairu_token'])) {
-
-  $TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['hairu_token'] = array(
-    'backend' => 'TYPO3\\CMS\\Core\\Cache\\Backend\\Typo3DatabaseBackend',
-    'frontend' => 'TYPO3\\CMS\\Core\\Cache\\Frontend\\VariableFrontend',
-    'groups' => array(
-      'system',
-    ),
-  );
+    $TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['hairu_token'] = [
+        'backend' => \TYPO3\CMS\Core\Cache\Backend\Typo3DatabaseBackend::class,
+        'frontend' => \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class,
+        'groups' => [
+            'system',
+        ],
+    ];
 }
 
 // Logging configuration
 if (empty($GLOBALS['TYPO3_CONF_VARS']['LOG']['PAGEmachine']['Hairu']['writerConfiguration'])) {
-
-  $GLOBALS['TYPO3_CONF_VARS']['LOG']['PAGEmachine']['Hairu']['writerConfiguration'] = array(
-    // DEBUG and higher severity
-    \TYPO3\CMS\Core\Log\LogLevel::DEBUG => array(
-      'TYPO3\\CMS\\Core\\Log\\Writer\\FileWriter' => array(
-        'logFile' => 'typo3temp/logs/hairu.log',
-      ),
-    ),
-  );
+    $GLOBALS['TYPO3_CONF_VARS']['LOG']['PAGEmachine']['Hairu']['writerConfiguration'] = [
+        // DEBUG and higher severity
+        \TYPO3\CMS\Core\Log\LogLevel::DEBUG => [
+            \TYPO3\CMS\Core\Log\Writer\FileWriter::class => [
+                'logFile' => 'typo3temp/logs/hairu.log',
+            ],
+        ],
+    ];
 }
 
 // New content element wizard icon
 $icons = [
-    'hairu-wizard-icon' => 'login.svg'
+    'hairu-wizard-icon' => 'login.svg',
 ];
 $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
 foreach ($icons as $identifier => $path) {
@@ -51,17 +49,17 @@ foreach ($icons as $identifier => $path) {
 }
 
 /** @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher */
-$signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\SignalSlot\\Dispatcher');
+$signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
 $signalSlotDispatcher->connect(
-  'PAGEmachine\\Hairu\\Controller\\AuthenticationController',
-  'afterLogin',
-  'PAGEmachine\\Hairu\\Slots\\RedirectUrlSlot',
-  'processRedirect'
+    \PAGEmachine\Hairu\Controller\AuthenticationController::class,
+    'afterLogin',
+    \PAGEmachine\Hairu\Slots\RedirectUrlSlot::class,
+    'processRedirect'
 );
 $signalSlotDispatcher->connect(
-  'PAGEmachine\\Hairu\\Controller\\AuthenticationController',
-  'afterLogout',
-  'PAGEmachine\\Hairu\\Slots\\RedirectUrlSlot',
-  'processRedirect'
+    \PAGEmachine\Hairu\Controller\AuthenticationController::class,
+    'afterLogout',
+    \PAGEmachine\Hairu\Slots\RedirectUrlSlot::class,
+    'processRedirect'
 );
 unset($signalSlotDispatcher);

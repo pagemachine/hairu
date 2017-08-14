@@ -15,56 +15,50 @@ namespace PAGEmachine\Hairu\Mvc\Controller;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 
-class ActionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
+class ActionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+{
+    /**
+     * Adds the needed validators to the Arguments:
+     *
+     * - Validators checking the data type from the @param annotation
+     * - Custom validators specified with validate annotations.
+     * - Model-based validators (validate annotations in the model)
+     * - Custom model validator classes
+     * - Validators from framework configuration
+     *
+     * @return void
+     */
+    protected function initializeActionMethodValidators()
+    {
+        parent::initializeActionMethodValidators();
 
-  /**
-   * Adds the needed validators to the Arguments:
-   *
-   * - Validators checking the data type from the @param annotation
-   * - Custom validators specified with validate annotations.
-   * - Model-based validators (validate annotations in the model)
-   * - Custom model validator classes
-   * - Validators from framework configuration
-   *
-   * @return void
-   */
-  protected function initializeActionMethodValidators() {
+        $frameworkConfiguration = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+        $actionArgumentValidation = !empty($frameworkConfiguration['mvc']['validation'][$this->request->getControllerName()][$this->request->getControllerActionName()])
+          ? $frameworkConfiguration['mvc']['validation'][$this->request->getControllerName()][$this->request->getControllerActionName()]
+          : array();
 
-    parent::initializeActionMethodValidators();
+        // Dynamically add argument validators
+        foreach ($actionArgumentValidation as $argumentName => $validators) {
+            try {
+                $argumentValidator = $this->arguments->getArgument($argumentName)->getValidator();
+            } catch (NoSuchArgumentException $e) {
+                continue;
+            }
 
-    $frameworkConfiguration = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
-    $actionArgumentValidation = !empty($frameworkConfiguration['mvc']['validation'][$this->request->getControllerName()][$this->request->getControllerActionName()])
-      ? $frameworkConfiguration['mvc']['validation'][$this->request->getControllerName()][$this->request->getControllerActionName()]
-      : array();
+            $validatorConjunction = $this->validatorResolver->createValidator('TYPO3.CMS.Extbase:Conjunction');
 
-    // Dynamically add argument validators
-    foreach ($actionArgumentValidation as $argumentName => $validators) {
+            foreach ($validators as $validatorConfiguration) {
+                if (isset($validatorConfiguration['type'])) {
+                    $validatorType = $validatorConfiguration['type'];
+                    $validatorOptions = isset($validatorConfiguration['options']) ? $validatorConfiguration['options'] : array();
+                    $validator = $this->validatorResolver->createValidator($validatorType, $validatorOptions);
+                    $validatorConjunction->addValidator($validator);
+                }
+            }
 
-      try {
-
-        $argumentValidator = $this->arguments->getArgument($argumentName)->getValidator();
-      } catch (NoSuchArgumentException $e) {
-
-        continue;
-      }
-
-      $validatorConjunction = $this->validatorResolver->createValidator('TYPO3.CMS.Extbase:Conjunction');
-
-      foreach ($validators as $validatorConfiguration) {
-
-        if (isset($validatorConfiguration['type'])) {
-
-          $validatorType = $validatorConfiguration['type'];
-          $validatorOptions = isset($validatorConfiguration['options']) ? $validatorConfiguration['options'] : array();
-          $validator = $this->validatorResolver->createValidator($validatorType, $validatorOptions);
-          $validatorConjunction->addValidator($validator);
+            if (count($validatorConjunction)) {
+                $argumentValidator->addValidator($validatorConjunction);
+            }
         }
-      }
-
-      if (count($validatorConjunction)) {
-
-        $argumentValidator->addValidator($validatorConjunction);
-      }
     }
-  }
 }

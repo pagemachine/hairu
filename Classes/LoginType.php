@@ -12,15 +12,17 @@ namespace PAGEmachine\Hairu;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-class LoginType extends \TYPO3\CMS\Core\Type\Enumeration {
+use TYPO3\CMS\Core\Type\Enumeration;
 
-  /**
-   * Indicates a login
-   */
-  const LOGIN = 'login';
+class LoginType extends Enumeration
+{
+    /**
+     * Indicates a login
+     */
+    const LOGIN = 'login';
 
-  /**
-   * Indicates a logout
-   */
-  const LOGOUT = 'logout';
+    /**
+     * Indicates a logout
+     */
+    const LOGOUT = 'logout';
 }

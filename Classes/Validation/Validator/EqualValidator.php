@@ -17,50 +17,48 @@ use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 /**
  * Validator for equality of two values
  */
-class EqualValidator extends AbstractValidator {
+class EqualValidator extends AbstractValidator
+{
+    /**
+     * @var array
+     */
+    protected $supportedOptions = array(
+        'equalTo' => array(null, 'Another value to compare with', 'mixed', true),
+        'strict' => array(false, 'TRUE for strict comparison (including type), FALSE otherwise', 'boolean'),
+        'negate' => array(false, 'TRUE to validate against not equal, FALSE for equal', 'boolean'),
+    );
 
-  /**
-   * @var array
-   */
-  protected $supportedOptions = array(
-    'equalTo' => array(NULL, 'Another value to compare with', 'mixed', TRUE),
-    'strict' => array(FALSE, 'TRUE for strict comparison (including type), FALSE otherwise', 'boolean'),
-    'negate' => array(FALSE, 'TRUE to validate against not equal, FALSE for equal', 'boolean'),
-  );
+    /**
+     * Checks if the given value is (not) equal to another value
+     *
+     * If at least one error occurred, the result is FALSE.
+     *
+     * @param mixed $value The value that should be validated
+     * @return bool TRUE if the value is valid, FALSE if an error occurred
+     */
+    public function isValid($value)
+    {
+        $otherValue = $this->options['equalTo'];
+        $valueIsValid = $this->options['strict'] ? $value === $otherValue : $value == $otherValue;
+        $errorMessageTranslationKey = 'validator.equal.invalid';
 
-  /**
-   * Checks if the given value is (not) equal to another value
-   *
-   * If at least one error occurred, the result is FALSE.
-   *
-   * @param mixed $value The value that should be validated
-   * @return boolean TRUE if the value is valid, FALSE if an error occurred
-   */
-  public function isValid($value) {
+        if ($this->options['negate']) {
+            $valueIsValid = !$valueIsValid;
+            $errorMessageTranslationKey = 'validator.equal.negate.invalid';
+        }
 
-    $otherValue = $this->options['equalTo'];
-    $valueIsValid = $this->options['strict'] ? $value === $otherValue : $value == $otherValue;
-    $errorMessageTranslationKey = 'validator.equal.invalid';
+        if (!$valueIsValid) {
+            $this->addError(
+                $this->translateErrorMessage(
+                    $errorMessageTranslationKey,
+                    'hairu'
+                ),
+                1415185288
+            );
 
-    if ($this->options['negate']) {
+            return false;
+        }
 
-      $valueIsValid = !$valueIsValid;
-      $errorMessageTranslationKey = 'validator.equal.negate.invalid';
+        return true;
     }
-
-    if (!$valueIsValid) {
-
-      $this->addError(
-        $this->translateErrorMessage(
-          $errorMessageTranslationKey,
-          'hairu'
-        ),
-        1415185288
-      );
-
-      return FALSE;
-    }
-
-    return TRUE;
-  }
 }
