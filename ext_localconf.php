@@ -35,7 +35,7 @@ if (empty($GLOBALS['TYPO3_CONF_VARS']['LOG']['PAGEmachine']['Hairu']['writerConf
     ];
 }
 
-call_user_func(function() {
+call_user_func(function () {
     // New content element wizard icon
     $icons = [
         'hairu-wizard-icon' => 'login.svg',
@@ -64,4 +64,3 @@ call_user_func(function() {
         'processRedirect'
     );
 });
-
