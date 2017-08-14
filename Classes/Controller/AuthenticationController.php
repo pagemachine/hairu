@@ -277,7 +277,6 @@ class AuthenticationController extends ActionController {
     $expiryDate = new \DateTime(sprintf('now + %d seconds', $tokenLifetime));
     $hashUri = $this->uriBuilder
       ->setTargetPageUid($this->getSettingValue('passwordReset.page'))
-      ->setUseCacheHash(FALSE)
       ->setCreateAbsoluteUri(TRUE)
       ->uriFor('showPasswordResetForm', array(
         'hash' => $hash,
