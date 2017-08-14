@@ -17,7 +17,8 @@ jobs:
     - stage: prepare
       script: composer install
 
-    - script: bin/typoscript-lint
+    - stage: test
+      script: bin/typoscript-lint
     - script: bin/xmllint --pattern "*.xlf*,svg" Resources
     - script: bin/parallel-lint --exclude bin --exclude vendor .
     - script: bin/phpcs
