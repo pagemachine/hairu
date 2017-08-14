@@ -14,6 +14,7 @@ namespace PAGEmachine\Hairu\Controller;
 
 use PAGEmachine\Hairu\LoginType;
 use PAGEmachine\Hairu\Mvc\Controller\ActionController;
+use TYPO3\CMS\Core\Crypto\Random;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
@@ -263,7 +264,14 @@ class AuthenticationController extends ActionController {
       $this->redirect('showPasswordResetForm');
     }
 
-    $hash = md5(GeneralUtility::generateRandomBytes(64));
+    if (class_exists(Random::class)) {
+
+      $hash = GeneralUtility::makeInstance(Random::class)->generateRandomHexString(64);
+    } else {
+
+      $hash = GeneralUtility::getRandomHexString(64);
+    }
+
     $token = array(
       'uid' => $user->getUid(),
       'hmac' => $this->hashService->generateHmac($userPassword),
