@@ -1,10 +1,5 @@
-language: php
-
-php:
-  - 5.6
-  - 7.0
-
 sudo: false
+dist: trusty
 
 cache:
   directories:
@@ -15,13 +10,24 @@ jobs:
     - stage: prepare
       script: composer self-update
     - stage: prepare
+      php: 5.6
+      script: composer install
+    - stage: prepare
+      php: 7.0
       script: composer install
 
     - stage: test
       script: bin/typoscript-lint
-    - script: bin/xmllint --pattern "*.xlf*,svg" Resources
-    - script: bin/parallel-lint --exclude bin --exclude vendor .
-    - script: bin/phpcs
+    - stage: test
+      script: bin/xmllint --pattern "*.xlf*,svg" Resources
+    - stage: test
+      php: 5.6
+      script: bin/parallel-lint --exclude bin --exclude vendor .
+    - stage: test
+      php: 7.0
+      script: bin/parallel-lint --exclude bin --exclude vendor .
+    - stage: test
+      script: bin/phpcs
 
     - stage: deploy
       script: >
