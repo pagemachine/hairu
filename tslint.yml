@@ -1,0 +1,15 @@
+paths:
+  - Configuration/PageTS
+  - Configuration/TypoScript
+
+filePatterns:
+  - "*.ts"
+  - constants.txt
+  - setup.txt
+
+sniffs:
+  - class: Indentation
+    parameters:
+      indentPerLevel: 2
+  - class: RepeatingRValue
+    disabled: true
