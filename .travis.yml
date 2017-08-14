@@ -20,6 +20,7 @@ before_script:
 
 script:
   - bin/parallel-lint --exclude bin --exclude vendor .
+  - bin/typoscript-lint
   - bin/xmllint --pattern "*.xlf*,svg" Resources
 
 after_script:
