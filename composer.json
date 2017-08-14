@@ -28,7 +28,6 @@
     "jakub-onderka/php-console-highlighter": "^0.3.2",
     "jakub-onderka/php-parallel-lint": "^0.9.2",
     "sclable/xml-lint": "^0.2.3",
-    "slevomat/coding-standard": "^3.1",
     "squizlabs/php_codesniffer": "^3.0"
   },
   "replace": {
