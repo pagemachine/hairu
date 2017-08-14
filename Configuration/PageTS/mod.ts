@@ -1,6 +1,6 @@
 mod {
   wizards.newContentElement.wizardItems.forms.elements.hairu_auth {
-    icon = ../typo3conf/ext/hairu/Resources/Public/Icons/plugin.png
+    iconIdentifier = hairu-wizard-icon
     title = LLL:EXT:hairu/Resources/Private/Language/locallang_db.xlf:plugin.auth
     description = LLL:EXT:hairu/Resources/Private/Language/locallang_db.xlf:plugin.auth.description
 

@@ -156,7 +156,7 @@ class AuthenticationController extends ActionController {
 
         case LoginType::LOGIN:
 
-          $this->addLocalizedFlashMessage('login.failed', NULL, FlashMessage::ERROR);
+          $this->addLocalizedFlashMessage('login.failed.message', NULL, FlashMessage::ERROR, 'login.failed.title');
           break;
 
         case LoginType::LOGOUT:
@@ -446,8 +446,9 @@ class AuthenticationController extends ActionController {
    * @param string $translationKey
    * @param array $translationArguments
    * @param integer $severity
+   * @param string $messageTitle
    */
-  protected function addLocalizedFlashMessage($translationKey, array $translationArguments = NULL, $severity = FlashMessage::OK) {
+  protected function addLocalizedFlashMessage($translationKey, array $translationArguments = NULL, $severity = FlashMessage::OK, $messageTitle = '') {
 
     $this->addFlashMessage(
       LocalizationUtility::translate(
@@ -455,7 +456,7 @@ class AuthenticationController extends ActionController {
         $this->request->getControllerExtensionName(),
         $translationArguments
       ),
-      '',
+      ($messageTitle != '' ? LocalizationUtility::translate($messageTitle, $this->request->getControllerExtensionName(),$translationArguments) : ''),
       $severity
     );
   }
