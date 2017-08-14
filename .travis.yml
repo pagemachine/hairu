@@ -10,39 +10,33 @@ cache:
   directories:
     - $HOME/.composer/cache
 
-before_install:
-  - composer self-update
+jobs:
+  include:
+    - script: composer self-update
+    - script: composer install
+    - script: bin/typoscript-lint
+    - script: bin/xmllint --pattern "*.xlf*,svg" Resources
+    - script: bin/parallel-lint --exclude bin --exclude vendor .
+    - script: bin/phpcs
 
-before_script:
-  - composer install
+    - stage: deploy
+      script: >
+        if [ -n "$TRAVIS_TAG" ]; then
+          echo -e "Preparing upload of release ${TRAVIS_TAG} to TER\n"
 
-script:
-  - bin/typoscript-lint
-  - bin/xmllint --pattern "*.xlf*,svg" Resources
-  - bin/parallel-lint --exclude bin --exclude vendor .
-  - bin/phpcs
+          if [ $? -eq 0 ]; then
+            TAG_ANNOTATION="$(git tag -n -l $TRAVIS_TAG)"
+            TAG_MESSAGE="${TAG_ANNOTATION#* }"
 
-after_script:
-  - >
-    if [ -n "$TRAVIS_TAG" ]; then
-      echo -e "Preparing upload of release ${TRAVIS_TAG} to TER\n"
+            git reset --hard
+            git clean -xfd
 
-      npm install
-      npm run travis-after-all
+            composer global require namelesscoder/typo3-repository-client:^1.1.1
 
-      if [ $? -eq 0 ]; then
-        TAG_ANNOTATION="$(git tag -n -l $TRAVIS_TAG)"
-        TAG_MESSAGE="${TAG_ANNOTATION#* }"
-
-        git reset --hard
-        git clean -xfd
-
-        composer global require namelesscoder/typo3-repository-client:^1.1.1
-
-        echo "Uploading release ${TRAVIS_TAG} to TER"
-        $HOME/.composer/vendor/bin/upload . $TYPO3_ORG_USERNAME $TYPO3_ORG_PASSWORD "$TAG_MESSAGE"
-      fi;
-    fi;
+            echo "Uploading release ${TRAVIS_TAG} to TER"
+            $HOME/.composer/vendor/bin/upload . $TYPO3_ORG_USERNAME $TYPO3_ORG_PASSWORD "$TAG_MESSAGE"
+          fi;
+        fi;
 
 notifications:
   slack:
