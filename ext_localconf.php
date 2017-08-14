@@ -35,31 +35,33 @@ if (empty($GLOBALS['TYPO3_CONF_VARS']['LOG']['PAGEmachine']['Hairu']['writerConf
     ];
 }
 
-// New content element wizard icon
-$icons = [
-    'hairu-wizard-icon' => 'login.svg',
-];
-$iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
-foreach ($icons as $identifier => $path) {
-    $iconRegistry->registerIcon(
-        $identifier,
-        \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-        ['source' => 'EXT:hairu/Resources/Public/Icons/' . $path]
-    );
-}
+call_user_func(function() {
+    // New content element wizard icon
+    $icons = [
+        'hairu-wizard-icon' => 'login.svg',
+    ];
+    $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
+    foreach ($icons as $identifier => $path) {
+        $iconRegistry->registerIcon(
+            $identifier,
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:hairu/Resources/Public/Icons/' . $path]
+        );
+    }
 
-/** @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher */
-$signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
-$signalSlotDispatcher->connect(
-    \PAGEmachine\Hairu\Controller\AuthenticationController::class,
-    'afterLogin',
-    \PAGEmachine\Hairu\Slots\RedirectUrlSlot::class,
-    'processRedirect'
-);
-$signalSlotDispatcher->connect(
-    \PAGEmachine\Hairu\Controller\AuthenticationController::class,
-    'afterLogout',
-    \PAGEmachine\Hairu\Slots\RedirectUrlSlot::class,
-    'processRedirect'
-);
-unset($signalSlotDispatcher);
+    /** @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher */
+    $signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher::class);
+    $signalSlotDispatcher->connect(
+        \PAGEmachine\Hairu\Controller\AuthenticationController::class,
+        'afterLogin',
+        \PAGEmachine\Hairu\Slots\RedirectUrlSlot::class,
+        'processRedirect'
+    );
+    $signalSlotDispatcher->connect(
+        \PAGEmachine\Hairu\Controller\AuthenticationController::class,
+        'afterLogout',
+        \PAGEmachine\Hairu\Slots\RedirectUrlSlot::class,
+        'processRedirect'
+    );
+});
+
