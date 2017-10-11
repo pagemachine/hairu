@@ -17,48 +17,47 @@ use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 /**
  * Validator for frontend users
  */
-class ValidFrontendUserValidator extends AbstractValidator {
+class ValidFrontendUserValidator extends AbstractValidator
+{
+    /**
+     * @var \PAGEmachine\Hairu\Domain\Repository\FrontendUserRepository
+     * @inject
+     */
+    protected $frontendUserRepository;
 
-  /**
-   * @var \PAGEmachine\Hairu\Domain\Repository\FrontendUserRepository
-   * @inject
-   */
-  protected $frontendUserRepository;
+    /**
+     * @var array
+     */
+    protected $supportedOptions = array(
+        'property' => array('', 'The property to use for frontend user lookup', 'string', true)
+    );
 
-  /**
-   * @var array
-   */
-  protected $supportedOptions = array(
-    'property' => array('', 'The property to use for frontend user lookup', 'string', TRUE)
-  );
+    /**
+     * Checks if the given value is a valid frontend user.
+     *
+     * If at least one error occurred, the result is FALSE.
+     *
+     * @param mixed $value The value that should be validated
+     * @return bool TRUE if the value is valid, FALSE if an error occurred
+     */
+    public function isValid($value)
+    {
+        $countMethod = 'countBy' . ucfirst($this->options['property']);
+        $count = $this->frontendUserRepository->$countMethod($value);
 
-  /**
-   * Checks if the given value is a valid frontend user.
-   *
-   * If at least one error occurred, the result is FALSE.
-   *
-   * @param mixed $value The value that should be validated
-   * @return boolean TRUE if the value is valid, FALSE if an error occurred
-   */
-  public function isValid($value) {
+        if ($count === 0) {
+            $this->addError(
+                $this->translateErrorMessage(
+                    'validator.validFrontendUser.invalid',
+                    'hairu',
+                    array($value)
+                ),
+                1415096884
+            );
 
-    $countMethod = 'countBy' . ucfirst($this->options['property']);
-    $count = $this->frontendUserRepository->$countMethod($value);
+            return false;
+        }
 
-    if ($count === 0) {
-
-      $this->addError(
-        $this->translateErrorMessage(
-          'validator.validFrontendUser.invalid',
-          'hairu',
-          array($value)
-        ),
-        1415096884
-      );
-
-      return FALSE;
+        return true;
     }
-
-    return TRUE;
-  }
 }

@@ -15,54 +15,57 @@ namespace PAGEmachine\Hairu\Domain\Service;
 use PAGEmachine\Hairu\Domain\Model\FrontendUser;
 use TYPO3\CMS\Extbase\DomainObject\DomainObjectInterface;
 
-class AuthenticationService implements \TYPO3\CMS\Core\SingletonInterface {
+/**
+ * Service for authentication tasks
+ */
+class AuthenticationService implements \TYPO3\CMS\Core\SingletonInterface
+{
+    /**
+     * @var \PAGEmachine\Hairu\Domain\Repository\FrontendUserRepository
+     * @inject
+     */
+    protected $frontendUserRepository;
 
-  /**
-   * @var \PAGEmachine\Hairu\Domain\Repository\FrontendUserRepository
-   * @inject
-   */
-  protected $frontendUserRepository;
+    /**
+     * Returns whether any user is currently authenticated
+     *
+     * @return bool
+     */
+    public function isUserAuthenticated()
+    {
+        return $this->getFrontendController()->loginUser;
+    }
 
-  /**
-   * Returns whether any user is currently authenticated
-   *
-   * @return boolean
-   */
-  public function isUserAuthenticated() {
+    /**
+     * Returns the currently authenticated user
+     *
+     * @return FrontendUser
+     */
+    public function getAuthenticatedUser()
+    {
+        return $this->frontendUserRepository->findByIdentifier($this->getFrontendController()->fe_user->user['uid']);
+    }
 
-    return $this->getFrontendController()->loginUser;
-  }
+    /**
+     * Authenticates a frontend user
+     *
+     * @param DomainObjectInterface $user
+     * @return void
+     */
+    public function authenticateUser(DomainObjectInterface $user)
+    {
+        $frontendController = $this->getFrontendController();
+        $frontendController->fe_user->createUserSession($user->_getCleanProperties());
+        $frontendController->fe_user->loginSessionStarted = true;
+        $frontendController->fe_user->user = $frontendController->fe_user->fetchUserSession();
+        $frontendController->loginUser = true;
+    }
 
-  /**
-   * Returns the currently authenticated user
-   *
-   * @return FrontendUser
-   */
-  public function getAuthenticatedUser() {
-
-    return $this->frontendUserRepository->findByIdentifier($this->getFrontendController()->fe_user->user['uid']);
-  }
-
-  /**
-   * Authenticates a frontend user
-   *
-   * @param DomainObjectInterface $user
-   * @return void
-   */
-  public function authenticateUser(DomainObjectInterface $user) {
-
-    $frontendController = $this->getFrontendController();
-    $frontendController->fe_user->createUserSession($user->_getCleanProperties());
-    $frontendController->fe_user->loginSessionStarted = TRUE;
-    $frontendController->fe_user->user = $frontendController->fe_user->fetchUserSession();
-    $frontendController->loginUser = TRUE;
-  }
-
-  /**
-   * @return \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
-   */
-  protected function getFrontendController() {
-
-    return $GLOBALS['TSFE'];
-  }
+    /**
+     * @return \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
+     */
+    protected function getFrontendController()
+    {
+        return $GLOBALS['TSFE'];
+    }
 }

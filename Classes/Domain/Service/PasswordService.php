@@ -12,30 +12,27 @@ namespace PAGEmachine\Hairu\Domain\Service;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Saltedpasswords\Salt\SaltFactory;
+use TYPO3\CMS\Saltedpasswords\Utility\SaltedPasswordsUtility;
 
 /**
  * Service for password-related tasks
  */
-class PasswordService implements \TYPO3\CMS\Core\SingletonInterface {
+class PasswordService implements \TYPO3\CMS\Core\SingletonInterface
+{
+    /**
+     * Applies transformations to a given plain text password, e.g. hashing
+     *
+     * @param string $password
+     * @return string
+     */
+    public function applyTransformations($password)
+    {
+        if (SaltedPasswordsUtility::isUsageEnabled('FE')) {
+            $saltingInstance = SaltFactory::getSaltingInstance();
+            $password = $saltingInstance->getHashedPassword($password);
+        }
 
-  /**
-   * Applies transformations to a given plain text password, e.g. hashing
-   *
-   * @param string $password
-   * @return string
-   */
-  public function applyTransformations($password) {
-
-    if (ExtensionManagementUtility::isLoaded('saltedpasswords')) {
-
-      if (\TYPO3\CMS\Saltedpasswords\Utility\SaltedPasswordsUtility::isUsageEnabled('FE')) {
-
-        $saltingInstance = \TYPO3\CMS\Saltedpasswords\Salt\SaltFactory::getSaltingInstance();
-        $password = $saltingInstance->getHashedPassword($password);
-      }
+        return $password;
     }
-
-    return $password;
-  }
 }
