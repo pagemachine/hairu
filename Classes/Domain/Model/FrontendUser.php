@@ -12,6 +12,8 @@ namespace PAGEmachine\Hairu\Domain\Model;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-class FrontendUser extends \TYPO3\CMS\Extbase\Domain\Model\FrontendUser {
+use TYPO3\CMS\Extbase\Domain\Model\FrontendUser as ExtbaseFrontendUser;
 
+class FrontendUser extends ExtbaseFrontendUser
+{
 }

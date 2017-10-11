@@ -1,21 +1,17 @@
 <?php
 
-$EM_CONF[$_EXTKEY] = array(
-  'title' => 'Hairu',
-  'description' => 'Flexible login/logout form based on Extbase/Fluid',
-  'category' => 'fe',
-  'author' => 'Mathias Brodala',
-  'author_email' => 'mbrodala@pagemachine.de',
-  'author_company' => 'PAGEmachine AG',
-  'state' => 'stable',
-  'version' => '1.4.1',
-  'constraints' => array(
-    'depends' => array(
-      'typo3' => '6.2.0-7.6.99',
-    ),
-    'conflicts' => array(
-    ),
-    'suggests' => array(
-    ),
-  ),
-);
+$EM_CONF[$_EXTKEY] = [
+    'title' => 'Hairu',
+    'description' => 'Flexible login/logout form based on Extbase/Fluid',
+    'category' => 'fe',
+    'author' => 'Mathias Brodala',
+    'author_email' => 'mbrodala@pagemachine.de',
+    'author_company' => 'Pagemachine AG',
+    'state' => 'stable',
+    'version' => '2.0.1',
+    'constraints' => [
+        'depends' => [
+            'typo3' => '7.6.0-8.7.99',
+        ],
+    ],
+];

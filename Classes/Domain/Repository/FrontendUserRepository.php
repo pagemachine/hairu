@@ -1,6 +1,8 @@
 <?php
 namespace PAGEmachine\Hairu\Domain\Repository;
 
+use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository as ExtbaseFrontendUserRepository;
+
 /*
  * This file is part of the PAGEmachine Hairu project.
  *
@@ -12,16 +14,16 @@ namespace PAGEmachine\Hairu\Domain\Repository;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-class FrontendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository {
-
-  /**
-   * Replaces an existing object with the same identifier by the given object
-   *
-   * @param object $modifiedObject The modified object
-   * @return void
-   */
-  public function update($modifiedObject) {
-
-    $this->persistenceManager->update($modifiedObject);
-  }
+class FrontendUserRepository extends ExtbaseFrontendUserRepository
+{
+    /**
+     * Replaces an existing object with the same identifier by the given object
+     *
+     * @param object $modifiedObject The modified object
+     * @return void
+     */
+    public function update($modifiedObject)
+    {
+        $this->persistenceManager->update($modifiedObject);
+    }
 }

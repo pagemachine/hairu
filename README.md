@@ -8,11 +8,12 @@ Flexible login/logout form based on Extbase/Fluid to replace the *felogin* exten
 
 This extension is installable from various sources:
 
-1. From the [TYPO3 Extension Repository](typo3.org/extensions/repository/view/hairu)
-2. From [Github](https://github.com/pagemachine/hairu/releases)
-3. Via [Composer](https://packagist.org/packages/pagemachine/hairu):
-        
+1. Via [Composer](https://packagist.org/packages/pagemachine/hairu):
+
         composer require pagemachine/hairu
+        
+2. From the [TYPO3 Extension Repository](https://extensions.typo3.org/extension/hairu/)
+3. From [Github](https://github.com/pagemachine/hairu/releases)
 
 After installation a new content element *Authentication form* will be available in the *Form elements* section. Make sure to also include the static template.
 
@@ -69,3 +70,7 @@ The following formats for the validator type are supported:
 ## Issues
 
 Found a bug? Need a feature? Let us know through our [issue tracker](https://github.com/pagemachine/hairu/issues).
+
+## Credits
+
+Icons made by [Freepik](http://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](https://creativecommons.org/licenses/by/3.0/)

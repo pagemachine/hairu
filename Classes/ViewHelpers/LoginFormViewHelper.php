@@ -12,9 +12,9 @@ namespace PAGEmachine\Hairu\ViewHelpers;
  * LICENSE.txt file that was distributed with this source code.
  */
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use PAGEmachine\Hairu\LoginType;
 use PAGEmachine\Hairu\ViewHelpers\Form\AbstractAuthenticationFormViewHelper;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Login form view helper. Generates a <form> tag.
@@ -29,116 +29,112 @@ use PAGEmachine\Hairu\ViewHelpers\Form\AbstractAuthenticationFormViewHelper;
  *
  * Most of the other arguments are the same as in <f:form/>
  */
-class LoginFormViewHelper extends AbstractAuthenticationFormViewHelper {
+class LoginFormViewHelper extends AbstractAuthenticationFormViewHelper
+{
+    /**
+     * List of JavaScript code snippets to invoke on form submit
+     *
+     * @var array
+     */
+    protected $submitJavaScriptCode = array();
 
-  /**
-   * List of JavaScript code snippets to invoke on form submit
-   *
-   * @var array
-   */
-  protected $submitJavaScriptCode = array();
+    /**
+     * List of additional hidden form fields
+     *
+     * @var array
+     */
+    protected $additionalHiddenFields = array();
 
-  /**
-   * List of additional hidden form fields
-   *
-   * @var array
-   */
-  protected $additionalHiddenFields = array();
+    /**
+     * Gets additional code for login forms based on the
+     * TYPO3_CONF_VARS/EXTCONF/felogin/loginFormOnSubmitFuncs hook
+     *
+     * Will be invoked just before the render method.
+     *
+     * @return void
+     */
+    public function initialize()
+    {
+        parent::initialize();
 
-  /**
-   * Gets additional code for login forms based on the
-   * TYPO3_CONF_VARS/EXTCONF/felogin/loginFormOnSubmitFuncs hook
-   *
-   * Will be invoked just before the render method.
-   *
-   * @return void
-   */
-  public function initialize() {
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['felogin']['loginFormOnSubmitFuncs'])) {
+            $parameters = array();
 
-    parent::initialize();
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['felogin']['loginFormOnSubmitFuncs'] as $callback) {
+                $result = GeneralUtility::callUserFunction($callback, $parameters, $this);
 
-    if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['felogin']['loginFormOnSubmitFuncs'])) {
+                if (isset($result[0])) {
+                    $this->submitJavaScriptCode[] = $result[0];
+                }
 
-      $parameters = array();
-
-      foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['felogin']['loginFormOnSubmitFuncs'] as $callback) {
-
-        $result = GeneralUtility::callUserFunction($callback, $parameters, $this);
-
-        if (isset($result[0])) {
-
-          $this->submitJavaScriptCode[] = $result[0];
+                if (isset($result[1])) {
+                    $this->additionalHiddenFields[] = $result[1];
+                }
+            }
         }
-
-        if (isset($result[1])) {
-
-          $this->additionalHiddenFields[] = $result[1];
-        }
-      }
     }
-  }
 
-  /**
-   * Render the form.
-   *
-   * @param integer $userStoragePageUid Storage page uid where user records are located
-   * @param integer $pageUid Target page uid
-   * @param integer $pageType Target page type
-   * @param boolean $noCache set this to disable caching for the target page. You should not need this.
-   * @param boolean $noCacheHash set this to supress the cHash query parameter created by TypoLink. You should not need this.
-   * @param string $section The anchor to be added to the action URI (only active if $actionUri is not set)
-   * @param string $format The requested format (e.g. ".html") of the target page (only active if $actionUri is not set)
-   * @param array $additionalParams additional action URI query parameters that won't be prefixed like $arguments (overrule $arguments) (only active if $actionUri is not set)
-   * @param boolean $absolute If set, an absolute action URI is rendered (only active if $actionUri is not set)
-   * @param boolean $addQueryString If set, the current query parameters will be kept in the action URI (only active if $actionUri is not set)
-   * @param array $argumentsToBeExcludedFromQueryString arguments to be removed from the action URI. Only active if $addQueryString = TRUE and $actionUri is not set
-   * @param string $actionUri can be used to overwrite the "action" attribute of the form tag
-   * @return string rendered form
-   */
-  public function render($userStoragePageUid, $pageUid = NULL, $pageType = 0, $noCache = FALSE, $noCacheHash = FALSE, $section = '', $format = '', array $additionalParams = array(), $absolute = FALSE, $addQueryString = FALSE, array $argumentsToBeExcludedFromQueryString = array(), $actionUri = NULL) {
+    /**
+     * Render the form.
+     *
+     * @param int $userStoragePageUid Storage page uid where user records are located
+     * @param int $pageUid Target page uid
+     * @param int $pageType Target page type
+     * @param bool $noCache set this to disable caching for the target page. You should not need this.
+     * @param bool $noCacheHash set this to supress the cHash query parameter created by TypoLink. You should not need this.
+     * @param string $section The anchor to be added to the action URI (only active if $actionUri is not set)
+     * @param string $format The requested format (e.g. ".html") of the target page (only active if $actionUri is not set)
+     * @param array $additionalParams additional action URI query parameters that won't be prefixed like $arguments (overrule $arguments) (only active if $actionUri is not set)
+     * @param bool $absolute If set, an absolute action URI is rendered (only active if $actionUri is not set)
+     * @param bool $addQueryString If set, the current query parameters will be kept in the action URI (only active if $actionUri is not set)
+     * @param array $argumentsToBeExcludedFromQueryString arguments to be removed from the action URI. Only active if $addQueryString = TRUE and $actionUri is not set
+     * @param string $actionUri can be used to overwrite the "action" attribute of the form tag
+     * @return string rendered form
+     */
+    public function render($userStoragePageUid, $pageUid = null, $pageType = 0, $noCache = false, $noCacheHash = false, $section = '', $format = '', array $additionalParams = array(), $absolute = false, $addQueryString = false, array $argumentsToBeExcludedFromQueryString = array(), $actionUri = null)
+    {
+        $this->setFormActionUri();
+        $this->setFormMethod();
+        $this->setFormOnSubmit();
 
-    $this->setFormActionUri();
-    $this->setFormMethod();
-    $this->setFormOnSubmit();
+        $content = $this->renderHiddenLoginTypeField(LoginType::LOGIN);
+        $content .= $this->renderHiddenUserStoragePageUidField($userStoragePageUid);
+        $content .= $this->renderAdditionalHiddenFields();
+        $content .= $this->renderChildren();
 
-    $content = $this->renderHiddenLoginTypeField(LoginType::LOGIN);
-    $content .= $this->renderHiddenUserStoragePageUidField($userStoragePageUid);
-    $content .= $this->renderAdditionalHiddenFields();
-    $content .= $this->renderChildren();
+        $this->tag->setContent($content);
 
-    $this->tag->setContent($content);
+        return $this->tag->render();
+    }
 
-    return $this->tag->render();
-  }
+    /**
+     * Sets the "onsubmit" attribute of the form tag
+     *
+     * @return void
+     */
+    protected function setFormOnSubmit()
+    {
+        $this->tag->addAttribute('onsubmit', implode(';', $this->submitJavaScriptCode));
+    }
 
-  /**
-   * Sets the "onsubmit" attribute of the form tag
-   *
-   * @return void
-   */
-  protected function setFormOnSubmit() {
+    /**
+     * Renders a hidden form field indicating the storage pid of user records
+     *
+     * @param int $userStoragePageUid Storage page uid where user records are located
+     * @return string
+     */
+    protected function renderHiddenUserStoragePageUidField($userStoragePageUid)
+    {
+        return LF . '<input type="hidden" name="pid" value="' . $userStoragePageUid . '" />' . LF;
+    }
 
-    $this->tag->addAttribute('onsubmit', implode(';', $this->submitJavaScriptCode));
-  }
-
-  /**
-   * Renders a hidden form field indicating the storage pid of user records
-   *
-   * @param integer $userStoragePageUid Storage page uid where user records are located
-   * @return string
-   */
-  protected function renderHiddenUserStoragePageUidField($userStoragePageUid) {
-
-    return LF . '<input type="hidden" name="pid" value="' . $userStoragePageUid . '" />' . LF;
-  }
-
-  /**
-   * Renders additional hidden form fields
-   *
-   * @return string
-   */
-  protected function renderAdditionalHiddenFields() {
-
-    return LF . implode(LF, $this->additionalHiddenFields);
-  }
+    /**
+     * Renders additional hidden form fields
+     *
+     * @return string
+     */
+    protected function renderAdditionalHiddenFields()
+    {
+        return LF . implode(LF, $this->additionalHiddenFields);
+    }
 }
