@@ -1,4 +1,5 @@
 <?php
+
 namespace PAGEmachine\Hairu\Controller;
 
 /*
@@ -13,7 +14,6 @@ namespace PAGEmachine\Hairu\Controller;
  */
 
 use PAGEmachine\Hairu\LoginType;
-use PAGEmachine\Hairu\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Crypto\Random;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
@@ -23,37 +23,18 @@ use TYPO3\CMS\Core\Utility\MailUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Rsaauth\RsaEncryptionEncoder;
 
 /**
  * Controller for authentication tasks
  */
-class AuthenticationController extends ActionController
+class AuthenticationController extends AbstractController
 {
-    /**
-     * @var \PAGEmachine\Hairu\Domain\Repository\FrontendUserRepository
-     * @inject
-     */
-    protected $frontendUserRepository;
-
-    /**
-     * @var \PAGEmachine\Hairu\Domain\Service\AuthenticationService
-     * @inject
-     */
-    protected $authenticationService;
-
     /**
      * @var \TYPO3\CMS\Extbase\Security\Cryptography\HashService
      * @inject
      */
     protected $hashService;
-
-    /**
-     * @var \PAGEmachine\Hairu\Domain\Service\PasswordService
-     * @inject
-     */
-    protected $passwordService;
 
     /**
      * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
@@ -73,6 +54,7 @@ class AuthenticationController extends ActionController
 
     /**
      * @param \TYPO3\CMS\Core\Log\LogManager $logManager
+     *
      * @return void
      */
     public function injectLogManager(\TYPO3\CMS\Core\Log\LogManager $logManager)
@@ -82,6 +64,7 @@ class AuthenticationController extends ActionController
 
     /**
      * @param \TYPO3\CMS\Core\Cache\CacheManager $cacheManager
+     *
      * @return void
      */
     public function injectCacheManager(\TYPO3\CMS\Core\Cache\CacheManager $cacheManager)
@@ -129,6 +112,7 @@ class AuthenticationController extends ActionController
      * Initialize all views
      *
      * @param ViewInterface $view
+     *
      * @return void
      */
     protected function initializeView(ViewInterface $view)
@@ -157,7 +141,8 @@ class AuthenticationController extends ActionController
         if (isset($formData['logintype'])) {
             switch ($formData['logintype']) {
                 case LoginType::LOGIN:
-                    $this->addLocalizedFlashMessage('login.failed.message', null, FlashMessage::ERROR, 'login.failed.title');
+                    $this->addLocalizedFlashMessage('login.failed.message', null, FlashMessage::ERROR,
+                        'login.failed.title');
                     break;
 
                 case LoginType::LOGOUT:
@@ -195,8 +180,9 @@ class AuthenticationController extends ActionController
     /**
      * Password reset form view
      *
-     * @param string $hash Identification hash of a password reset token
-     * @param bool $start TRUE when starting the reset process, FALSE otherwise
+     * @param string $hash  Identification hash of a password reset token
+     * @param bool   $start TRUE when starting the reset process, FALSE otherwise
+     *
      * @return void
      */
     public function showPasswordResetFormAction($hash = null, $start = false)
@@ -228,8 +214,8 @@ class AuthenticationController extends ActionController
      * Start password reset
      *
      * @param string $username Username of a user
-     * @return void
      *
+     * @return void
      * @validate $username NotEmpty
      */
     public function startPasswordResetAction($username)
@@ -339,11 +325,11 @@ class AuthenticationController extends ActionController
     /**
      * Complete password reset
      *
-     * @param string $hash Identification hash of a password reset token
-     * @param string $password New password of the user
+     * @param string $hash           Identification hash of a password reset token
+     * @param string $password       New password of the user
      * @param string $passwordRepeat Confirmation of the new password
-     * @return void
      *
+     * @return void
      * @validate $password NotEmpty
      * @validate $passwordRepeat NotEmpty
      */
@@ -382,11 +368,11 @@ class AuthenticationController extends ActionController
 
     /**
      * Shorthand helper for getting setting values with optional default values
-     *
      * Any setting value is automatically processed via stdWrap if configured.
      *
-     * @param string $settingPath Path to the setting, e.g. "foo.bar.qux"
-     * @param mixed $defaultValue Default value if no value is set
+     * @param string $settingPath  Path to the setting, e.g. "foo.bar.qux"
+     * @param mixed  $defaultValue Default value if no value is set
+     *
      * @return mixed
      */
     protected function getSettingValue($settingPath, $defaultValue = null)
@@ -418,27 +404,6 @@ class AuthenticationController extends ActionController
     protected function getErrorFlashMessage()
     {
         return false;
-    }
-
-    /**
-     * Shorthand helper for adding localized flash messages
-     *
-     * @param string $translationKey
-     * @param array $translationArguments
-     * @param int $severity
-     * @param string $messageTitle
-     */
-    protected function addLocalizedFlashMessage($translationKey, array $translationArguments = null, $severity = FlashMessage::OK, $messageTitle = '')
-    {
-        $this->addFlashMessage(
-            LocalizationUtility::translate(
-                $translationKey,
-                $this->request->getControllerExtensionName(),
-                $translationArguments
-            ),
-            ($messageTitle != '' ? LocalizationUtility::translate($messageTitle, $this->request->getControllerExtensionName(), $translationArguments) : ''),
-            $severity
-        );
     }
 
     /**
@@ -487,6 +452,7 @@ class AuthenticationController extends ActionController
      * Emits a signal before a password reset mail is sent
      *
      * @param MailMessage $message
+     *
      * @return void
      */
     protected function emitBeforePasswordResetMailSendSignal(MailMessage $message)
