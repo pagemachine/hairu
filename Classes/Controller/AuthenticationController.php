@@ -141,8 +141,12 @@ class AuthenticationController extends AbstractController
         if (isset($formData['logintype'])) {
             switch ($formData['logintype']) {
                 case LoginType::LOGIN:
-                    $this->addLocalizedFlashMessage('login.failed.message', null, FlashMessage::ERROR,
-                        'login.failed.title');
+                    $this->addLocalizedFlashMessage(
+                        'login.failed.message',
+                        null,
+                        FlashMessage::ERROR,
+                        'login.failed.title'
+                    );
                     break;
 
                 case LoginType::LOGOUT:

@@ -13,7 +13,6 @@ $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['hairu_au
   'PAGEmachine.Hairu',
   'Password',
   'LLL:EXT:hairu/Resources/Private/Language/locallang_db.xlf:plugin.password'
-
 );
 
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['hairu_password'] = 'select_key,recursive';
