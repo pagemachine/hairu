@@ -16,8 +16,8 @@ mod {
             }
             hairu_password {
               iconIdentifier = hairu-wizard-icon
-              title = Hairu Passwort
-              description = LLL:EXT:hairu/Resources/Private/Language/locallang_db.xlf:plugin.auth.description
+              title = LLL:EXT:hairu/Resources/Private/Language/locallang_db.xlf:plugin.password
+              description = LLL:EXT:hairu/Resources/Private/Language/locallang_db.xlf:plugin.password.description
 
               tt_content_defValues {
                 CType = list
