@@ -100,6 +100,10 @@
         <source>You have successfully changed your password and have been logged in automatically.</source>
       </trans-unit>
 
+      <trans-unit id="updatePassword.completed">
+        <source>You have successfully updated your password and may login with your new password next time.</source>
+      </trans-unit>
+
       <trans-unit id="validator.validFrontendUser.invalid">
         <source>There is no user "%s".</source>
       </trans-unit>

@@ -70,7 +70,7 @@ class PasswordController extends AbstractController
             $user->setPassword($this->passwordService->applyTransformations($password));
             $this->frontendUserRepository->update($user);
 
-            $this->addLocalizedFlashMessage('resetPassword.completed', [$user->getUsername()], FlashMessage::OK);
+            $this->addLocalizedFlashMessage('updatePassword.completed', [$user->getUsername()], FlashMessage::OK);
 
             $this->forward('showPasswordEditForm');
         }
