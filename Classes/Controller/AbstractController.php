@@ -60,4 +60,16 @@ abstract class AbstractController extends ActionController
             $severity
         );
     }
+
+    /**
+     * A template method for displaying custom error flash messages, or to
+     * display no flash message at all on errors. Override this to customize
+     * the flash message in your action controller.
+     *
+     * @return string|bool The flash message or FALSE if no flash message should be set
+     */
+    protected function getErrorFlashMessage()
+    {
+        return false;
+    }
 }

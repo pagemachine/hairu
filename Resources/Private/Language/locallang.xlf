@@ -104,6 +104,10 @@
         <source>You have successfully updated your password and may login with your new password next time.</source>
       </trans-unit>
 
+      <trans-unit id="validationErrors.errors">
+        <source>There where some errors with your input:</source>
+      </trans-unit>
+
       <trans-unit id="validator.validFrontendUser.invalid">
         <source>There is no user "%s".</source>
       </trans-unit>

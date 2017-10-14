@@ -1,9 +1,9 @@
 <div class="alert alert-danger">
   <p>
-    <f:translate key="resetPassword.errors">There where some errors with your input:</f:translate>
+    <f:translate key="validationErrors.errors">There where some errors with your input:</f:translate>
   </p>
   <ul class="errors">
-    <f:for each="{validationResults.flattenedErrors}" as="errors" key="propertyPath">
+    <f:for each="{flattenedErrors}" as="errors" key="propertyPath">
       <li>
         <f:translate key="{propertyPath}">{propertyPath}</f:translate>: {errors.0}
       </li>
