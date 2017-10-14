@@ -42,7 +42,7 @@ class PasswordController extends AbstractController
      *
      * @return void
      */
-    protected function initializeCompletePasswordEditAction()
+    protected function initializeUpdatePasswordAction()
     {
         // Password repeat validation needs to be added manually here to access the password value
         $passwordRepeatArgumentValidator = $this->arguments->getArgument('passwordRepeat')->getValidator();
@@ -62,7 +62,7 @@ class PasswordController extends AbstractController
      * @validate $password NotEmpty
      * @validate $passwordRepeat NotEmpty
      */
-    public function completePasswordEditAction($password, $passwordRepeat)
+    public function updatePasswordAction($password, $passwordRepeat)
     {
         if ($this->authenticationService->isUserAuthenticated()) {
             $user = $this->authenticationService->getAuthenticatedUser();
