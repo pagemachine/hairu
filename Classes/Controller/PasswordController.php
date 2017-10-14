@@ -55,7 +55,7 @@ class PasswordController extends AbstractController
     /**
      * Complete password edit
      *
-     * @param string $password       New password of the user
+     * @param string $password New password of the user
      * @param string $passwordRepeat Confirmation of the new password
      *
      * @return void

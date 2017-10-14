@@ -184,8 +184,8 @@ class AuthenticationController extends AbstractController
     /**
      * Password reset form view
      *
-     * @param string $hash  Identification hash of a password reset token
-     * @param bool   $start TRUE when starting the reset process, FALSE otherwise
+     * @param string $hash Identification hash of a password reset token
+     * @param bool $start TRUE when starting the reset process, FALSE otherwise
      *
      * @return void
      */
@@ -329,8 +329,8 @@ class AuthenticationController extends AbstractController
     /**
      * Complete password reset
      *
-     * @param string $hash           Identification hash of a password reset token
-     * @param string $password       New password of the user
+     * @param string $hash Identification hash of a password reset token
+     * @param string $password New password of the user
      * @param string $passwordRepeat Confirmation of the new password
      *
      * @return void
@@ -374,8 +374,8 @@ class AuthenticationController extends AbstractController
      * Shorthand helper for getting setting values with optional default values
      * Any setting value is automatically processed via stdWrap if configured.
      *
-     * @param string $settingPath  Path to the setting, e.g. "foo.bar.qux"
-     * @param mixed  $defaultValue Default value if no value is set
+     * @param string $settingPath Path to the setting, e.g. "foo.bar.qux"
+     * @param mixed $defaultValue Default value if no value is set
      *
      * @return mixed
      */
