@@ -64,6 +64,10 @@
         <source>Please enter your password twice.</source>
       </trans-unit>
 
+      <trans-unit id="resetPassword.errors">
+        <source>There where some errors with your input:</source>
+      </trans-unit>
+
       <trans-unit id="resetPassword.failed.nopassword">
         <source>This account currently has no password, you have most likely not completed registration yet or are supposed to authenticate in some other way.</source>
       </trans-unit>
