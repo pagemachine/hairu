@@ -1,5 +1,4 @@
 <?php
-
 namespace PAGEmachine\Hairu\Controller;
 
 /*
@@ -54,8 +53,6 @@ class AuthenticationController extends AbstractController
 
     /**
      * @param \TYPO3\CMS\Core\Log\LogManager $logManager
-     *
-     * @return void
      */
     public function injectLogManager(\TYPO3\CMS\Core\Log\LogManager $logManager)
     {
@@ -64,8 +61,6 @@ class AuthenticationController extends AbstractController
 
     /**
      * @param \TYPO3\CMS\Core\Cache\CacheManager $cacheManager
-     *
-     * @return void
      */
     public function injectCacheManager(\TYPO3\CMS\Core\Cache\CacheManager $cacheManager)
     {
@@ -112,7 +107,6 @@ class AuthenticationController extends AbstractController
      * Initialize all views
      *
      * @param ViewInterface $view
-     *
      * @return void
      */
     protected function initializeView(ViewInterface $view)
@@ -186,7 +180,6 @@ class AuthenticationController extends AbstractController
      *
      * @param string $hash Identification hash of a password reset token
      * @param bool $start TRUE when starting the reset process, FALSE otherwise
-     *
      * @return void
      */
     public function showPasswordResetFormAction($hash = null, $start = false)
@@ -218,7 +211,6 @@ class AuthenticationController extends AbstractController
      * Start password reset
      *
      * @param string $username Username of a user
-     *
      * @return void
      * @validate $username NotEmpty
      */
@@ -332,7 +324,6 @@ class AuthenticationController extends AbstractController
      * @param string $hash Identification hash of a password reset token
      * @param string $password New password of the user
      * @param string $passwordRepeat Confirmation of the new password
-     *
      * @return void
      * @validate $password NotEmpty
      * @validate $passwordRepeat NotEmpty
@@ -376,7 +367,6 @@ class AuthenticationController extends AbstractController
      *
      * @param string $settingPath Path to the setting, e.g. "foo.bar.qux"
      * @param mixed $defaultValue Default value if no value is set
-     *
      * @return mixed
      */
     protected function getSettingValue($settingPath, $defaultValue = null)
@@ -444,7 +434,6 @@ class AuthenticationController extends AbstractController
      * Emits a signal before a password reset mail is sent
      *
      * @param MailMessage $message
-     *
      * @return void
      */
     protected function emitBeforePasswordResetMailSendSignal(MailMessage $message)
