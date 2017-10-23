@@ -14,7 +14,6 @@ namespace PAGEmachine\Hairu\Controller;
  */
 
 use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Controller for password tasks
