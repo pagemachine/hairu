@@ -76,5 +76,18 @@ plugin.tx_hairu {
         }
       }
     }
+
+    Password {
+      updatePassword {
+        password {
+          1 {
+            type = StringLength
+            options {
+              minimum = 5
+            }
+          }
+        }
+      }
+    }
   }
 }

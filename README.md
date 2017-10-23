@@ -11,7 +11,7 @@ This extension is installable from various sources:
 1. Via [Composer](https://packagist.org/packages/pagemachine/hairu):
 
         composer require pagemachine/hairu
-        
+
 2. From the [TYPO3 Extension Repository](https://extensions.typo3.org/extension/hairu/)
 3. From [Github](https://github.com/pagemachine/hairu/releases)
 
@@ -35,9 +35,9 @@ You can also use the `stdWrap` property on any `settings` value for custom proce
       }
     }
 
-## Password reset validation
+## Password validation
 
-The validation rules applied within the password reset process can be customized freely through TypoScript. Example from the default configuration:
+The validation rules applied within the password reset and update process can be customized freely through TypoScript. Example from the default configuration:
 
     plugin.tx_hairu {
       // ...
@@ -46,6 +46,19 @@ The validation rules applied within the password reset process can be customized
         Authentication {
           // ...
           completePasswordReset {
+            password {
+              1 {
+                type = StringLength
+                options {
+                  minimum = 5
+                }
+              }
+            }
+          }
+        }
+
+        Password {
+          updatePassword {
             password {
               1 {
                 type = StringLength
