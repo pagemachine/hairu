@@ -25,7 +25,7 @@ class PasswordController extends AbstractController
      *
      * @return void
      */
-    public function showPasswordEditFormAction()
+    public function showPasswordUpdateFormAction()
     {
         if (class_exists(RsaEncryptionEncoder::class)) {
             $rsaEncryptionEncoder = $this->objectManager->get(RsaEncryptionEncoder::class);

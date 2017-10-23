@@ -16,10 +16,10 @@ defined('TYPO3_MODE') or die();
     'PAGEmachine.Hairu',
     'Password',
     [
-        'Password' => 'showPasswordEditForm,updatePassword',
+        'Password' => 'showPasswordUpdateForm,updatePassword',
     ],
     [
-        'Password' => 'showPasswordEditForm,updatePassword',
+        'Password' => 'showPasswordUpdateForm,updatePassword',
     ]
 );
 
