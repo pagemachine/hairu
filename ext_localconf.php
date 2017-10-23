@@ -12,6 +12,17 @@ defined('TYPO3_MODE') or die();
     ]
 );
 
+\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+    'PAGEmachine.Hairu',
+    'Password',
+    [
+        'Password' => 'showPasswordEditForm,updatePassword',
+    ],
+    [
+        'Password' => 'showPasswordEditForm,updatePassword',
+    ]
+);
+
 // Cache configuration
 if (!is_array($TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['hairu_token'])) {
     $TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['hairu_token'] = [

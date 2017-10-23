@@ -12,6 +12,14 @@
         <source>Login/logout form for website users</source>
       </trans-unit>
 
+      <trans-unit id="plugin.password">
+        <source>Password edit form</source>
+      </trans-unit>
+
+      <trans-unit id="plugin.password.description">
+        <source>Edit password for website users</source>
+      </trans-unit>
+
     </body>
   </file>
 </xliff>
