@@ -76,9 +76,9 @@ You can use any validator type as long as Extbase can resolve it. In the example
 
 The following formats for the validator type are supported:
 
-* Extbase builtin validators: `ValidatorType`
+* Extbase builtin validators: `StringLengthValidator` (resolves to `TYPO3\CMS\Extbase\Validation\Validator\StringLengthValidator`)
 * Fully qualified class name: `Vendor\Package\Validation\Validator\CustomValidator`
-* Shorthand syntax: `Vendor.Package:CustomValidator` (internally resolved to the fully qualified class name)
+* Shorthand syntax: `Vendor.Package:CustomValidator` (resolves to `Vendor\Package\Validation\Validator\CustomValidator`)
 
 ## Issues
 
