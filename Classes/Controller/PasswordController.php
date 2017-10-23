@@ -14,6 +14,7 @@ namespace PAGEmachine\Hairu\Controller;
  */
 
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Rsaauth\RsaEncryptionEncoder;
 
 /**
  * Controller for password tasks
@@ -27,6 +28,14 @@ class PasswordController extends AbstractController
      */
     public function showPasswordEditFormAction()
     {
+        if (class_exists(RsaEncryptionEncoder::class)) {
+            $rsaEncryptionEncoder = $this->objectManager->get(RsaEncryptionEncoder::class);
+
+            if ($rsaEncryptionEncoder->isAvailable()) {
+                $rsaEncryptionEncoder->enableRsaEncryption();
+            }
+        }
+
         if ($this->authenticationService->isUserAuthenticated()) {
             $user = $this->authenticationService->getAuthenticatedUser();
 
