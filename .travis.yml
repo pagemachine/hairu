@@ -35,18 +35,17 @@ jobs:
         if [ -n "$TRAVIS_TAG" ]; then
           echo -e "Preparing upload of release ${TRAVIS_TAG} to TER\n"
 
-          if [ $? -eq 0 ]; then
-            TAG_ANNOTATION="$(git tag -n -l $TRAVIS_TAG)"
-            TAG_MESSAGE="${TAG_ANNOTATION#* }"
+          TAG_ANNOTATION="$(git tag -n -l $TRAVIS_TAG)"
+          TAG_MESSAGE="${TAG_ANNOTATION#* }"
 
-            git reset --hard
-            git clean -xfd
+          git reset --hard
+          git clean -xfd
 
-            composer global require helhum/ter-client dev-master
+          export PATH=$PATH:$(composer global config bin-dir --absolute 2>/dev/null)
+          composer global require helhum/ter-client dev-master
 
-            echo "Uploading release ${TRAVIS_TAG} to TER"
-            $HOME/.composer/vendor/bin/ter-client upload $(composer config extra.typo3/cms.extension-key) . -u "$TYPO3_ORG_USERNAME" -p "$TYPO3_ORG_PASSWORD" -m "$TAG_MESSAGE"
-          fi;
+          echo "Uploading release ${TRAVIS_TAG} to TER"
+          ter-client upload $(composer config extra.typo3/cms.extension-key) . -u "$TYPO3_ORG_USERNAME" -p "$TYPO3_ORG_PASSWORD" -m "$TAG_MESSAGE"
         fi;
 
 notifications:
