@@ -2,27 +2,35 @@ dist: trusty
 sudo: false
 language: php
 
-php:
-  - 7.0
-
 cache:
   directories:
     - $HOME/.composer/cache
 
-before_script:
+install:
   - composer install
+
+script:
+  - bin/parallel-lint --exclude bin --exclude vendor .
 
 jobs:
   include:
-    - script: &script
+    - php: 5.6
+    - php: 7.0
+    - php: 7.1
+      env: Other lints
+      script:
         - bin/typoscript-lint
         - bin/xmllint --pattern "*.xlf*,svg" Resources
-        - bin/parallel-lint --exclude bin --exclude vendor .
+    - php: 7.1
+      env: Codestyle
+      script:
         - bin/phpcs
-    - php: 5.6
-      script: *script
 
     - stage: deploy
+      php: 7.1
+      before_install: skip
+      install: skip
+      before_script: skip
       script: >
         if [ -n "$TRAVIS_TAG" ]; then
           echo -e "Preparing upload of release ${TRAVIS_TAG} to TER\n"
