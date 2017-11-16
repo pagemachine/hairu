@@ -10,7 +10,7 @@ install:
   - composer require typo3/cms="$TYPO3_VERSION"
 
 script:
-  - bin/parallel-lint --exclude bin --exclude vendor .
+  - composer lint:php
 
 jobs:
   include:
@@ -20,20 +20,19 @@ jobs:
       env: TYPO3_VERSION=^7.6
     - php: 7.0
       env: TYPO3_VERSION=^8.7
-      
-    - php: 7.1
+
+    - &lint
+      php: 7.1
       env: Other lints
       install:
         - composer install
       script:
-        - bin/typoscript-lint
-        - bin/xmllint --pattern "*.xlf*,svg" Resources
-    - php: 7.1
+        - composer lint:typoscript
+        - composer lint:xml
+    - <<: *lint
       env: Codestyle
-      install:
-        - composer install
       script:
-        - bin/phpcs
+        - composer lint:style
 
     - stage: deploy
       if: tag IS present
