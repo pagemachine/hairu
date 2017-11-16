@@ -48,5 +48,17 @@
       "cms-package-dir": "{$vendor-dir}/typo3/cms",
       "web-dir": "web"
     }
+  },
+  "scripts": {
+    "lint:php": "parallel-lint --exclude bin --exclude vendor --exclude web .",
+    "lint:typoscript": "typoscript-lint",
+    "lint:xml": "xmllint --pattern '*.xlf,*.svg' Resources",
+    "lint:style": "phpcs",
+    "lint": [
+      "@lint:php",
+      "@lint:style",
+      "@lint:typoscript",
+      "@lint:xml"
+    ]
   }
 }
