@@ -30,6 +30,8 @@ jobs:
         - bin/xmllint --pattern "*.xlf*,svg" Resources
     - php: 7.1
       env: Codestyle
+      install:
+        - composer install
       script:
         - bin/phpcs
 
