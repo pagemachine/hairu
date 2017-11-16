@@ -7,7 +7,7 @@ cache:
     - $HOME/.composer/cache
 
 install:
-  - composer install
+  - composer require typo3/cms="$TYPO3_VERSION"
 
 script:
   - bin/parallel-lint --exclude bin --exclude vendor .
@@ -15,14 +15,23 @@ script:
 jobs:
   include:
     - php: 5.6
+      env: TYPO3_VERSION=^7.6
     - php: 7.0
+      env: TYPO3_VERSION=^7.6
+    - php: 7.0
+      env: TYPO3_VERSION=^8.7
+      
     - php: 7.1
       env: Other lints
+      install:
+        - composer install
       script:
         - bin/typoscript-lint
         - bin/xmllint --pattern "*.xlf*,svg" Resources
     - php: 7.1
       env: Codestyle
+      install:
+        - composer install
       script:
         - bin/phpcs
 
