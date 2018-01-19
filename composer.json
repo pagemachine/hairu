@@ -2,7 +2,7 @@
   "name": "pagemachine/hairu",
   "description": "Flexible login/logout form based on Extbase/Fluid",
   "keywords": ["typo3", "felogin", "extbase", "fluid"],
-  "license": "GPL-3.0+",
+  "license": "GPL-3.0-or-later",
   "authors": [
     {
       "name": "Mathias Brodala",
