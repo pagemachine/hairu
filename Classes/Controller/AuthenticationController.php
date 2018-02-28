@@ -36,6 +36,12 @@ class AuthenticationController extends AbstractController
     protected $hashService;
 
     /**
+     * @var TYPO3\CMS\Extbase\Service\TypoScriptService
+     * @inject
+     */
+    protected $typoScriptService;
+
+    /**
      * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
      * @inject
      */
@@ -363,6 +369,7 @@ class AuthenticationController extends AbstractController
 
     /**
      * Shorthand helper for getting setting values with optional default values
+     *
      * Any setting value is automatically processed via stdWrap if configured.
      *
      * @param string $settingPath Path to the setting, e.g. "foo.bar.qux"
@@ -372,10 +379,10 @@ class AuthenticationController extends AbstractController
     protected function getSettingValue($settingPath, $defaultValue = null)
     {
         $value = ObjectAccess::getPropertyPath($this->settings, $settingPath);
-        $stdWrapConfiguration = ObjectAccess::getPropertyPath($this->settings, $settingPath . '.stdWrap');
 
-        if ($stdWrapConfiguration !== null) {
-            $value = $this->getFrontendController()->cObj->stdWrap($value, $stdWrapConfiguration);
+        if (!empty($value['stdWrap'])) {
+            $stdWrap = $this->typoScriptService->convertPlainArrayToTypoScriptArray($value['stdWrap']);
+            $value = $this->getFrontendController()->cObj->stdWrap($value['_typoScriptNodeValue'], $stdWrap);
         }
 
         // Change type of value to type of default value if possible
