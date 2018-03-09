@@ -91,7 +91,7 @@ class AuthenticationController extends AbstractController
                 'mail' => [
                     'from' => MailUtility::getSystemFromAddress(),
                     'subject' => 'Password reset request',
-                    'addHtmlPart' => true
+                    'addHtmlPart' => true,
                 ],
                 'page' => $this->getFrontendController()->id,
                 'token' => [
