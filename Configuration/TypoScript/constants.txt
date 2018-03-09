@@ -39,6 +39,8 @@ plugin.tx_hairu {
         subject = Password reset request
         // cat=plugin.tx_hairu/reset/mail.subject; type=string; label=Mail from: Sender for the password reset mail, system from address if empty
         from = 
+        // cat=plugin.tx_hairu/reset/mail.html; type=boolean; label=Send the password reset mail with a HTML part?
+        addHtmlPart = 1
       }
 
       // cat=plugin.tx_hairu/reset/loginOnSuccess; type=boolean; label=Login on success: Whether to automatically log in users after successful password reset

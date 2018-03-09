@@ -91,6 +91,7 @@ class AuthenticationController extends AbstractController
                 'mail' => [
                     'from' => MailUtility::getSystemFromAddress(),
                     'subject' => 'Password reset request',
+                    'addHtmlPart' => true
                 ],
                 'page' => $this->getFrontendController()->id,
                 'token' => [
@@ -280,8 +281,11 @@ class AuthenticationController extends AbstractController
 
         $this->request->setFormat('txt');
         $message->setBody($this->view->render('passwordResetMail'), 'text/plain');
+
         $this->request->setFormat('html');
-        $message->addPart($this->view->render('passwordResetMail'), 'text/html');
+        if ($this->getSettingValue('passwordReset.mail.addHtmlPart')) {
+            $message->addPart($this->view->render('passwordResetMail'), 'text/html');
+        }
         $mailSent = false;
 
         $this->emitBeforePasswordResetMailSendSignal($message);
