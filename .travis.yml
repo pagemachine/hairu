@@ -50,7 +50,7 @@ jobs:
         git clean -xfd
 
         export PATH=$PATH:$(composer global config bin-dir --absolute 2>/dev/null)
-        composer global require helhum/ter-client dev-master
+        composer global require helhum/ter-client
 
         echo "Uploading release ${TRAVIS_TAG} to TER"
         ter-client upload $(composer config extra.typo3/cms.extension-key) . -u "$TYPO3_ORG_USERNAME" -p "$TYPO3_ORG_PASSWORD" -m "$TAG_MESSAGE"
