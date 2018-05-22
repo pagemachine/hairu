@@ -15,7 +15,7 @@ This extension is installable from various sources:
 2. From the [TYPO3 Extension Repository](https://extensions.typo3.org/extension/hairu/)
 3. From [Github](https://github.com/pagemachine/hairu/releases)
 
-After installation a new content element *Authentication form* will be available in the *Form elements* section. Make sure to also include the static template.
+After installation two new content elements *Authentication form* and *Password edit form* will be available in the *Form elements* section. Make sure to also include the static template.
 
 ## Configuration
 
