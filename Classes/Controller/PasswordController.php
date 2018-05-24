@@ -78,7 +78,7 @@ class PasswordController extends AbstractController
 
             $this->addLocalizedFlashMessage('updatePassword.completed', [$user->getUsername()], FlashMessage::OK);
 
-            $this->forward('showPasswordEditForm');
+            $this->forward('showPasswordUpdateForm');
         }
     }
 }
