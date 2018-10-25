@@ -14,7 +14,7 @@ namespace PAGEmachine\Hairu;
 
 use TYPO3\CMS\Core\Type\Enumeration;
 
-class LoginType extends Enumeration
+final class LoginType extends Enumeration
 {
     /**
      * Indicates a login
