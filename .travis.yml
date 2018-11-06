@@ -7,7 +7,7 @@ cache:
     - $HOME/.composer/cache
 
 install:
-  - composer require typo3/cms="$TYPO3_VERSION"
+  - composer require ${TYPO3_PACKAGE:-typo3/cms}="$TYPO3_VERSION"
 
 script:
   - composer lint:php
@@ -28,6 +28,10 @@ jobs:
       env: TYPO3_VERSION=^8.7
     - php: 7.2
       env: TYPO3_VERSION=^8.7
+    - php: 7.2
+      env:
+        - TYPO3_PACKAGE=typo3/cms-core
+        - TYPO3_VERSION=^9.5
 
     - &lint
       php: 7.1
