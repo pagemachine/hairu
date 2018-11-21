@@ -12,6 +12,7 @@ namespace PAGEmachine\Hairu\Validation\Validator;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use PAGEmachine\Hairu\Domain\Repository\FrontendUserRepository;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
 /**
@@ -20,10 +21,17 @@ use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 class ValidFrontendUserValidator extends AbstractValidator
 {
     /**
-     * @var \PAGEmachine\Hairu\Domain\Repository\FrontendUserRepository
-     * @inject
+     * @var FrontendUserRepository $frontendUserRepository
      */
     protected $frontendUserRepository;
+
+    /**
+     * @param FrontendUserRepository $frontendUserRepository
+     */
+    public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository)
+    {
+        $this->frontendUserRepository = $frontendUserRepository;
+    }
 
     /**
      * @var array
