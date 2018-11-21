@@ -13,6 +13,7 @@ namespace PAGEmachine\Hairu\ViewHelpers\Form;
  */
 
 use PAGEmachine\Hairu\LoginType;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 
 abstract class AbstractAuthenticationFormViewHelper extends AbstractTagBasedViewHelper
@@ -61,7 +62,7 @@ abstract class AbstractAuthenticationFormViewHelper extends AbstractTagBasedView
         if ($this->hasArgument('actionUri')) {
             $formActionUri = $this->arguments['actionUri'];
         } else {
-            $formActionUri = $this->controllerContext->getUriBuilder()
+            $formActionUri = $this->getUriBuilder()
                 ->reset()
                 ->setTargetPageUid($this->arguments['pageUid'])
                 ->setTargetPageType($this->arguments['pageType'])
@@ -104,5 +105,19 @@ abstract class AbstractAuthenticationFormViewHelper extends AbstractTagBasedView
         $loginType = LoginType::cast($loginType); // Ensure valid value
 
         return LF . '<input type="hidden" name="logintype" value="' . $loginType . '" />' . LF;
+    }
+
+    /**
+     * Get the UriBuilder
+     *
+     * @return UriBuilder
+     */
+    private function getUriBuilder()
+    {
+        if ($this->renderingContext instanceof RenderingContext) { // TYPO3v9+
+            return $this->renderingContext->getControllerContext()->getUriBuilder();
+        }
+
+        return $this->controllerContext->getUriBuilder();
     }
 }
