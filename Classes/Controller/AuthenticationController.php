@@ -22,6 +22,9 @@ use TYPO3\CMS\Core\Utility\MailUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
+use TYPO3\CMS\Extbase\Security\Cryptography\HashService;
+use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
+use TYPO3\CMS\Extbase\TypoScript\TypoScriptService;
 use TYPO3\CMS\Rsaauth\RsaEncryptionEncoder;
 
 /**
@@ -30,22 +33,43 @@ use TYPO3\CMS\Rsaauth\RsaEncryptionEncoder;
 class AuthenticationController extends AbstractController
 {
     /**
-     * @var \TYPO3\CMS\Extbase\Security\Cryptography\HashService
-     * @inject
+     * @var HashService $hashService
      */
     protected $hashService;
 
     /**
-     * @var TYPO3\CMS\Extbase\Service\TypoScriptService
-     * @inject
+     * @param HashService $hashService
+     */
+    public function injectHashService(HashService $hashService)
+    {
+        $this->hashService = $hashService;
+    }
+
+    /**
+     * @var TypoScriptService $typoScriptService
      */
     protected $typoScriptService;
 
     /**
-     * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
-     * @inject
+     * @param TypoScriptService $typoScriptService
+     */
+    public function injectTypoScriptService(TypoScriptService $typoScriptService)
+    {
+        $this->typoScriptService = $typoScriptService;
+    }
+
+    /**
+     * @var Dispatcher $signalSlotDispatcher
      */
     protected $signalSlotDispatcher;
+
+    /**
+     * @param Dispatcher $signalSlotDispatcher
+     */
+    public function injectSignalSlotDispatcher(Dispatcher $signalSlotDispatcher)
+    {
+        $this->signalSlotDispatcher = $signalSlotDispatcher;
+    }
 
     /**
      * @var \TYPO3\CMS\Core\Log\Logger

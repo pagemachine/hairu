@@ -12,6 +12,7 @@ namespace PAGEmachine\Hairu\Domain\Service;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use PAGEmachine\Hairu\Domain\Repository\FrontendUserRepository;
 use TYPO3\CMS\Extbase\DomainObject\DomainObjectInterface;
 
 /**
@@ -20,10 +21,17 @@ use TYPO3\CMS\Extbase\DomainObject\DomainObjectInterface;
 class AuthenticationService implements \TYPO3\CMS\Core\SingletonInterface
 {
     /**
-     * @var \PAGEmachine\Hairu\Domain\Repository\FrontendUserRepository
-     * @inject
+     * @var FrontendUserRepository $frontendUserRepository
      */
     protected $frontendUserRepository;
+
+    /**
+     * @param FrontendUserRepository $frontendUserRepository
+     */
+    public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository)
+    {
+        $this->frontendUserRepository = $frontendUserRepository;
+    }
 
     /**
      * Returns whether any user is currently authenticated
