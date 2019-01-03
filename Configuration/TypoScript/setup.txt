@@ -56,16 +56,6 @@ plugin.tx_hairu {
   mvc.validation {
     // Validation of Authentication controller action arguments
     Authentication {
-      startPasswordReset {
-        username {
-          1 {
-            type = PAGEmachine.Hairu:ValidFrontendUserValidator
-            options {
-              property = username
-            }
-          }
-        }
-      }
       completePasswordReset {
         password {
           1 {

@@ -223,94 +223,97 @@ class AuthenticationController extends AbstractController
     public function startPasswordResetAction($username)
     {
         $user = $this->frontendUserRepository->findOneByUsername($username);
-        // Forbid password reset if there is no password or password property,
-        // e.g. if the user has not completed a special registration process
-        // or is supposed to authenticate in some other way
-        $userPassword = ObjectAccess::getPropertyPath($user, 'password');
 
-        if ($userPassword === null) {
-            $this->logger->error('Failed to initiate password reset for user "' . $username . '": no password present');
-            $this->addLocalizedFlashMessage('resetPassword.failed.nopassword', null, FlashMessage::ERROR);
-            $this->redirect('showPasswordResetForm');
-        }
+        if ($user) {
+            // Forbid password reset if there is no password or password property,
+            // e.g. if the user has not completed a special registration process
+            // or is supposed to authenticate in some other way
+            $userPassword = ObjectAccess::getPropertyPath($user, 'password');
 
-        $userEmail = ObjectAccess::getPropertyPath($user, 'email');
-
-        if (empty($userEmail)) {
-            $this->logger->error('Failed to initiate password reset for user "' . $username . '": no email address present');
-            $this->addLocalizedFlashMessage('resetPassword.failed.noemail', null, FlashMessage::ERROR);
-            $this->redirect('showPasswordResetForm');
-        }
-
-        if (class_exists(Random::class)) {
-            $hash = GeneralUtility::makeInstance(Random::class)->generateRandomHexString(64);
-        } else {
-            $hash = GeneralUtility::getRandomHexString(64);
-        }
-
-        $token = [
-            'uid' => $user->getUid(),
-            'hmac' => $this->hashService->generateHmac($userPassword),
-        ];
-        $tokenLifetime = $this->getSettingValue('passwordReset.token.lifetime');
-
-        // Remove possibly existing reset tokens and store new one
-        $this->tokenCache->flushByTag($user->getUid());
-        $this->tokenCache->set($hash, $token, [$user->getUid()], $tokenLifetime);
-
-        $expiryDate = new \DateTime(sprintf('now + %d seconds', $tokenLifetime));
-        $hashUri = $this->uriBuilder
-            ->setTargetPageUid($this->getSettingValue('passwordReset.page'))
-            ->setCreateAbsoluteUri(true)
-            ->uriFor('showPasswordResetForm', [
-                'hash' => $hash,
-            ]);
-        $this->view->assignMultiple([
-            'user' => $user,
-            'hash' => $hash, // Allow for custom URI in Fluid
-            'hashUri' => $hashUri,
-            'expiryDate' => $expiryDate,
-        ]);
-
-        $message = $this->objectManager->get('TYPO3\\CMS\\Core\\Mail\\MailMessage');
-        $message
-            ->setFrom($this->getSettingValue('passwordReset.mail.from'))
-            ->setTo($userEmail)
-            ->setSubject($this->getSettingValue('passwordReset.mail.subject'));
-
-        $setViewFormat = function ($format) {
-            // TYPO3v8+
-            if (method_exists($this->view, 'getTemplatePaths')) {
-                $this->view->getTemplatePaths()->setFormat($format);
-            } else { // TYPO3v7
-                $this->request->setFormat($format);
+            if ($userPassword === null) {
+                $this->logger->error('Failed to initiate password reset for user "' . $username . '": no password present');
+                $this->addLocalizedFlashMessage('resetPassword.failed.nopassword', null, FlashMessage::ERROR);
+                $this->redirect('showPasswordResetForm');
             }
-        };
 
-        $setViewFormat('txt');
-        $message->setBody($this->view->render('passwordResetMail'), 'text/plain');
+            $userEmail = ObjectAccess::getPropertyPath($user, 'email');
 
-        if ($this->getSettingValue('passwordReset.mail.addHtmlPart')) {
-            $setViewFormat('html');
-            $message->addPart($this->view->render('passwordResetMail'), 'text/html');
+            if (empty($userEmail)) {
+                $this->logger->error('Failed to initiate password reset for user "' . $username . '": no email address present');
+                $this->addLocalizedFlashMessage('resetPassword.failed.noemail', null, FlashMessage::ERROR);
+                $this->redirect('showPasswordResetForm');
+            }
+
+            if (class_exists(Random::class)) {
+                $hash = GeneralUtility::makeInstance(Random::class)->generateRandomHexString(64);
+            } else {
+                $hash = GeneralUtility::getRandomHexString(64);
+            }
+
+            $token = [
+                'uid' => $user->getUid(),
+                'hmac' => $this->hashService->generateHmac($userPassword),
+            ];
+            $tokenLifetime = $this->getSettingValue('passwordReset.token.lifetime');
+
+            // Remove possibly existing reset tokens and store new one
+            $this->tokenCache->flushByTag($user->getUid());
+            $this->tokenCache->set($hash, $token, [$user->getUid()], $tokenLifetime);
+
+            $expiryDate = new \DateTime(sprintf('now + %d seconds', $tokenLifetime));
+            $hashUri = $this->uriBuilder
+                ->setTargetPageUid($this->getSettingValue('passwordReset.page'))
+                ->setCreateAbsoluteUri(true)
+                ->uriFor('showPasswordResetForm', [
+                    'hash' => $hash,
+                ]);
+            $this->view->assignMultiple([
+                'user' => $user,
+                'hash' => $hash, // Allow for custom URI in Fluid
+                'hashUri' => $hashUri,
+                'expiryDate' => $expiryDate,
+            ]);
+
+            $message = $this->objectManager->get('TYPO3\\CMS\\Core\\Mail\\MailMessage');
+            $message
+                ->setFrom($this->getSettingValue('passwordReset.mail.from'))
+                ->setTo($userEmail)
+                ->setSubject($this->getSettingValue('passwordReset.mail.subject'));
+
+            $setViewFormat = function ($format) {
+                // TYPO3v8+
+                if (method_exists($this->view, 'getTemplatePaths')) {
+                    $this->view->getTemplatePaths()->setFormat($format);
+                } else { // TYPO3v7
+                    $this->request->setFormat($format);
+                }
+            };
+
+            $setViewFormat('txt');
+            $message->setBody($this->view->render('passwordResetMail'), 'text/plain');
+
+            if ($this->getSettingValue('passwordReset.mail.addHtmlPart')) {
+                $setViewFormat('html');
+                $message->addPart($this->view->render('passwordResetMail'), 'text/html');
+            }
+
+            $mailSent = false;
+
+            $this->emitBeforePasswordResetMailSendSignal($message);
+
+            try {
+                $mailSent = $message->send();
+            } catch (\Swift_SwiftException $e) {
+                $this->logger->error($e->getMessage);
+            }
+
+            if (!$mailSent) {
+                $this->addLocalizedFlashMessage('resetPassword.failed.sending', null, FlashMessage::ERROR);
+                $this->redirect('showPasswordResetForm');
+            }
         }
 
-        $mailSent = false;
-
-        $this->emitBeforePasswordResetMailSendSignal($message);
-
-        try {
-            $mailSent = $message->send();
-        } catch (\Swift_SwiftException $e) {
-            $this->logger->error($e->getMessage);
-        }
-
-        if ($mailSent) {
-            $this->addLocalizedFlashMessage('resetPassword.started', null, FlashMessage::INFO);
-        } else {
-            $this->addLocalizedFlashMessage('resetPassword.failed.sending', null, FlashMessage::ERROR);
-        }
-
+        $this->addLocalizedFlashMessage('resetPassword.started', null, FlashMessage::INFO);
         $this->redirect('showPasswordResetForm');
     }
 
