@@ -56,6 +56,7 @@
     "lint:typoscript": "typoscript-lint",
     "lint:xml": "xmllint --pattern '*.xlf,*.svg' Resources",
     "lint:style": "phpcs",
+    "fix:style": "phpcbf",
     "lint": [
       "@lint:php",
       "@lint:style",
