@@ -1,4 +1,6 @@
 <?php
+declare(strict_types = 1);
+
 namespace PAGEmachine\Hairu\ViewHelpers\Form;
 
 /*
@@ -80,11 +82,11 @@ abstract class AbstractAuthenticationFormViewHelper extends AbstractTagBasedView
         $this->tag->addAttribute('action', $formActionUri);
     }
 
-  /**
-   * Sets the "method" attribute of the form tag
-   *
-   * @return void
-   */
+    /**
+     * Sets the "method" attribute of the form tag
+     *
+     * @return void
+     */
     protected function setFormMethod()
     {
         if (strtolower($this->arguments['method']) === 'get') {
@@ -94,12 +96,12 @@ abstract class AbstractAuthenticationFormViewHelper extends AbstractTagBasedView
         }
     }
 
-  /**
-   * Renders a hidden form field indicating the given login type
-   *
-   * @param string $loginType Login type, one of \PAGEmachine\Hairu\LoginType
-   * @return string
-   */
+    /**
+     * Renders a hidden form field indicating the given login type
+     *
+     * @param string $loginType Login type, one of \PAGEmachine\Hairu\LoginType
+     * @return string
+     */
     protected function renderHiddenLoginTypeField($loginType)
     {
         $loginType = LoginType::cast($loginType); // Ensure valid value

@@ -1,5 +1,6 @@
 <?php
 declare(strict_types = 1);
+
 namespace PAGEmachine\Hairu\Controller;
 
 /*
@@ -197,7 +198,7 @@ class AuthenticationController extends AbstractController
         $formData = $this->request->getArgument('formData');
         $user = $this->authenticationService->getAuthenticatedUser();
 
-        if ($this->authenticationService->isUserAuthenticated() && $formData['logintype'] ?? null === LoginType::LOGIN) {
+        if ($this->authenticationService->isUserAuthenticated() && ($formData['logintype'] ?? null) === LoginType::LOGIN) {
             $this->emitAfterLoginSignal();
 
             $this->addLocalizedFlashMessage('login.successful', [$user->getUsername()], FlashMessage::OK);
