@@ -228,10 +228,12 @@ class AuthenticationController extends AbstractController
 
                 $this->view->assign('hash', $hash);
 
-                $rsaEncryptionEncoder = $this->objectManager->get(RsaEncryptionEncoder::class);
+                if (class_exists(RsaEncryptionEncoder::class)) {
+                    $rsaEncryptionEncoder = $this->objectManager->get(RsaEncryptionEncoder::class);
 
-                if ($rsaEncryptionEncoder->isAvailable()) {
-                    $rsaEncryptionEncoder->enableRsaEncryption();
+                    if ($rsaEncryptionEncoder->isAvailable()) {
+                        $rsaEncryptionEncoder->enableRsaEncryption();
+                    }
                 }
             } else {
                 $this->addLocalizedFlashMessage('resetPassword.failed.invalid', null, FlashMessage::ERROR);
@@ -345,10 +347,12 @@ class AuthenticationController extends AbstractController
      */
     protected function initializeCompletePasswordResetAction()
     {
-        $rsaEncryptionDecoder = $this->objectManager->get(RsaEncryptionDecoder::class);
+        if (class_exists(RsaEncryptionDecoder::class)) {
+            $rsaEncryptionDecoder = $this->objectManager->get(RsaEncryptionDecoder::class);
 
-        if ($rsaEncryptionDecoder->isAvailable()) {
-            $this->request->setArguments($rsaEncryptionDecoder->decrypt($this->request->getArguments()));
+            if ($rsaEncryptionDecoder->isAvailable()) {
+                $this->request->setArguments($rsaEncryptionDecoder->decrypt($this->request->getArguments()));
+            }
         }
 
         // Password repeat validation needs to be added manually here to access the password value
