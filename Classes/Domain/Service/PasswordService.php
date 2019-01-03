@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace PAGEmachine\Hairu\Domain\Service;
 
 /*
@@ -26,7 +27,7 @@ class PasswordService implements \TYPO3\CMS\Core\SingletonInterface
      * @param string $password
      * @return string
      */
-    public function applyTransformations($password)
+    public function applyTransformations(string $password): string
     {
         if (SaltedPasswordsUtility::isUsageEnabled('FE')) {
             $saltingInstance = SaltFactory::getSaltingInstance();

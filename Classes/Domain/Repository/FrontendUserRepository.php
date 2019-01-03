@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace PAGEmachine\Hairu\Domain\Repository;
 
 use TYPO3\CMS\Extbase\Domain\Repository\FrontendUserRepository as ExtbaseFrontendUserRepository;

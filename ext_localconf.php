@@ -37,8 +37,8 @@ if (!is_array($TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['hairu_t
 // Logging configuration
 if (empty($GLOBALS['TYPO3_CONF_VARS']['LOG']['PAGEmachine']['Hairu']['writerConfiguration'])) {
     $GLOBALS['TYPO3_CONF_VARS']['LOG']['PAGEmachine']['Hairu']['writerConfiguration'] = [
-        // DEBUG and higher severity
-        \TYPO3\CMS\Core\Log\LogLevel::DEBUG => [
+        // WARNING and higher severity
+        \TYPO3\CMS\Core\Log\LogLevel::WARNING => [
             \TYPO3\CMS\Core\Log\Writer\FileWriter::class => [
                 'logFile' => 'typo3temp/logs/hairu.log',
             ],
@@ -46,7 +46,7 @@ if (empty($GLOBALS['TYPO3_CONF_VARS']['LOG']['PAGEmachine']['Hairu']['writerConf
     ];
 }
 
-call_user_func(function () {
+(function () {
     // New content element wizard icon
     $icons = [
         'hairu-wizard-icon' => 'login.svg',
@@ -74,4 +74,4 @@ call_user_func(function () {
         \PAGEmachine\Hairu\Slots\RedirectUrlSlot::class,
         'processRedirect'
     );
-});
+})();

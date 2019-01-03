@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace PAGEmachine\Hairu\Controller;
 
 /*
@@ -71,7 +72,7 @@ abstract class AbstractController extends ActionController
      * @param int $severity
      * @param string $messageTitle
      */
-    protected function addLocalizedFlashMessage($translationKey, array $translationArguments = null, $severity = FlashMessage::OK, $messageTitle = '')
+    protected function addLocalizedFlashMessage(string $translationKey, array $translationArguments = null, int $severity = FlashMessage::OK, string $messageTitle = '')
     {
         $this->addFlashMessage(
             LocalizationUtility::translate(

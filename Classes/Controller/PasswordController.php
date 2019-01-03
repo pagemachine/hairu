@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace PAGEmachine\Hairu\Controller;
 
 /*
@@ -29,10 +30,8 @@ class PasswordController extends AbstractController
      */
     public function showPasswordUpdateFormAction()
     {
-        if (class_exists(RsaEncryptionEncoder::class)) {
-            $rsaEncryptionEncoder = $this->objectManager->get(RsaEncryptionEncoder::class);
-            $rsaEncryptionEncoder->enableRsaEncryption();
-        }
+        $rsaEncryptionEncoder = $this->objectManager->get(RsaEncryptionEncoder::class);
+        $rsaEncryptionEncoder->enableRsaEncryption();
 
         if ($this->authenticationService->isUserAuthenticated()) {
             $user = $this->authenticationService->getAuthenticatedUser();
@@ -50,15 +49,13 @@ class PasswordController extends AbstractController
      */
     protected function initializeUpdatePasswordAction()
     {
-        if (class_exists(RsaEncryptionDecoder::class)) {
-            $rsaEncryptionDecoder = $this->objectManager->get(RsaEncryptionDecoder::class);
+        $rsaEncryptionDecoder = $this->objectManager->get(RsaEncryptionDecoder::class);
 
-            try {
-                $this->request->setArgument('password', $rsaEncryptionDecoder->decrypt($this->request->getArgument('password')));
-                $this->request->setArgument('passwordRepeat', $rsaEncryptionDecoder->decrypt($this->request->getArgument('passwordRepeat')));
-            } catch (NoSuchArgumentException $e) {
-                /* Invalid states are handled by validators */
-            }
+        try {
+            $this->request->setArgument('password', $rsaEncryptionDecoder->decrypt($this->request->getArgument('password')));
+            $this->request->setArgument('passwordRepeat', $rsaEncryptionDecoder->decrypt($this->request->getArgument('passwordRepeat')));
+        } catch (NoSuchArgumentException $e) {
+            /* Invalid states are handled by validators */
         }
 
         // Password repeat validation needs to be added manually here to access the password value

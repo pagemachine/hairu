@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace PAGEmachine\Hairu\Domain\Service;
 
 /*
@@ -13,12 +14,14 @@ namespace PAGEmachine\Hairu\Domain\Service;
  */
 
 use PAGEmachine\Hairu\Domain\Repository\FrontendUserRepository;
+use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Extbase\DomainObject\DomainObjectInterface;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Service for authentication tasks
  */
-class AuthenticationService implements \TYPO3\CMS\Core\SingletonInterface
+class AuthenticationService implements SingletonInterface
 {
     /**
      * @var FrontendUserRepository $frontendUserRepository
@@ -38,7 +41,7 @@ class AuthenticationService implements \TYPO3\CMS\Core\SingletonInterface
      *
      * @return bool
      */
-    public function isUserAuthenticated()
+    public function isUserAuthenticated(): bool
     {
         return $this->getFrontendController()->loginUser;
     }
@@ -69,9 +72,9 @@ class AuthenticationService implements \TYPO3\CMS\Core\SingletonInterface
     }
 
     /**
-     * @return \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
+     * @return TypoScriptFrontendController
      */
-    protected function getFrontendController()
+    protected function getFrontendController(): TypoScriptFrontendController
     {
         return $GLOBALS['TSFE'];
     }

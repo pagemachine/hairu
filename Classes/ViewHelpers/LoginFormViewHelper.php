@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace PAGEmachine\Hairu\ViewHelpers;
 
 /*
@@ -36,14 +37,14 @@ class LoginFormViewHelper extends AbstractAuthenticationFormViewHelper
      *
      * @var array
      */
-    protected $submitJavaScriptCode = array();
+    protected $submitJavaScriptCode = [];
 
     /**
      * List of additional hidden form fields
      *
      * @var array
      */
-    protected $additionalHiddenFields = array();
+    protected $additionalHiddenFields = [];
 
     /**
      * Gets additional code for login forms based on the
@@ -57,19 +58,17 @@ class LoginFormViewHelper extends AbstractAuthenticationFormViewHelper
     {
         parent::initialize();
 
-        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['felogin']['loginFormOnSubmitFuncs'])) {
-            $parameters = array();
+        $parameters = [];
 
-            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['felogin']['loginFormOnSubmitFuncs'] as $callback) {
-                $result = GeneralUtility::callUserFunction($callback, $parameters, $this);
+        foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['felogin']['loginFormOnSubmitFuncs'] ?? [] as $callback) {
+            $result = GeneralUtility::callUserFunction($callback, $parameters, $this);
 
-                if (isset($result[0])) {
-                    $this->submitJavaScriptCode[] = $result[0];
-                }
+            if (isset($result[0])) {
+                $this->submitJavaScriptCode[] = $result[0];
+            }
 
-                if (isset($result[1])) {
-                    $this->additionalHiddenFields[] = $result[1];
-                }
+            if (isset($result[1])) {
+                $this->additionalHiddenFields[] = $result[1];
             }
         }
     }
