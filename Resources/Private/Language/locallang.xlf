@@ -85,7 +85,7 @@
       </trans-unit>
 
       <trans-unit id="resetPassword.started">
-        <source>A mail has been sent, please check the inbox of your mail account to complete the password reset process.</source>
+        <source>A mail has been sent if there is a user account for the given username. Please check the inbox of your mail account to complete the password reset process.</source>
       </trans-unit>
 
       <trans-unit id="resetPassword.completed">
