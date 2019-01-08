@@ -72,11 +72,11 @@ The validation rules applied within the password reset and update process can be
       }
     }
 
-You can use any validator type as long as Extbase can resolve it. In the example the builtin `StringLengthValidator` is set with a minimum length of 5.
+You can use any validator type as long as Extbase can resolve it. In the example the builtin `StringLength` validator is set with a minimum length of 5.
 
 The following formats for the validator type are supported:
 
-* Extbase builtin validators: `StringLengthValidator` (resolves to `TYPO3\CMS\Extbase\Validation\Validator\StringLengthValidator`)
+* Extbase builtin validators: `StringLength` (resolves to `TYPO3\CMS\Extbase\Validation\Validator\StringLengthValidator`)
 * Fully qualified class name: `Vendor\Package\Validation\Validator\CustomValidator`
 * Shorthand syntax: `Vendor.Package:CustomValidator` (resolves to `Vendor\Package\Validation\Validator\CustomValidator`)
 
