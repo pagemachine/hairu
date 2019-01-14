@@ -104,6 +104,10 @@
         <source>There where some errors with your input:</source>
       </trans-unit>
 
+      <trans-unit id="validator.validFrontendUser.invalid">
+        <source>There is no user "%s".</source>
+      </trans-unit>
+
       <trans-unit id="validator.equal.invalid">
         <source>The given values are not equal.</source>
       </trans-unit>
