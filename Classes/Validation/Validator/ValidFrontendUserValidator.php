@@ -12,6 +12,7 @@ namespace PAGEmachine\Hairu\Validation\Validator;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
 /**
@@ -31,6 +32,20 @@ class ValidFrontendUserValidator extends AbstractValidator
     protected $supportedOptions = array(
         'property' => array('', 'The property to use for frontend user lookup', 'string', true)
     );
+
+    /**
+     * Constructs the validator and sets validation options
+     *
+     * @param array $options Options for the validator
+     * @throws \TYPO3\CMS\Extbase\Validation\Exception\InvalidValidationOptionsException
+     * @deprecated since version 2.1.3, will be removed in version 3.0.0
+     */
+    public function __construct(array $options = [])
+    {
+        parent::__construct($options);
+
+        GeneralUtility::logDeprecatedFunction();
+    }
 
     /**
      * Checks if the given value is a valid frontend user.
