@@ -4,8 +4,8 @@ paths:
 
 filePatterns:
   - "*.ts"
-  - constants.txt
-  - setup.txt
+  - constants.typoscript
+  - setup.typoscript
 
 sniffs:
   - class: Indentation
