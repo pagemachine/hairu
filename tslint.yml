@@ -3,9 +3,9 @@ paths:
   - Configuration/TypoScript
 
 filePatterns:
-  - "*.ts"
-  - constants.txt
-  - setup.txt
+  - "*.tsconfig"
+  - constants.typoscript
+  - setup.typoscript
 
 sniffs:
   - class: Indentation

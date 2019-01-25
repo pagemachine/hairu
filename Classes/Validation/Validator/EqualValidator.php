@@ -1,4 +1,6 @@
 <?php
+declare(strict_types = 1);
+
 namespace PAGEmachine\Hairu\Validation\Validator;
 
 /*
@@ -22,11 +24,11 @@ class EqualValidator extends AbstractValidator
     /**
      * @var array
      */
-    protected $supportedOptions = array(
-        'equalTo' => array(null, 'Another value to compare with', 'mixed', true),
-        'strict' => array(false, 'TRUE for strict comparison (including type), FALSE otherwise', 'boolean'),
-        'negate' => array(false, 'TRUE to validate against not equal, FALSE for equal', 'boolean'),
-    );
+    protected $supportedOptions = [
+        'equalTo' => [null, 'Another value to compare with', 'mixed', true],
+        'strict' => [false, 'TRUE for strict comparison (including type), FALSE otherwise', 'boolean'],
+        'negate' => [false, 'TRUE to validate against not equal, FALSE for equal', 'boolean'],
+    ];
 
     /**
      * Checks if the given value is (not) equal to another value
@@ -34,7 +36,6 @@ class EqualValidator extends AbstractValidator
      * If at least one error occurred, the result is FALSE.
      *
      * @param mixed $value The value that should be validated
-     * @return bool TRUE if the value is valid, FALSE if an error occurred
      */
     public function isValid($value)
     {
@@ -55,10 +56,6 @@ class EqualValidator extends AbstractValidator
                 ),
                 1415185288
             );
-
-            return false;
         }
-
-        return true;
     }
 }

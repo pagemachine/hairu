@@ -1,4 +1,6 @@
 <?php
+declare(strict_types = 1);
+
 namespace PAGEmachine\Hairu\Domain\Service;
 
 /*
@@ -12,25 +14,35 @@ namespace PAGEmachine\Hairu\Domain\Service;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use PAGEmachine\Hairu\Domain\Repository\FrontendUserRepository;
+use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Extbase\DomainObject\DomainObjectInterface;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Service for authentication tasks
  */
-class AuthenticationService implements \TYPO3\CMS\Core\SingletonInterface
+class AuthenticationService implements SingletonInterface
 {
     /**
-     * @var \PAGEmachine\Hairu\Domain\Repository\FrontendUserRepository
-     * @inject
+     * @var FrontendUserRepository $frontendUserRepository
      */
     protected $frontendUserRepository;
+
+    /**
+     * @param FrontendUserRepository $frontendUserRepository
+     */
+    public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository)
+    {
+        $this->frontendUserRepository = $frontendUserRepository;
+    }
 
     /**
      * Returns whether any user is currently authenticated
      *
      * @return bool
      */
-    public function isUserAuthenticated()
+    public function isUserAuthenticated(): bool
     {
         return $this->getFrontendController()->loginUser;
     }
@@ -61,9 +73,9 @@ class AuthenticationService implements \TYPO3\CMS\Core\SingletonInterface
     }
 
     /**
-     * @return \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
+     * @return TypoScriptFrontendController
      */
-    protected function getFrontendController()
+    protected function getFrontendController(): TypoScriptFrontendController
     {
         return $GLOBALS['TSFE'];
     }

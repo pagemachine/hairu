@@ -1,4 +1,6 @@
 <?php
+declare(strict_types = 1);
+
 namespace PAGEmachine\Hairu\Controller;
 
 /*
@@ -12,6 +14,9 @@ namespace PAGEmachine\Hairu\Controller;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use PAGEmachine\Hairu\Domain\Repository\FrontendUserRepository;
+use PAGEmachine\Hairu\Domain\Service\AuthenticationService;
+use PAGEmachine\Hairu\Domain\Service\PasswordService;
 use PAGEmachine\Hairu\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -22,22 +27,43 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 abstract class AbstractController extends ActionController
 {
     /**
-     * @var \PAGEmachine\Hairu\Domain\Repository\FrontendUserRepository
-     * @inject
+     * @var FrontendUserRepository $frontendUserRepository
      */
     protected $frontendUserRepository;
 
     /**
-     * @var \PAGEmachine\Hairu\Domain\Service\AuthenticationService
-     * @inject
+     * @param FrontendUserRepository $frontendUserRepository
+     */
+    public function injectFrontendUserRepository(FrontendUserRepository $frontendUserRepository)
+    {
+        $this->frontendUserRepository = $frontendUserRepository;
+    }
+
+    /**
+     * @var AuthenticationService $authenticationService
      */
     protected $authenticationService;
 
     /**
-     * @var \PAGEmachine\Hairu\Domain\Service\PasswordService
-     * @inject
+     * @param AuthenticationService $authenticationService
+     */
+    public function injectAuthenticationService(AuthenticationService $authenticationService)
+    {
+        $this->authenticationService = $authenticationService;
+    }
+
+    /**
+     * @var PasswordService $passwordService
      */
     protected $passwordService;
+
+    /**
+     * @param PasswordService $passwordService
+     */
+    public function injectPasswordService(PasswordService $passwordService)
+    {
+        $this->passwordService = $passwordService;
+    }
 
     /**
      * Shorthand helper for adding localized flash messages
@@ -47,7 +73,7 @@ abstract class AbstractController extends ActionController
      * @param int $severity
      * @param string $messageTitle
      */
-    protected function addLocalizedFlashMessage($translationKey, array $translationArguments = null, $severity = FlashMessage::OK, $messageTitle = '')
+    protected function addLocalizedFlashMessage(string $translationKey, array $translationArguments = null, int $severity = FlashMessage::OK, string $messageTitle = '')
     {
         $this->addFlashMessage(
             LocalizationUtility::translate(

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types = 1);
+
 namespace PAGEmachine\Hairu\ViewHelpers;
 
 /*
@@ -36,14 +38,14 @@ class LoginFormViewHelper extends AbstractAuthenticationFormViewHelper
      *
      * @var array
      */
-    protected $submitJavaScriptCode = array();
+    protected $submitJavaScriptCode = [];
 
     /**
      * List of additional hidden form fields
      *
      * @var array
      */
-    protected $additionalHiddenFields = array();
+    protected $additionalHiddenFields = [];
 
     /**
      * Gets additional code for login forms based on the
@@ -57,48 +59,44 @@ class LoginFormViewHelper extends AbstractAuthenticationFormViewHelper
     {
         parent::initialize();
 
-        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['felogin']['loginFormOnSubmitFuncs'])) {
-            $parameters = array();
+        $parameters = [];
 
-            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['felogin']['loginFormOnSubmitFuncs'] as $callback) {
-                $result = GeneralUtility::callUserFunction($callback, $parameters, $this);
+        foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['felogin']['loginFormOnSubmitFuncs'] ?? [] as $callback) {
+            $result = GeneralUtility::callUserFunction($callback, $parameters, $this);
 
-                if (isset($result[0])) {
-                    $this->submitJavaScriptCode[] = $result[0];
-                }
+            if (isset($result[0])) {
+                $this->submitJavaScriptCode[] = $result[0];
+            }
 
-                if (isset($result[1])) {
-                    $this->additionalHiddenFields[] = $result[1];
-                }
+            if (isset($result[1])) {
+                $this->additionalHiddenFields[] = $result[1];
             }
         }
     }
 
     /**
+     * @return void
+     */
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+
+        $this->registerArgument('userStoragePageUid', 'int', 'Storage page uid where user records are located');
+    }
+
+    /**
      * Render the form.
      *
-     * @param int $userStoragePageUid Storage page uid where user records are located
-     * @param int $pageUid Target page uid
-     * @param int $pageType Target page type
-     * @param bool $noCache set this to disable caching for the target page. You should not need this.
-     * @param bool $noCacheHash set this to supress the cHash query parameter created by TypoLink. You should not need this.
-     * @param string $section The anchor to be added to the action URI (only active if $actionUri is not set)
-     * @param string $format The requested format (e.g. ".html") of the target page (only active if $actionUri is not set)
-     * @param array $additionalParams additional action URI query parameters that won't be prefixed like $arguments (overrule $arguments) (only active if $actionUri is not set)
-     * @param bool $absolute If set, an absolute action URI is rendered (only active if $actionUri is not set)
-     * @param bool $addQueryString If set, the current query parameters will be kept in the action URI (only active if $actionUri is not set)
-     * @param array $argumentsToBeExcludedFromQueryString arguments to be removed from the action URI. Only active if $addQueryString = TRUE and $actionUri is not set
-     * @param string $actionUri can be used to overwrite the "action" attribute of the form tag
      * @return string rendered form
      */
-    public function render($userStoragePageUid, $pageUid = null, $pageType = 0, $noCache = false, $noCacheHash = false, $section = '', $format = '', array $additionalParams = array(), $absolute = false, $addQueryString = false, array $argumentsToBeExcludedFromQueryString = array(), $actionUri = null)
+    public function render()
     {
         $this->setFormActionUri();
         $this->setFormMethod();
         $this->setFormOnSubmit();
 
         $content = $this->renderHiddenLoginTypeField(LoginType::LOGIN);
-        $content .= $this->renderHiddenUserStoragePageUidField($userStoragePageUid);
+        $content .= $this->renderHiddenUserStoragePageUidField($this->arguments['userStoragePageUid']);
         $content .= $this->renderAdditionalHiddenFields();
         $content .= $this->renderChildren();
 

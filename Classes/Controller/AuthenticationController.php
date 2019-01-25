@@ -1,4 +1,6 @@
 <?php
+declare(strict_types = 1);
+
 namespace PAGEmachine\Hairu\Controller;
 
 /*
@@ -13,15 +15,22 @@ namespace PAGEmachine\Hairu\Controller;
  */
 
 use PAGEmachine\Hairu\LoginType;
+use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Crypto\Random;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MailUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
+use TYPO3\CMS\Extbase\Security\Cryptography\HashService;
+use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\CMS\Rsaauth\RsaEncryptionDecoder;
 use TYPO3\CMS\Rsaauth\RsaEncryptionEncoder;
 
 /**
@@ -30,22 +39,43 @@ use TYPO3\CMS\Rsaauth\RsaEncryptionEncoder;
 class AuthenticationController extends AbstractController
 {
     /**
-     * @var \TYPO3\CMS\Extbase\Security\Cryptography\HashService
-     * @inject
+     * @var HashService $hashService
      */
     protected $hashService;
 
     /**
-     * @var TYPO3\CMS\Extbase\Service\TypoScriptService
-     * @inject
+     * @param HashService $hashService
+     */
+    public function injectHashService(HashService $hashService)
+    {
+        $this->hashService = $hashService;
+    }
+
+    /**
+     * @var TypoScriptService $typoScriptService
      */
     protected $typoScriptService;
 
     /**
-     * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
-     * @inject
+     * @param TypoScriptService $typoScriptService
+     */
+    public function injectTypoScriptService(TypoScriptService $typoScriptService)
+    {
+        $this->typoScriptService = $typoScriptService;
+    }
+
+    /**
+     * @var Dispatcher $signalSlotDispatcher
      */
     protected $signalSlotDispatcher;
+
+    /**
+     * @param Dispatcher $signalSlotDispatcher
+     */
+    public function injectSignalSlotDispatcher(Dispatcher $signalSlotDispatcher)
+    {
+        $this->signalSlotDispatcher = $signalSlotDispatcher;
+    }
 
     /**
      * @var \TYPO3\CMS\Core\Log\Logger
@@ -60,7 +90,7 @@ class AuthenticationController extends AbstractController
     /**
      * @param \TYPO3\CMS\Core\Log\LogManager $logManager
      */
-    public function injectLogManager(\TYPO3\CMS\Core\Log\LogManager $logManager)
+    public function injectLogManager(LogManager $logManager)
     {
         $this->logger = $logManager->getLogger(__CLASS__);
     }
@@ -68,7 +98,7 @@ class AuthenticationController extends AbstractController
     /**
      * @param \TYPO3\CMS\Core\Cache\CacheManager $cacheManager
      */
-    public function injectCacheManager(\TYPO3\CMS\Core\Cache\CacheManager $cacheManager)
+    public function injectCacheManager(CacheManager $cacheManager)
     {
         $this->tokenCache = $cacheManager->getCache('hairu_token');
     }
@@ -168,9 +198,7 @@ class AuthenticationController extends AbstractController
         $formData = $this->request->getArgument('formData');
         $user = $this->authenticationService->getAuthenticatedUser();
 
-        if ($this->authenticationService->isUserAuthenticated()
-            && isset($formData['logintype'])
-            && $formData['logintype'] === LoginType::LOGIN) {
+        if ($this->authenticationService->isUserAuthenticated() && ($formData['logintype'] ?? null) === LoginType::LOGIN) {
             $this->emitAfterLoginSignal();
 
             $this->addLocalizedFlashMessage('login.successful', [$user->getUsername()], FlashMessage::OK);
@@ -188,7 +216,7 @@ class AuthenticationController extends AbstractController
      * @param bool $start TRUE when starting the reset process, FALSE otherwise
      * @return void
      */
-    public function showPasswordResetFormAction($hash = null, $start = false)
+    public function showPasswordResetFormAction(string $hash = null, bool $start = false)
     {
         if ($start) {
             $this->addLocalizedFlashMessage('resetPassword.start', null, FlashMessage::INFO);
@@ -220,7 +248,7 @@ class AuthenticationController extends AbstractController
      * @return void
      * @validate $username NotEmpty
      */
-    public function startPasswordResetAction($username)
+    public function startPasswordResetAction(string $username)
     {
         $user = $this->frontendUserRepository->findOneByUsername($username);
 
@@ -244,12 +272,7 @@ class AuthenticationController extends AbstractController
                 $this->redirect('showPasswordResetForm');
             }
 
-            if (class_exists(Random::class)) {
-                $hash = GeneralUtility::makeInstance(Random::class)->generateRandomHexString(64);
-            } else {
-                $hash = GeneralUtility::getRandomHexString(64);
-            }
-
+            $hash = GeneralUtility::makeInstance(Random::class)->generateRandomHexString(64);
             $token = [
                 'uid' => $user->getUid(),
                 'hmac' => $this->hashService->generateHmac($userPassword),
@@ -274,7 +297,7 @@ class AuthenticationController extends AbstractController
                 'expiryDate' => $expiryDate,
             ]);
 
-            $message = $this->objectManager->get('TYPO3\\CMS\\Core\\Mail\\MailMessage');
+            $message = $this->objectManager->get(MailMessage::class);
             $message
                 ->setFrom($this->getSettingValue('passwordReset.mail.from'))
                 ->setTo($userEmail)
@@ -324,8 +347,8 @@ class AuthenticationController extends AbstractController
      */
     protected function initializeCompletePasswordResetAction()
     {
-        if (class_exists('TYPO3\\CMS\\Rsaauth\\RsaEncryptionDecoder')) {
-            $rsaEncryptionDecoder = $this->objectManager->get('TYPO3\\CMS\\Rsaauth\\RsaEncryptionDecoder');
+        if (class_exists(RsaEncryptionDecoder::class)) {
+            $rsaEncryptionDecoder = $this->objectManager->get(RsaEncryptionDecoder::class);
 
             if ($rsaEncryptionDecoder->isAvailable()) {
                 $this->request->setArguments($rsaEncryptionDecoder->decrypt($this->request->getArguments()));
@@ -350,7 +373,7 @@ class AuthenticationController extends AbstractController
      * @validate $password NotEmpty
      * @validate $passwordRepeat NotEmpty
      */
-    public function completePasswordResetAction($hash, $password, $passwordRepeat)
+    public function completePasswordResetAction(string $hash, string $password, string $passwordRepeat)
     {
         $token = $this->tokenCache->get($hash);
 
@@ -392,7 +415,7 @@ class AuthenticationController extends AbstractController
      * @param mixed $defaultValue Default value if no value is set
      * @return mixed
      */
-    protected function getSettingValue($settingPath, $defaultValue = null)
+    protected function getSettingValue(string $settingPath, $defaultValue = null)
     {
         $value = ObjectAccess::getPropertyPath($this->settings, $settingPath);
 
@@ -412,9 +435,9 @@ class AuthenticationController extends AbstractController
     }
 
     /**
-     * @return \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
+     * @return TypoScriptFrontendController
      */
-    protected function getFrontendController()
+    protected function getFrontendController(): TypoScriptFrontendController
     {
         return $GLOBALS['TSFE'];
     }

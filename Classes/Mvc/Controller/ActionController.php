@@ -1,4 +1,6 @@
 <?php
+declare(strict_types = 1);
+
 namespace PAGEmachine\Hairu\Mvc\Controller;
 
 /*
@@ -13,9 +15,10 @@ namespace PAGEmachine\Hairu\Mvc\Controller;
  */
 
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController as ExtbaseActionController;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 
-class ActionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+class ActionController extends ExtbaseActionController
 {
     /**
      * Adds the needed validators to the Arguments:
@@ -33,9 +36,7 @@ class ActionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         parent::initializeActionMethodValidators();
 
         $frameworkConfiguration = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
-        $actionArgumentValidation = !empty($frameworkConfiguration['mvc']['validation'][$this->request->getControllerName()][$this->request->getControllerActionName()])
-          ? $frameworkConfiguration['mvc']['validation'][$this->request->getControllerName()][$this->request->getControllerActionName()]
-          : array();
+        $actionArgumentValidation = $frameworkConfiguration['mvc']['validation'][$this->request->getControllerName()][$this->request->getControllerActionName()] ?? [];
 
         // Dynamically add argument validators
         foreach ($actionArgumentValidation as $argumentName => $validators) {
@@ -49,9 +50,7 @@ class ActionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
             foreach ($validators as $validatorConfiguration) {
                 if (isset($validatorConfiguration['type'])) {
-                    $validatorType = $validatorConfiguration['type'];
-                    $validatorOptions = isset($validatorConfiguration['options']) ? $validatorConfiguration['options'] : array();
-                    $validator = $this->validatorResolver->createValidator($validatorType, $validatorOptions);
+                    $validator = $this->validatorResolver->createValidator($validatorConfiguration['type'], $validatorConfiguration['options'] ?? []);
                     $validatorConjunction->addValidator($validator);
                 }
             }
