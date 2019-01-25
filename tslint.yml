@@ -3,7 +3,7 @@ paths:
   - Configuration/TypoScript
 
 filePatterns:
-  - "*.ts"
+  - "*.tsconfig"
   - constants.typoscript
   - setup.typoscript
 
