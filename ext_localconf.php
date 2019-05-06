@@ -75,3 +75,7 @@ if (empty($GLOBALS['TYPO3_CONF_VARS']['LOG']['PAGEmachine']['Hairu']['writerConf
         'processRedirect'
     );
 })();
+
+if (!class_exists(\TYPO3\CMS\Core\Site\SiteFinder::class)) {
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\PAGEmachine\Hairu\Validation\Validator\RedirectUrlValidator::class]['className'] = \PAGEmachine\Hairu\Validation\Validator\LegacyRedirectUrlValidator::class;
+}
