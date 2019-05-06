@@ -14,6 +14,8 @@ namespace PAGEmachine\Hairu\Slots;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+use PAGEmachine\Hairu\Validation\Validator\RedirectUrlValidator;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\HttpUtility;
 use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 
@@ -22,6 +24,16 @@ use TYPO3\CMS\Extbase\Mvc\RequestInterface;
  */
 class RedirectUrlSlot
 {
+    /**
+     * @var RedirectUrlValidator $redirectUrlValidator
+     */
+    protected $redirectUrlValidator;
+
+    public function __construct()
+    {
+        $this->redirectUrlValidator = GeneralUtility::makeInstance(RedirectUrlValidator::class);
+    }
+
     /**
      * Performs a redirect if possible
      *
@@ -43,7 +55,7 @@ class RedirectUrlSlot
             $redirectUrl = $formData['return_url'];
         }
 
-        if ($redirectUrl !== null) {
+        if ($redirectUrl !== null && $this->redirectUrlValidator->isValid($redirectUrl)) {
             HttpUtility::redirect($redirectUrl);
         }
     }
