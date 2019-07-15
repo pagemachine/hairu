@@ -385,7 +385,7 @@ class AuthenticationController extends AbstractController
                     $user->setPassword($this->passwordService->applyTransformations($password));
                     $this->frontendUserRepository->update($user);
 
-                    $this->authenticationService->invalidateUserSessions($user, true);
+                    $this->authenticationService->invalidateUserSessions($user);
                     $this->tokenCache->remove($hash);
 
                     if ($this->getSettingValue('passwordReset.loginOnSuccess')) {

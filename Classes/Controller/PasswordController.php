@@ -91,7 +91,7 @@ class PasswordController extends AbstractController
         $user->setPassword($this->passwordService->applyTransformations($password));
         $this->frontendUserRepository->update($user);
 
-        $this->authenticationService->invalidateUserSessions($user, true);
+        $this->authenticationService->invalidateUserSessions($user);
 
         $this->addLocalizedFlashMessage('updatePassword.completed', [$user->getUsername()], FlashMessage::OK);
 

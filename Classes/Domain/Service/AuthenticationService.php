@@ -78,16 +78,10 @@ class AuthenticationService implements SingletonInterface
      * Invalidate all sessions of a frontend user
      *
      * @param DomainObjectInterface $user
-     * @param bool $renewCurrentSession
      */
-    public function invalidateUserSessions(DomainObjectInterface $user, bool $renewCurrentSession = false)
+    public function invalidateUserSessions(DomainObjectInterface $user)
     {
-        $userAuthentication = null;
-
-        if ($renewCurrentSession) {
-            $userAuthentication = $this->getFrontendController()->fe_user;
-        }
-
+        $userAuthentication = $this->getFrontendController()->fe_user;
         $sessionManager = GeneralUtility::makeInstance(SessionManager::class);
         $sessionBackend = $sessionManager->getSessionBackend('FE');
         $sessionManager->invalidateAllSessionsByUserId($sessionBackend, (int)$user->getUid(), $userAuthentication);
