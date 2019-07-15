@@ -15,13 +15,13 @@ script:
 jobs:
   include:
     - php: 7.0
-      env: TYPO3_VERSION=^8.7
+      env: TYPO3_VERSION=^8.7.25
     - php: 7.1
-      env: TYPO3_VERSION=^8.7
+      env: TYPO3_VERSION=^8.7.25
     - php: 7.2
-      env: TYPO3_VERSION=^8.7
+      env: TYPO3_VERSION=^8.7.25
     - php: 7.2
-      env: TYPO3_VERSION=^9.5
+      env: TYPO3_VERSION=^9.5.6
 
     - &lint
       php: 7.1

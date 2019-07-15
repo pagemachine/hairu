@@ -82,15 +82,19 @@ class PasswordController extends AbstractController
      */
     public function updatePasswordAction($password, $passwordRepeat)
     {
-        if ($this->authenticationService->isUserAuthenticated()) {
-            $user = $this->authenticationService->getAuthenticatedUser();
-
-            $user->setPassword($this->passwordService->applyTransformations($password));
-            $this->frontendUserRepository->update($user);
-
-            $this->addLocalizedFlashMessage('updatePassword.completed', [$user->getUsername()], FlashMessage::OK);
-
-            $this->forward('showPasswordUpdateForm');
+        if (!$this->authenticationService->isUserAuthenticated()) {
+            return;
         }
+
+        $user = $this->authenticationService->getAuthenticatedUser();
+
+        $user->setPassword($this->passwordService->applyTransformations($password));
+        $this->frontendUserRepository->update($user);
+
+        $this->authenticationService->invalidateUserSessions($user);
+
+        $this->addLocalizedFlashMessage('updatePassword.completed', [$user->getUsername()], FlashMessage::OK);
+
+        $this->forward('showPasswordUpdateForm');
     }
 }
