@@ -384,6 +384,8 @@ class AuthenticationController extends AbstractController
                 if ($this->hashService->validateHmac($user->getPassword(), $token['hmac'])) {
                     $user->setPassword($this->passwordService->applyTransformations($password));
                     $this->frontendUserRepository->update($user);
+
+                    $this->authenticationService->invalidateUserSessions($user);
                     $this->tokenCache->remove($hash);
 
                     if ($this->getSettingValue('passwordReset.loginOnSuccess')) {

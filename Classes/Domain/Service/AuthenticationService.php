@@ -15,7 +15,9 @@ namespace PAGEmachine\Hairu\Domain\Service;
  */
 
 use PAGEmachine\Hairu\Domain\Repository\FrontendUserRepository;
+use TYPO3\CMS\Core\Session\SessionManager;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\DomainObjectInterface;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
@@ -70,6 +72,25 @@ class AuthenticationService implements SingletonInterface
         $frontendController->fe_user->loginSessionStarted = true;
         $frontendController->fe_user->user = $frontendController->fe_user->fetchUserSession();
         $frontendController->loginUser = true;
+    }
+
+    /**
+     * Invalidate all sessions of a frontend user
+     *
+     * @param DomainObjectInterface $user
+     * @param bool $renewCurrentSession
+     */
+    public function invalidateUserSessions(DomainObjectInterface $user, bool $renewCurrentSession = false)
+    {
+        $userAuthentication = null;
+
+        if ($renewCurrentSession) {
+            $userAuthentication = $this->getFrontendController()->fe_user;
+        }
+
+        $sessionManager = GeneralUtility::makeInstance(SessionManager::class);
+        $sessionBackend = $sessionManager->getSessionBackend('FE');
+        $sessionManager->invalidateAllSessionsByUserId($sessionBackend, (int)$user->getUid(), $userAuthentication);
     }
 
     /**
