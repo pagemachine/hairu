@@ -299,7 +299,7 @@ class AuthenticationController extends AbstractController
 
             $message = $this->objectManager->get(MailMessage::class);
             $message
-                ->setFrom($this->getSettingValue('passwordReset.mail.from'))
+                ->setFrom(MailUtility::parseAddresses($this->getSettingValue('passwordReset.mail.from')))
                 ->setTo($userEmail)
                 ->setSubject($this->getSettingValue('passwordReset.mail.subject'));
 
