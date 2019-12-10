@@ -46,6 +46,11 @@ if (empty($GLOBALS['TYPO3_CONF_VARS']['LOG']['PAGEmachine']['Hairu']['writerConf
     ];
 }
 
+// PageTS extensions
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
+    '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:hairu/Configuration/TSconfig/page.tsconfig">'
+);
+
 (function () {
     // New content element wizard icon
     $icons = [
