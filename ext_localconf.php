@@ -24,8 +24,8 @@ defined('TYPO3_MODE') or die();
 );
 
 // Cache configuration
-if (!is_array($TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['hairu_token'])) {
-    $TYPO3_CONF_VARS['SYS']['caching']['cacheConfigurations']['hairu_token'] = [
+if (!is_array($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['hairu_token'])) {
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['hairu_token'] = [
         'backend' => \TYPO3\CMS\Core\Cache\Backend\Typo3DatabaseBackend::class,
         'frontend' => \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class,
         'groups' => [
