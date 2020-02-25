@@ -56,13 +56,30 @@ plugin.tx_hairu {
   mvc.validation {
     // Validation of Authentication controller action arguments
     Authentication {
+      startPasswordReset {
+        username {
+          1 {
+            type = NotEmpty
+          }
+        }
+      }
       completePasswordReset {
         password {
           1 {
+            type = NotEmpty
+          }
+
+          2 {
             type = StringLength
             options {
               minimum = 5
             }
+          }
+        }
+
+        passwordRepeat {
+          1 {
+            type = NotEmpty
           }
         }
       }
@@ -72,10 +89,20 @@ plugin.tx_hairu {
       updatePassword {
         password {
           1 {
+            type = NotEmpty
+          }
+
+          2 {
             type = StringLength
             options {
               minimum = 5
             }
+          }
+        }
+
+        passwordRepeat {
+          1 {
+            type = NotEmpty
           }
         }
       }
