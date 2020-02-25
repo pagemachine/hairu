@@ -246,7 +246,6 @@ class AuthenticationController extends AbstractController
      *
      * @param string $username Username of a user
      * @return void
-     * @validate $username NotEmpty
      */
     public function startPasswordResetAction(string $username)
     {
@@ -370,8 +369,6 @@ class AuthenticationController extends AbstractController
      * @param string $password New password of the user
      * @param string $passwordRepeat Confirmation of the new password
      * @return void
-     * @validate $password NotEmpty
-     * @validate $passwordRepeat NotEmpty
      */
     public function completePasswordResetAction(string $hash, string $password, string $passwordRepeat)
     {
