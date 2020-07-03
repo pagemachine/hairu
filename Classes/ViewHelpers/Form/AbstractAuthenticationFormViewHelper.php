@@ -16,7 +16,7 @@ namespace PAGEmachine\Hairu\ViewHelpers\Form;
 
 use PAGEmachine\Hairu\LoginType;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 
 abstract class AbstractAuthenticationFormViewHelper extends AbstractTagBasedViewHelper
 {
