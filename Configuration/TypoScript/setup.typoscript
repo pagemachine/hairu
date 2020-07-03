@@ -1,15 +1,3 @@
-config.tx_extbase {
-  persistence {
-    classes {
-      PAGEmachine\Hairu\Domain\Model\FrontendUser {
-        mapping {
-          tableName = fe_users
-        }
-      }
-    }
-  }
-}
-
 plugin.tx_hairu {
   features {
     skipDefaultArguments = 1
