@@ -15,6 +15,8 @@ namespace PAGEmachine\Hairu\Controller;
  */
 
 use PAGEmachine\Hairu\LoginType;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\SentMessage;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Crypto\Random;
 use TYPO3\CMS\Core\Log\LogManager;
@@ -311,22 +313,45 @@ class AuthenticationController extends AbstractController
                 }
             };
 
-            $setViewFormat('txt');
-            $message->setBody($this->view->render('passwordResetMail'), 'text/plain');
+            $useSymfonyMail = false;
+            if (class_exists(\TYPO3\CMS\Core\Information\Typo3Version::class) && \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Information\Typo3Version::class)->getMajorVersion() === 10) {
+                $useSymfonyMail = true;
+            }
 
-            if ($this->getSettingValue('passwordReset.mail.addHtmlPart')) {
-                $setViewFormat('html');
-                $message->addPart($this->view->render('passwordResetMail'), 'text/html');
+            $setViewFormat('txt');
+            if ($useSymfonyMail) {
+                $message->text($this->view->render('passwordResetMail'));
+
+                if ($this->getSettingValue('passwordReset.mail.addHtmlPart')) {
+                    $setViewFormat('html');
+                    $message->html($this->view->render('passwordResetMail'));
+                }
+            } else {
+                $message->setBody($this->view->render('passwordResetMail'), 'text/plain');
+
+                if ($this->getSettingValue('passwordReset.mail.addHtmlPart')) {
+                    $setViewFormat('html');
+                    $message->addPart($this->view->render('passwordResetMail'), 'text/html');
+                }
             }
 
             $mailSent = false;
 
             $this->emitBeforePasswordResetMailSendSignal($message);
 
-            try {
-                $mailSent = $message->send();
-            } catch (\Swift_SwiftException $e) {
-                $this->logger->error($e->getMessage);
+            if ($useSymfonyMail) {
+                try {
+                    /** @var SentMessage $mailSent */
+                    $mailSent = $message->send();
+                } catch (TransportExceptionInterface $e) {
+                    $this->logger->error($mailSent->getDebug());
+                }
+            } else {
+                try {
+                    $mailSent = $message->send();
+                } catch (\Swift_SwiftException $e) {
+                    $this->logger->error($e->getMessage);
+                }
             }
 
             if (!$mailSent) {
