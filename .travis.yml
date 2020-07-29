@@ -25,14 +25,15 @@ jobs:
 
     - &lint
       php: 7.1
-      env: Other lints
+      name: Other lints
       install:
         - composer install
       script:
         - composer lint:typoscript
         - composer lint:xml
+
     - <<: *lint
-      env: Codestyle
+      name: Codestyle
       script:
         - composer lint:style
 
