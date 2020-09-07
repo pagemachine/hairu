@@ -61,7 +61,8 @@
             "@composer require --no-progress --ansi --update-with-dependencies typo3/cms-core $TYPO3_VERSION",
             "@composer validate --ansi",
             "@composer normalize --no-update-lock --dry-run",
-            "@lint"
+            "@lint",
+            "@test"
         ],
         "build:cleanup": [
             "git reset --hard",
@@ -88,7 +89,11 @@
         "lint:php": "parallel-lint --exclude vendor --exclude web .",
         "lint:style": "phpcs",
         "lint:typoscript": "typoscript-lint",
-        "lint:xml": "xmllint --pattern '*.xlf,*.svg' Resources"
+        "lint:xml": "xmllint --pattern '*.xlf,*.svg' Resources",
+        "test": [
+            "@test:unit"
+        ],
+        "test:unit": "phpunit --colors=always"
     },
     "support": {
         "issues": "https://github.com/pagemachine/hairu/issues",
