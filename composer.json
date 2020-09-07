@@ -37,7 +37,6 @@
         "squizlabs/php_codesniffer": "^3.0"
     },
     "config": {
-        "bin-dir": "bin",
         "sort-packages": true
     },
     "extra": {
@@ -81,7 +80,7 @@
             "@lint:typoscript",
             "@lint:xml"
         ],
-        "lint:php": "parallel-lint --exclude bin --exclude vendor --exclude web .",
+        "lint:php": "parallel-lint --exclude vendor --exclude web .",
         "lint:style": "phpcs",
         "lint:typoscript": "typoscript-lint",
         "lint:xml": "xmllint --pattern '*.xlf,*.svg' Resources"
