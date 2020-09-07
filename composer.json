@@ -20,8 +20,7 @@
         "typo3/cms-core": "^8.7.25 || ^9.5.6 || ^10.4",
         "typo3/cms-extbase": "^8.7.25 || ^9.5.6 || ^10.4",
         "typo3/cms-fluid": "^8.7.25 || ^9.5.6 || ^10.4",
-        "typo3/cms-frontend": "^8.7.25 || ^9.5.6 || ^10.4",
-        "typo3/cms-saltedpasswords": "^8.7.25 || ^9.5.6 || ^10.4"
+        "typo3/cms-frontend": "^8.7.25 || ^9.5.6 || ^10.4"
     },
     "replace": {
         "typo3-ter/hairu": "self.version"
@@ -35,6 +34,9 @@
         "sclable/xml-lint": "^0.2.3",
         "slevomat/coding-standard": "^4.0",
         "squizlabs/php_codesniffer": "^3.0"
+    },
+    "suggest": {
+        "typo3/cms-saltedpasswords": "For password hashing in TYPO3v8"
     },
     "config": {
         "sort-packages": true
