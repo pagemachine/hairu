@@ -1,62 +1,28 @@
 dist: trusty
-sudo: false
-language: php
+language: shell
 
-cache:
-  directories:
-    - $HOME/.composer/cache
+services:
+  - docker
 
-install:
-  - composer require typo3/cms-core="$TYPO3_VERSION"
+env:
+  global:
+    - PHP_VERSION=7.2
+  jobs:
+    - TYPO3_VERSION=^9.5
+    - TYPO3_VERSION=^8.7
 
 script:
-  - composer lint:php
+  - docker-compose run --rm app composer build
+
+after_script:
+  - docker-compose down --volumes
 
 jobs:
   include:
-    - php: 7.0
-      env: TYPO3_VERSION=^8.7.25
-    - php: 7.4
-      env: TYPO3_VERSION=^8.7.25
-    - php: 7.2
-      env: TYPO3_VERSION=^9.5.6
-    - php: 7.4
-      env: TYPO3_VERSION=^9.5.6
-
-    - &lint
-      php: 7.1
-      name: Other lints
-      install:
-        - composer install
-      script:
-        - composer lint:typoscript
-        - composer lint:xml
-
-    - <<: *lint
-      name: Codestyle
-      script:
-        - composer lint:style
-
     - stage: deploy
+      name: Deploy to TER
       if: tag IS present
-      php: 7.1
-      before_install: skip
-      install: skip
-      before_script: skip
-      script: |
-        echo -e "Preparing upload of release ${TRAVIS_TAG} to TER\n"
-
-        TAG_ANNOTATION="$(git tag -n -l $TRAVIS_TAG)"
-        TAG_MESSAGE="${TAG_ANNOTATION#* }"
-
-        git reset --hard
-        git clean -xfd
-
-        export PATH=$PATH:$(composer global config bin-dir --absolute 2>/dev/null)
-        composer global require helhum/ter-client
-
-        echo "Uploading release ${TRAVIS_TAG} to TER"
-        ter-client upload $(composer config extra.typo3/cms.extension-key) . -u "$TYPO3_ORG_USERNAME" -p "$TYPO3_ORG_PASSWORD" -m "$TAG_MESSAGE"
+      script: docker-compose run --rm app composer deploy:ter
 
 notifications:
   slack:

@@ -51,6 +51,26 @@
     }
   },
   "scripts": {
+    "build": [
+      "@composer require --no-progress --ansi --update-with-dependencies typo3/cms-core $TYPO3_VERSION",
+      "@composer validate --ansi",
+      "@lint"
+    ],
+    "build:cleanup": [
+      "git reset --hard",
+      "git clean -xfd"
+    ],
+    "deploy:ter": [
+      "@build:cleanup",
+      "@deploy:ter:setup",
+      "@deploy:ter:upload"
+    ],
+    "deploy:ter:setup": [
+      "@composer global require helhum/ter-client symfony/console:^3"
+    ],
+    "deploy:ter:upload": [
+      "composer global exec -v -- ter-client upload --username $TYPO3_ORG_USERNAME --password $TYPO3_ORG_PASSWORD --upload-comment \"$(git tag -l --format='%(contents)' $TRAVIS_TAG)\" $(composer config extra.typo3/cms.extension-key) ."
+    ],
     "lint:php": "parallel-lint --exclude bin --exclude vendor --exclude web .",
     "lint:typoscript": "typoscript-lint",
     "lint:xml": "xmllint --pattern '*.xlf,*.svg' Resources",
