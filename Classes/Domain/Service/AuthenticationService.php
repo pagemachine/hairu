@@ -15,6 +15,7 @@ namespace PAGEmachine\Hairu\Domain\Service;
  */
 
 use PAGEmachine\Hairu\Domain\Repository\FrontendUserRepository;
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Session\SessionManager;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -46,6 +47,11 @@ class AuthenticationService implements SingletonInterface
      */
     public function isUserAuthenticated(): bool
     {
+        if (class_exists(Context::class)) {
+            return (bool)GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('frontend.user', 'isLoggedIn');
+        }
+
+        // @extensionScannerIgnoreLine
         return $this->getFrontendController()->loginUser;
     }
 
@@ -71,7 +77,7 @@ class AuthenticationService implements SingletonInterface
         $frontendController->fe_user->createUserSession($user->_getCleanProperties());
         $frontendController->fe_user->loginSessionStarted = true;
         $frontendController->fe_user->user = $frontendController->fe_user->fetchUserSession();
-        $frontendController->loginUser = true;
+        $frontendController->initUserGroups();
     }
 
     /**
