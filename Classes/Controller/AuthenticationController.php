@@ -302,20 +302,11 @@ class AuthenticationController extends AbstractController
                 ->setTo($userEmail)
                 ->setSubject($this->getSettingValue('passwordReset.mail.subject'));
 
-            $setViewFormat = function ($format) {
-                // TYPO3v8+
-                if (method_exists($this->view, 'getTemplatePaths')) {
-                    $this->view->getTemplatePaths()->setFormat($format);
-                } else { // TYPO3v7
-                    $this->request->setFormat($format);
-                }
-            };
-
-            $setViewFormat('txt');
+            $this->view->getTemplatePaths()->setFormat('txt');
             $message->setBody($this->view->render('passwordResetMail'), 'text/plain');
 
             if ($this->getSettingValue('passwordReset.mail.addHtmlPart')) {
-                $setViewFormat('html');
+                $this->view->getTemplatePaths()->setFormat('html');
                 $message->addPart($this->view->render('passwordResetMail'), 'text/html');
             }
 
