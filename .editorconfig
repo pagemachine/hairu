@@ -7,6 +7,10 @@ trim_trailing_whitespace = true
 end_of_line = lf
 insert_final_newline = true
 
+[composer.json]
+indent_style = space
+indent_size = 4
+
 [*.php]
 indent_style = space
 indent_size = 4
