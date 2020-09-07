@@ -1,0 +1,30 @@
+<phpunit
+  backupGlobals="true"
+  backupStaticAttributes="false"
+  bootstrap="vendor/nimut/testing-framework/res/Configuration/UnitTestsBootstrap.php"
+  colors="true"
+  convertErrorsToExceptions="true"
+  convertWarningsToExceptions="true"
+  forceCoversAnnotation="false"
+  processIsolation="false"
+  stopOnError="false"
+  stopOnFailure="false"
+  stopOnIncomplete="false"
+  stopOnSkipped="false"
+  verbose="false"
+  printerClass="Codedungeon\PHPUnitPrettyResultPrinter\Printer"
+>
+
+  <testsuites>
+    <testsuite name="Unit tests">
+      <directory>Tests/Unit/</directory>
+    </testsuite>
+  </testsuites>
+
+  <filter>
+    <whitelist>
+      <directory suffix=".php">Classes/</directory>
+    </whitelist>
+  </filter>
+
+</phpunit>

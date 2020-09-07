@@ -56,6 +56,11 @@
             "PAGEmachine\\Hairu\\": "Classes/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "PAGEmachine\\Hairu\\Tests\\": "Tests/"
+        }
+    },
     "scripts": {
         "build": [
             "@composer require --no-progress --ansi --update-with-dependencies typo3/cms-core $TYPO3_VERSION",
