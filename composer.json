@@ -56,6 +56,7 @@
         "build": [
             "@composer require --no-progress --ansi --update-with-dependencies typo3/cms-core $TYPO3_VERSION",
             "@composer validate --ansi",
+            "@composer normalize --no-update-lock --dry-run",
             "@lint"
         ],
         "build:cleanup": [
