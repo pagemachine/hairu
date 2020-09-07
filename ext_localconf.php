@@ -79,6 +79,14 @@ if (empty($GLOBALS['TYPO3_CONF_VARS']['LOG']['PAGEmachine']['Hairu']['writerConf
         \PAGEmachine\Hairu\Slots\RedirectUrlSlot::class,
         'processRedirect'
     );
+
+    if (is_subclass_of(\TYPO3\CMS\Core\Mail\MailMessage::class, \Swift_Message::class)) {
+        $objectContainer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class);
+        $objectContainer->registerImplementation(
+            \PAGEmachine\Hairu\Mail\MailMessageBuilderInterface::class,
+            \PAGEmachine\Hairu\Mail\SwiftmailerMailMessageBuilder::class
+        );
+    }
 })();
 
 if (!class_exists(\TYPO3\CMS\Core\Site\SiteFinder::class)) {
