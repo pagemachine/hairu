@@ -32,7 +32,6 @@
     "squizlabs/php_codesniffer": "^3.0"
   },
   "replace": {
-    "hairu": "self.version",
     "typo3-ter/hairu": "self.version"
   },
   "config": {
