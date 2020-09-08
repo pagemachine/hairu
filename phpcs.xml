@@ -16,6 +16,9 @@
     <exclude name="Generic.Files.LineLength"/>
   </rule>
 
+  <rule ref="PSR12">
+  </rule>
+
   <rule ref="Generic.PHP.NoSilencedErrors">
     <properties>
       <property name="error" type="bool" value="true"/>
@@ -35,13 +38,6 @@
   <rule ref="SlevomatCodingStandard.Namespaces.MultipleUsesPerLine"/>
   <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses"/>
   <rule ref="SlevomatCodingStandard.Namespaces.UseDoesNotStartWithBackslash"/>
-  <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
-    <properties>
-      <property name="newlinesCountBetweenOpenTagAndDeclare" type="int" value="1"/>
-    </properties>
-    <exclude-pattern>Configuration/TCA/*.php</exclude-pattern>
-    <exclude-pattern>ext_*.php</exclude-pattern>
-  </rule>
   <rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints"/>
   <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>
   <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing"/>
