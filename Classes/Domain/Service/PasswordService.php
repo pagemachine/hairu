@@ -35,7 +35,8 @@ class PasswordService implements \TYPO3\CMS\Core\SingletonInterface
         if (class_exists(PasswordHashFactory::class)) {
             $hashInstance = GeneralUtility::makeInstance(PasswordHashFactory::class)->getDefaultHashInstance('FE');
             $password = $hashInstance->getHashedPassword($password);
-        } elseif (SaltedPasswordsUtility::isUsageEnabled('FE')) {
+        // @extensionScannerIgnoreLine
+        } elseif (class_exists(SaltedPasswordsUtility::class) && SaltedPasswordsUtility::isUsageEnabled('FE')) {
             $saltingInstance = SaltFactory::getSaltingInstance();
             $password = $saltingInstance->getHashedPassword($password);
         }

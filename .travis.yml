@@ -8,6 +8,8 @@ env:
   global:
     - PHP_VERSION=7.2
   jobs:
+    - TYPO3_VERSION=^10.4
+    - TYPO3_VERSION=^10.4 PHP_VERSION=7.4
     - TYPO3_VERSION=^9.5
     - TYPO3_VERSION=^9.5 PHP_VERSION=7.4
     - TYPO3_VERSION=^8.7

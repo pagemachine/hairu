@@ -15,6 +15,7 @@ namespace PAGEmachine\Hairu\Controller;
  */
 
 use PAGEmachine\Hairu\LoginType;
+use PAGEmachine\Hairu\Mail\MailMessageBuilderInterface;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Crypto\Random;
 use TYPO3\CMS\Core\Log\LogManager;
@@ -246,7 +247,6 @@ class AuthenticationController extends AbstractController
      *
      * @param string $username Username of a user
      * @return void
-     * @validate $username NotEmpty
      */
     public function startPasswordResetAction(string $username)
     {
@@ -297,32 +297,25 @@ class AuthenticationController extends AbstractController
                 'expiryDate' => $expiryDate,
             ]);
 
-            $message = $this->objectManager->get(MailMessage::class);
-            $message
-                ->setFrom(MailUtility::parseAddresses($this->getSettingValue('passwordReset.mail.from')))
-                ->setTo($userEmail)
-                ->setSubject($this->getSettingValue('passwordReset.mail.subject'));
+            $messageBuilder = $this->objectManager->get(MailMessageBuilderInterface::class);
+            $messageBuilder
+                ->from(...MailUtility::parseAddresses($this->getSettingValue('passwordReset.mail.from')))
+                ->to($userEmail)
+                ->subject($this->getSettingValue('passwordReset.mail.subject'));
 
-            $setViewFormat = function ($format) {
-                // TYPO3v8+
-                if (method_exists($this->view, 'getTemplatePaths')) {
-                    $this->view->getTemplatePaths()->setFormat($format);
-                } else { // TYPO3v7
-                    $this->request->setFormat($format);
-                }
-            };
-
-            $setViewFormat('txt');
-            $message->setBody($this->view->render('passwordResetMail'), 'text/plain');
+            $this->view->getTemplatePaths()->setFormat('txt');
+            $messageBuilder->text($this->view->render('passwordResetMail'));
 
             if ($this->getSettingValue('passwordReset.mail.addHtmlPart')) {
-                $setViewFormat('html');
-                $message->addPart($this->view->render('passwordResetMail'), 'text/html');
+                $this->view->getTemplatePaths()->setFormat('html');
+                $messageBuilder->html($this->view->render('passwordResetMail'));
             }
 
-            $mailSent = false;
+            $message = $messageBuilder->build();
 
             $this->emitBeforePasswordResetMailSendSignal($message);
+
+            $mailSent = false;
 
             try {
                 $mailSent = $message->send();
@@ -370,8 +363,6 @@ class AuthenticationController extends AbstractController
      * @param string $password New password of the user
      * @param string $passwordRepeat Confirmation of the new password
      * @return void
-     * @validate $password NotEmpty
-     * @validate $passwordRepeat NotEmpty
      */
     public function completePasswordResetAction(string $hash, string $password, string $passwordRepeat)
     {

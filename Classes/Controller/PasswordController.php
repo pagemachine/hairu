@@ -77,8 +77,6 @@ class PasswordController extends AbstractController
      * @param string $password New password of the user
      * @param string $passwordRepeat Confirmation of the new password
      * @return void
-     * @validate $password NotEmpty
-     * @validate $passwordRepeat NotEmpty
      */
     public function updatePasswordAction($password, $passwordRepeat)
     {
