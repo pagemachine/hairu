@@ -4,6 +4,7 @@
 .travis.yml export-ignore
 docker-compose.yml export-ignore
 phpcs.xml export-ignore
+phpunit.xml export-ignore
 typoscript-lint.yml export-ignore
 
 Tests/ export-ignore
