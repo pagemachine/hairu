@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace PAGEmachine\Hairu;
 
@@ -21,10 +22,10 @@ final class LoginType extends Enumeration
     /**
      * Indicates a login
      */
-    const LOGIN = 'login';
+    public const LOGIN = 'login';
 
     /**
      * Indicates a logout
      */
-    const LOGOUT = 'logout';
+    public const LOGOUT = 'logout';
 }
