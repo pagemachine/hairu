@@ -74,10 +74,9 @@ class AuthenticationService implements SingletonInterface
     public function authenticateUser(DomainObjectInterface $user)
     {
         $frontendController = $this->getFrontendController();
+        $frontendController->fe_user->setAndSaveSessionData('dummy', true);
         $frontendController->fe_user->createUserSession($user->_getCleanProperties());
-        $frontendController->fe_user->loginSessionStarted = true;
-        $frontendController->fe_user->user = $frontendController->fe_user->fetchUserSession();
-        $frontendController->initUserGroups();
+        $frontendController->fe_user->setAndSaveSessionData('dummy', true);
     }
 
     /**
