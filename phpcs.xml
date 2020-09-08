@@ -24,7 +24,6 @@
 
   <rule ref="CakePHP.Commenting.DocBlockAlignment"/>
   <rule ref="CakePHP.Formatting.BlankLineBeforeReturn"/>
-  <rule ref="CakePHP.Strings.ConcatenationSpacing"/>
   <rule ref="CakePHP.WhiteSpace.EmptyLines"/>
 
   <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma"/>
@@ -46,11 +45,5 @@
   <rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints"/>
   <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>
   <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing"/>
-  <rule ref="SlevomatCodingStandard.Types.EmptyLinesAroundTypeBraces">
-    <properties>
-      <property name="linesCountAfterOpeningBrace" type="int" value="0"/>
-      <property name="linesCountBeforeClosingBrace" type="int" value="0"/>
-    </properties>
-  </rule>
 
 </ruleset>
