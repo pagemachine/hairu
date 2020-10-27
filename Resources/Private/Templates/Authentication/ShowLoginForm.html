@@ -19,7 +19,10 @@
     fieldType: 'text',
     fieldValue: formData.user,
     translationKey: 'username',
-    defaultLabel: 'Username'
+    defaultLabel: 'Username',
+    additionalAttributes: {
+      autocomplete: 'username'
+    }
   }"/>
 
   <f:render partial="Form/TextField" arguments="{
@@ -27,7 +30,10 @@
     fieldType: 'password',
     translationKey: 'password',
     defaultLabel: 'Password',
-    additionalAttributes: {autocomplete: 'current-password', data-rsa-encryption: ''}
+    additionalAttributes: {
+      autocomplete: 'current-password',
+      data-rsa-encryption: ''
+    }
   }"/>
 
   <f:render partial="Form/SubmitButton" arguments="{
