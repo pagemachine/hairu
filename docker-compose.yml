@@ -7,7 +7,6 @@ services:
       TYPO3_VERSION: ${TYPO3_VERSION:-^9.5}
       TYPO3_ORG_PASSWORD:
       TYPO3_ORG_USERNAME:
-      TRAVIS_TAG:
     depends_on:
       - ssh-key
     volumes:
