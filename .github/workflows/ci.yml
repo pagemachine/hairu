@@ -36,3 +36,20 @@ jobs:
       - name: Cleanup
         if: ${{ always() }}
         run: docker-compose down --volumes
+
+  release-ter:
+    name: TYPO3 TER release
+
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Deploy to TER
+        env:
+          TYPO3_ORG_USERNAME: ${{secrets.TYPO3_ORG_USERNAME}}
+          TYPO3_ORG_PASSWORD: ${{secrets.TYPO3_ORG_PASSWORD}}
+        run: docker-compose run --rm app composer deploy:ter
