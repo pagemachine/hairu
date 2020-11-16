@@ -1,4 +1,4 @@
-# Hairu [![Build Status](https://travis-ci.org/pagemachine/hairu.svg)](https://travis-ci.org/pagemachine/hairu) [![Latest Stable Version](https://poser.pugx.org/pagemachine/hairu/v/stable)](https://packagist.org/packages/pagemachine/hairu) [![Total Downloads](https://poser.pugx.org/pagemachine/hairu/downloads)](https://packagist.org/packages/pagemachine/hairu) [![Latest Unstable Version](https://poser.pugx.org/pagemachine/hairu/v/unstable)](https://packagist.org/packages/pagemachine/hairu) [![License](https://poser.pugx.org/pagemachine/hairu/license)](https://packagist.org/packages/pagemachine/hairu)
+# Hairu ![CI](https://github.com/pagemachine/hairu/workflows/CI/badge.svg)
 
 Flexible login/logout form based on Extbase/Fluid to replace the *felogin* extension shipped with TYPO3 CMS.
 
