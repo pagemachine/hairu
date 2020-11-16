@@ -84,6 +84,12 @@ The following formats for the validator type are supported:
 
 Found a bug? Need a feature? Let us know through our [issue tracker](https://github.com/pagemachine/hairu/issues).
 
+## Testing
+
+All tests can be executed with the shipped Docker Compose definition:
+
+    docker-compose run --rm app composer build
+
 ## Credits
 
 Icons made by [Freepik](http://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/) is licensed by [CC 3.0 BY](https://creativecommons.org/licenses/by/3.0/)
