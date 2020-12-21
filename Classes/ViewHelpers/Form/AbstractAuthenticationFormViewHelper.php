@@ -67,7 +67,7 @@ abstract class AbstractAuthenticationFormViewHelper extends AbstractTagBasedView
         } else {
             $formActionUri = $this->getUriBuilder()
                 ->reset()
-                ->setTargetPageUid($this->arguments['pageUid'])
+                ->setTargetPageUid((int) $this->arguments['pageUid'])
                 ->setTargetPageType($this->arguments['pageType'])
                 ->setNoCache($this->arguments['noCache'])
                 ->setUseCacheHash(!$this->arguments['noCacheHash'])
