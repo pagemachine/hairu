@@ -286,7 +286,7 @@ class AuthenticationController extends AbstractController
 
             $expiryDate = new \DateTime(sprintf('now + %d seconds', $tokenLifetime));
             $hashUri = $this->uriBuilder
-                ->setTargetPageUid($this->getSettingValue('passwordReset.page'))
+                ->setTargetPageUid($this->getSettingValue('passwordReset.page', 0))
                 ->setCreateAbsoluteUri(true)
                 ->uriFor('showPasswordResetForm', [
                     'hash' => $hash,
