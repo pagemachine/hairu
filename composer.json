@@ -46,8 +46,8 @@
     },
     "extra": {
         "typo3/cms": {
-            "extension-key": "hairu",
             "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "extension-key": "hairu",
             "web-dir": "web"
         }
     },
