@@ -7,25 +7,5 @@ services:
       TYPO3_VERSION: ${TYPO3_VERSION:-^9.5}
       TYPO3_ORG_PASSWORD:
       TYPO3_ORG_USERNAME:
-    depends_on:
-      - ssh-key
     volumes:
       - ./:/var/www/html
-      - ssh-agent:/.ssh-agent
-
-  ssh-agent:
-    image: docksal/ssh-agent:1.3
-    volumes:
-      - ssh-agent:/.ssh-agent
-
-  ssh-key:
-    image: docksal/ssh-agent:1.3
-    command: ['bash', '-c', 'ssh-add - </tmp/host-ssh/id_rsa']
-    depends_on:
-      - ssh-agent
-    volumes:
-      - $HOME/.ssh:/tmp/host-ssh:ro
-      - ssh-agent:/.ssh-agent
-
-volumes:
-  ssh-agent:
