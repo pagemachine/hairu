@@ -5,6 +5,7 @@
 docker-compose.yml export-ignore
 phpcs.xml export-ignore
 phpunit.xml export-ignore
+renovate.json export-ignore
 typoscript-lint.yml export-ignore
 
 Tests/ export-ignore
