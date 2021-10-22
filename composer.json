@@ -30,10 +30,10 @@
         "codedungeon/phpunit-result-printer": "^0.31.0",
         "ergebnis/composer-normalize": "^2.8",
         "helmich/typo3-typoscript-lint": "^2.2",
-        "nimut/testing-framework": "^5.1",
+        "nimut/testing-framework": "^6.0",
         "php-parallel-lint/php-console-highlighter": "^0.5.0",
         "php-parallel-lint/php-parallel-lint": "^1.2",
-        "phpunit/phpunit": "^6.5",
+        "phpunit/phpunit": "^8.5",
         "sclable/xml-lint": "^0.3.0",
         "slevomat/coding-standard": "^7.0",
         "squizlabs/php_codesniffer": "^3.0"

@@ -22,7 +22,7 @@ final class MailMessageBuilderTest extends UnitTestCase
     /**
      * Set up this testcase
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!is_subclass_of(MailMessage::class, Email::class)) {
             $this->markTestSkipped('Symfony mail only');
@@ -34,7 +34,7 @@ final class MailMessageBuilderTest extends UnitTestCase
     /**
      * Tear down this testcase
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         GeneralUtility::purgeInstances();
     }
