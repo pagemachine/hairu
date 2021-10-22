@@ -21,7 +21,7 @@ final class SwiftmailerMailMessageBuilderTest extends UnitTestCase
     /**
      * Set up this testcase
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!is_subclass_of(MailMessage::class, \Swift_Message::class)) {
             $this->markTestSkipped('Swiftmailer mail only');
@@ -33,7 +33,7 @@ final class SwiftmailerMailMessageBuilderTest extends UnitTestCase
     /**
      * Tear down this testcase
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         GeneralUtility::purgeInstances();
     }
