@@ -2,7 +2,7 @@ version: '3'
 
 services:
   app:
-    image: thecodingmachine/php:${PHP_VERSION:-7.2}-v4-cli
+    image: thecodingmachine/php:${PHP_VERSION:-7.4}-v4-cli
     environment:
       TYPO3_VERSION: ${TYPO3_VERSION:-^9.5}
       TYPO3_ORG_PASSWORD:
