@@ -1,29 +1,30 @@
 {
     "name": "pagemachine/hairu",
-    "type": "typo3-cms-extension",
     "description": "Flexible login/logout form based on Extbase/Fluid",
+    "license": "GPL-3.0-or-later",
+    "type": "typo3-cms-extension",
     "keywords": [
         "typo3",
         "felogin",
         "extbase",
         "fluid"
     ],
-    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "Mathias Brodala",
             "email": "mbrodala@pagemachine.de"
         }
     ],
+    "support": {
+        "issues": "https://github.com/pagemachine/hairu/issues",
+        "source": "https://github.com/pagemachine/hairu"
+    },
     "require": {
         "php": "^7.4",
         "typo3/cms-core": "^9.5.6 || ^10.4",
         "typo3/cms-extbase": "^9.5.6 || ^10.4",
         "typo3/cms-fluid": "^9.5.6 || ^10.4",
         "typo3/cms-frontend": "^9.5.6 || ^10.4"
-    },
-    "replace": {
-        "typo3-ter/hairu": "self.version"
     },
     "require-dev": {
         "cakephp/cakephp-codesniffer": "^4.2",
@@ -38,18 +39,11 @@
         "slevomat/coding-standard": "^7.0",
         "squizlabs/php_codesniffer": "^3.0"
     },
+    "replace": {
+        "typo3-ter/hairu": "self.version"
+    },
     "suggest": {
         "typo3/cms-saltedpasswords": "For password hashing in TYPO3v8"
-    },
-    "config": {
-        "sort-packages": true
-    },
-    "extra": {
-        "typo3/cms": {
-            "cms-package-dir": "{$vendor-dir}/typo3/cms",
-            "extension-key": "hairu",
-            "web-dir": "web"
-        }
     },
     "autoload": {
         "psr-4": {
@@ -59,6 +53,16 @@
     "autoload-dev": {
         "psr-4": {
             "PAGEmachine\\Hairu\\Tests\\": "Tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "typo3/cms": {
+            "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "extension-key": "hairu",
+            "web-dir": "web"
         }
     },
     "scripts": {
@@ -99,9 +103,5 @@
             "@test:unit"
         ],
         "test:unit": "phpunit --colors=always"
-    },
-    "support": {
-        "issues": "https://github.com/pagemachine/hairu/issues",
-        "source": "https://github.com/pagemachine/hairu"
     }
 }
