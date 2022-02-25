@@ -28,7 +28,7 @@
     },
     "require-dev": {
         "cakephp/cakephp-codesniffer": "^4.2",
-        "codedungeon/phpunit-result-printer": "^0.31.0",
+        "codedungeon/phpunit-result-printer": "^0.32.0",
         "ergebnis/composer-normalize": "^2.8",
         "helmich/typo3-typoscript-lint": "^2.2",
         "nimut/testing-framework": "^6.0",
