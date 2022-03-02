@@ -89,10 +89,10 @@
             "@deploy:ter:upload"
         ],
         "deploy:ter:setup": [
-            "@composer global require helhum/ter-client symfony/console:^3"
+            "@composer global require typo3/tailor"
         ],
         "deploy:ter:upload": [
-            "composer global exec -v -- ter-client upload --username $TYPO3_ORG_USERNAME --password $TYPO3_ORG_PASSWORD --upload-comment \"$(git tag --points-at HEAD --format='%(contents)')\" $(composer config extra.typo3/cms.extension-key) ."
+            "composer global exec -v -- tailor ter:publish --comment \"$(git tag -l --format='%(contents)' $TAG)\" $TAG"
         ],
         "fix:style": "phpcbf",
         "lint": [

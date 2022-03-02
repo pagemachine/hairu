@@ -50,6 +50,6 @@ jobs:
 
       - name: Deploy to TER
         env:
-          TYPO3_ORG_USERNAME: ${{secrets.TYPO3_ORG_USERNAME}}
-          TYPO3_ORG_PASSWORD: ${{secrets.TYPO3_ORG_PASSWORD}}
+          TYPO3_API_USERNAME: ${{secrets.TYPO3_API_USERNAME}}
+          TYPO3_API_PASSWORD: ${{secrets.TYPO3_API_PASSWORD}}
         run: docker-compose run --rm app composer deploy:ter
