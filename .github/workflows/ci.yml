@@ -52,4 +52,5 @@ jobs:
         env:
           TYPO3_API_USERNAME: ${{secrets.TYPO3_API_USERNAME}}
           TYPO3_API_PASSWORD: ${{secrets.TYPO3_API_PASSWORD}}
+          TAG: ${{github.ref_name}}
         run: docker-compose run --rm app composer deploy:ter
