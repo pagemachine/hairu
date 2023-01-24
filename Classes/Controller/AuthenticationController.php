@@ -151,10 +151,11 @@ class AuthenticationController extends AbstractController
     protected function initializeView(ViewInterface $view)
     {
         $frameworkConfiguration = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+        $storagePidList = $frameworkConfiguration['persistence']['storagePid'];
 
         $view->assignMultiple([
             'formData' => $this->request->getArgument('formData'),
-            'storagePid' => $this->getSignedStorageFolders($frameworkConfiguration['persistence']['storagePid']),
+            'storagePid' => $this->shallEnforceLoginSigning() ? $this->getSignedStorageFolders($storagePidList) : $storagePidList,
         ]);
     }
 

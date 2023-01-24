@@ -19,7 +19,9 @@ use PAGEmachine\Hairu\Domain\Repository\FrontendUserRepository;
 use PAGEmachine\Hairu\Domain\Service\AuthenticationService;
 use PAGEmachine\Hairu\Domain\Service\PasswordService;
 use PAGEmachine\Hairu\Mvc\Controller\ActionController;
+use TYPO3\CMS\Core\Configuration\Features;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -85,6 +87,12 @@ abstract class AbstractController extends ActionController
             ($messageTitle != '' ? LocalizationUtility::translate($messageTitle, $this->request->getControllerExtensionName(), $translationArguments) : ''),
             $severity
         );
+    }
+
+    protected function shallEnforceLoginSigning(): bool
+    {
+        return GeneralUtility::makeInstance(Features::class)
+            ->isFeatureEnabled('security.frontend.enforceLoginSigning');
     }
 
     /**
