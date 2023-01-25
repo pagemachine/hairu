@@ -31,6 +31,7 @@ use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3\CMS\Extbase\Security\Cryptography\HashService;
 use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
+use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Rsaauth\RsaEncryptionDecoder;
 use TYPO3\CMS\Rsaauth\RsaEncryptionEncoder;
@@ -150,11 +151,23 @@ class AuthenticationController extends AbstractController
     protected function initializeView(ViewInterface $view)
     {
         $frameworkConfiguration = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK);
+        $storagePidList = $frameworkConfiguration['persistence']['storagePid'];
 
         $view->assignMultiple([
             'formData' => $this->request->getArgument('formData'),
-            'storagePid' => $frameworkConfiguration['persistence']['storagePid'],
+            'storagePid' => $this->shallEnforceLoginSigning() ? $this->getSignedStorageFolders($storagePidList) : $storagePidList,
         ]);
+    }
+
+    protected function getSignedStorageFolders(string $storagePidList): string
+    {
+        $pidList = implode(',', GeneralUtility::intExplode(',', $storagePidList, true));
+
+        return sprintf(
+            '%s@%s',
+            $pidList,
+            GeneralUtility::hmac($pidList, FrontendUserAuthentication::class)
+        );
     }
 
     /**
