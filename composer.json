@@ -1,4 +1,5 @@
 {
+    "abandoned": "typo3/cms-felogin",
     "name": "pagemachine/hairu",
     "description": "Flexible login/logout form based on Extbase/Fluid",
     "license": "GPL-3.0-or-later",
